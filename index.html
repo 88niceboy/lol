@@ -7,15 +7,18 @@
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
+  <div class="header">
+    <h1>Pick Your Team Members!</h1>
+  </div>
   <div class="container">
-    <div class="left">
-      <h2>사람 리스트</h2>
-      <ul id="nameList"></ul>
-    </div>
+    <!-- 좌측: 사람 목록 -->
+    <div class="grid" id="peopleGrid"></div>
+
+    <!-- 우측: 선택된 사람과 팀 나누기 -->
     <div class="right">
-      <h2>선택된 사람</h2>
-      <ul id="selectedList"></ul>
-      <button id="teamButton" disabled>팀 나누기</button>
+      <h2>Selected Members</h2>
+      <div id="selectedGroups"></div>
+      <button id="teamButton" disabled>Make Teams</button>
     </div>
   </div>
   <script src="script.js"></script>

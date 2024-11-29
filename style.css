@@ -1,54 +1,118 @@
+/* 기본 레이아웃 */
 body {
-    font-family: Arial, sans-serif;
-    background-color: #f4f4f9;
-    color: #333;
     margin: 0;
     padding: 0;
+    font-family: Arial, sans-serif;
+    background-color: #1e2023;
+    color: white;
     display: flex;
-    justify-content: center;
+    flex-direction: column;
     align-items: center;
+    justify-content: flex-start;
     height: 100vh;
   }
   
+  .header {
+    width: 100%;
+    text-align: center;
+    padding: 10px;
+    background-color: #121416;
+    border-bottom: 2px solid #333;
+  }
+  
+  .header h1 {
+    margin: 0;
+    font-size: 24px;
+    text-transform: uppercase;
+  }
+  
+  /* 메인 컨테이너 */
   .container {
     display: flex;
     gap: 20px;
-    background: white;
     padding: 20px;
+    width: 90%;
+    height: 90%;
+    box-sizing: border-box;
+  }
+  
+  /* 좌측: 사람 목록 */
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);  /* 5명씩 가로로 배치 */
+    gap: 10px;
+    width: 65%;
+    max-height: 100%;
+    overflow-y: auto;
+    background-color: #2a2e33;
+    padding: 10px;
     border-radius: 8px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   }
   
-  .left, .right {
-    width: 200px;
-  }
-  
-  h2 {
+  .grid .card {
+    position: relative;
+    background-color: #333;
+    border: 2px solid #444;
+    border-radius: 5px;
     text-align: center;
+    color: white;
+    font-size: 14px;
+    padding: 10px;
+    cursor: pointer;
+    transition: transform 0.3s, border-color 0.3s;
   }
   
-  ul {
+  .grid .card:hover {
+    transform: scale(1.1);
+    border-color: #ffcc00;
+  }
+  
+  .grid .card.selected {
+    border-color: #00ff00;
+    transform: scale(1.2);
+  }
+  
+  /* 우측: 선택된 사람 */
+  .right {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    background-color: #2a2e33;
+    border-radius: 8px;
+    padding: 20px;
+    overflow-y: auto;
+  }
+  
+  .right h2 {
+    margin-top: 0;
+    text-align: center;
+    color: #ffcc00;
+  }
+  
+  .right .group {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);  /* 5명씩 가로로 배치 */
+    gap: 10px;
+    margin-bottom: 20px;
+  }
+  
+  .right .group ul {
     list-style: none;
     padding: 0;
     margin: 0;
   }
   
-  li {
+  .right .group li {
     background: #007bff;
     color: white;
     padding: 10px;
     margin: 5px 0;
     border-radius: 4px;
     text-align: center;
-    cursor: pointer;
-  }
-  
-  li:hover {
-    background: #0056b3;
   }
   
   button {
-    width: 100%;
+    margin-top: 10px;
     padding: 10px;
     background: #28a745;
     color: white;
@@ -56,11 +120,15 @@ body {
     border-radius: 4px;
     cursor: pointer;
     font-size: 16px;
-    margin-top: 10px;
   }
   
   button:disabled {
     background: #cccccc;
     cursor: not-allowed;
+  }
+  
+  /* 좌측 버튼 간격 조절 */
+  .grid .card {
+    margin-bottom: 10px;  /* 버튼 간격을 늘려서 겹치지 않게 */
   }
   
