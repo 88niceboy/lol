@@ -3,18 +3,21 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Simple Frontend Example</title>
+  <title>Team Picker</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
   <div class="container">
-    <h1>Hello, Frontend!</h1>
-    <p>Click the button to see a message:</p>
-    <button id="alertButton">Click Me!</button>
-    <button id="alertButton2">dsfsdf Me!</button>
-    <button id="alertButton3">fffffff Me!</button>
+    <div class="left">
+      <h2>사람 리스트</h2>
+      <ul id="nameList"></ul>
+    </div>
+    <div class="right">
+      <h2>선택된 사람</h2>
+      <ul id="selectedList"></ul>
+      <button id="teamButton" disabled>팀 나누기</button>
+    </div>
   </div>
-
   <script src="script.js"></script>
 </body>
 </html>
