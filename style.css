@@ -36,7 +36,7 @@ body {
   box-sizing: border-box;
 }
 
-/* 공통 스타일: 좌측과 우측 동일 */
+/* 좌측: 사람 목록 */
 .grid {
   position: relative;
   display: flex;
@@ -44,16 +44,49 @@ body {
   gap: 30px;
   justify-content: center;
   align-items: center;
-  width: 35%; /* 좌우 균등 크기 */
+  width: 30%; /* 좌측 크기 */
   max-height: 100%;
   overflow-y: auto;
-  background-color: #1c2331; /* 공통 배경색 */
+  background-color: rgba(28, 35, 49, 0.8); /* Semi-transparent background for better visibility */
   padding: 10px;
   border-radius: 8px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
 }
 
-/* 참여 인원 제목 스타일 */
+/* 가운데: 선택된 사람들 */
+#selectedGroups {
+  position: relative;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 30px;
+  justify-content: center;
+  align-items: center;
+  width: 30%; /* 가운데 크기 */
+  max-height: 100%;
+  overflow-y: auto;
+  background-color: rgba(28, 35, 49, 0.8); /* Semi-transparent background */
+  padding: 10px;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+}
+
+/* 우측: 팀 나누기 */
+#teamDisplay {
+  position: relative;
+  width: 30%; /* 우측 크기 */
+  background: url('vsImage.png') no-repeat center center; /* 배경 이미지 */
+  background-size: cover; /* Ensures the image covers the area */
+  padding: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+  color: white;
+  text-align: center;
+}
+
 .group-title {
   width: 100%;
   text-align: center;
@@ -66,6 +99,30 @@ body {
   background-color: #1c2331;
   padding: 5px 0;
   z-index: 10;
+}
+
+/* 팀 이름 (VS 위, 아래로) */
+.team-members {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.team-name {
+  margin: 10px 0;
+  font-size: 20px;
+  font-weight: bold;
+}
+
+.team-a {
+  position: absolute;
+  top: 20%;
+}
+
+.team-b {
+  position: absolute;
+  bottom: 20%;
 }
 
 /* 카드 스타일 */
@@ -113,28 +170,6 @@ body {
 .grid .card:hover::after {
   inset: 0px;
   transform: rotate(0deg);
-}
-
-.grid .card a {
-  position: relative;
-  text-decoration: none;
-  z-index: 10;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-}
-
-.grid .card a i {
-  font-size: 2em;
-  transition: 0.5s;
-  color: var(--clr);
-  opacity: 1;
-}
-
-.grid .card:hover a i {
-  color: var(--clr);
-  transform: translateY(-20%);
 }
 
 /* 버튼 컨테이너 */

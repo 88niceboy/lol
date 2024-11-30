@@ -13,6 +13,7 @@ const selectedGroups = document.getElementById("selectedGroups");
 const teamButton = document.createElement("button");
 teamButton.textContent = "Make Teams";
 teamButton.disabled = true; // 기본적으로 비활성화
+const teamDisplay = document.getElementById("teamDisplay");
 
 // 선택된 사람 리스트
 const selectedPeople = [];
@@ -52,7 +53,7 @@ function selectPerson(person, cardElement) {
 
 // 선택된 사람 그룹 업데이트
 function updateSelectedGroups() {
-  selectedGroups.innerHTML = '<div class="group-title">참여 인원</div>'; // 제목 고정
+  selectedGroups.innerHTML = '<div class="group-title">선택한 인원</div>'; // 제목 고정
   // 선택된 사람을 카드 형태로 우측 영역에 추가
   selectedPeople.forEach(person => {
     const card = document.createElement("div");
@@ -71,9 +72,19 @@ teamButton.addEventListener("click", () => {
 
   // 랜덤으로 팀 나누기
   const shuffled = [...selectedPeople].sort(() => Math.random() - 0.5);
-  const teamA = shuffled.slice(0, shuffled.length / 2);
-  const teamB = shuffled.slice(shuffled.length / 2);
+  const teamA = shuffled.slice(0, 5);
+  const teamB = shuffled.slice(5, 10);
 
   // 팀 결과 출력
-  alert(`팀 나누기 결과:\n\n팀 A: ${teamA.join(", ")}\n팀 B: ${teamB.join(", ")}`);
+  teamDisplay.innerHTML = `
+    <div class="team-a team-members">
+      <div class="team-name">팀 A</div>
+      <div>${teamA.join(", ")}</div>
+    </div>
+    <div class="vs">VS</div>
+    <div class="team-b team-members">
+      <div class="team-name">팀 B</div>
+      <div>${teamB.join(", ")}</div>
+    </div>
+  `;
 });
