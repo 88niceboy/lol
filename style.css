@@ -74,7 +74,7 @@ body {
 #teamDisplay {
   position: relative;
   width: 30%; /* 우측 크기 */
-  background: url('vsImage.png') no-repeat center center; /* 배경 이미지 */
+  background: url('https://github.com/88niceboy/lol/blob/main/vsImage.png?raw=true') no-repeat center center; /* 배경 이미지 */
   background-size: cover; /* Ensures the image covers the area */
   padding: 20px;
   display: flex;
