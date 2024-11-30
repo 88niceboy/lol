@@ -1,134 +1,159 @@
 /* 기본 레이아웃 */
 body {
-    margin: 0;
-    padding: 0;
-    font-family: Arial, sans-serif;
-    background-color: #1e2023;
-    color: white;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: flex-start;
-    height: 100vh;
-  }
-  
-  .header {
-    width: 100%;
-    text-align: center;
-    padding: 10px;
-    background-color: #121416;
-    border-bottom: 2px solid #333;
-  }
-  
-  .header h1 {
-    margin: 0;
-    font-size: 24px;
-    text-transform: uppercase;
-  }
-  
-  /* 메인 컨테이너 */
-  .container {
-    display: flex;
-    gap: 20px;
-    padding: 20px;
-    width: 90%;
-    height: 90%;
-    box-sizing: border-box;
-  }
-  
-  /* 좌측: 사람 목록 */
-  .grid {
-    display: grid;
-    grid-template-columns: repeat(5, 1fr);  /* 5명씩 가로로 배치 */
-    gap: 10px;
-    width: 65%;
-    max-height: 100%;
-    overflow-y: auto;
-    background-color: #2a2e33;
-    padding: 10px;
-    border-radius: 8px;
-  }
-  
-  .grid .card {
-    position: relative;
-    background-color: #333;
-    border: 2px solid #444;
-    border-radius: 5px;
-    text-align: center;
-    color: white;
-    font-size: 14px;
-    padding: 10px;
-    cursor: pointer;
-    transition: transform 0.3s, border-color 0.3s;
-  }
-  
-  .grid .card:hover {
-    transform: scale(1.1);
-    border-color: #ffcc00;
-  }
-  
-  .grid .card.selected {
-    border-color: #00ff00;
-    transform: scale(1.2);
-  }
-  
-  /* 우측: 선택된 사람 */
-  .right {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    background-color: #2a2e33;
-    border-radius: 8px;
-    padding: 20px;
-    overflow-y: auto;
-  }
-  
-  .right h2 {
-    margin-top: 0;
-    text-align: center;
-    color: #ffcc00;
-  }
-  
-  .right .group {
-    display: grid;
-    grid-template-columns: repeat(5, 1fr);  /* 5명씩 가로로 배치 */
-    gap: 10px;
-    margin-bottom: 20px;
-  }
-  
-  .right .group ul {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-  }
-  
-  .right .group li {
-    background: #007bff;
-    color: white;
-    padding: 10px;
-    margin: 5px 0;
-    border-radius: 4px;
-    text-align: center;
-  }
-  
-  button {
-    margin-top: 10px;
-    padding: 10px;
-    background: #28a745;
-    color: white;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    font-size: 16px;
-  }
-  
-  button:disabled {
-    background: #cccccc;
-    cursor: not-allowed;
-  }
-  
-  /* 좌측 버튼 간격 조절 */
-  .grid .card {
-    margin-bottom: 10px;  /* 버튼 간격을 늘려서 겹치지 않게 */
-  }
-  
+  margin: 0;
+  padding: 0;
+  font-family: Arial, sans-serif;
+  background-color: #051229;
+  color: white;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  height: 100vh;
+}
+
+.header {
+  width: 100%;
+  text-align: center;
+  padding: 10px;
+  background-color: #121416;
+  border-bottom: 2px solid #333;
+}
+
+.header h1 {
+  margin: 0;
+  font-size: 24px;
+  text-transform: uppercase;
+}
+
+/* 메인 컨테이너 */
+.container {
+  display: flex;
+  gap: 20px;
+  padding: 20px;
+  width: 90%;
+  height: 90%;
+  box-sizing: border-box;
+}
+
+/* 공통 스타일: 좌측과 우측 동일 */
+.grid {
+  position: relative;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 30px;
+  justify-content: center;
+  align-items: center;
+  width: 35%; /* 좌우 균등 크기 */
+  max-height: 100%;
+  overflow-y: auto;
+  background-color: #1c2331; /* 공통 배경색 */
+  padding: 10px;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+}
+
+/* 참여 인원 제목 스타일 */
+.group-title {
+  width: 100%;
+  text-align: center;
+  font-size: 18px;
+  font-weight: bold;
+  color: #fff;
+  margin-bottom: 10px;
+  position: sticky;
+  top: 0;
+  background-color: #1c2331;
+  padding: 5px 0;
+  z-index: 10;
+}
+
+/* 카드 스타일 */
+.grid .card {
+  position: relative;
+  width: 100px; /* 카드 크기 */
+  height: 100px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  transition: 0.5s;
+  --clr: #2483ff; /* 기본 카드 색상 */
+}
+
+.grid .card.selected {
+  --clr: #ffffff; /* 선택된 카드 색상 */
+  transform: scale(1.1); /* 선택된 카드 크기 확대 */
+  box-shadow: 0 0 15px var(--clr), 0 0 30px var(--clr);
+}
+
+.grid .card::before {
+  content: '';
+  position: absolute;
+  inset: 30px;
+  box-shadow: 0 0 0 10px var(--clr),
+              0 0 0 20px rgba(30, 32, 35, 0.8),
+              0 0 0 22px var(--clr);
+  transition: 0.5s;
+}
+
+.grid .card:hover::before {
+  inset: 15px;
+}
+
+.grid .card::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: rgba(30, 32, 35, 0.8);
+  transform: rotate(45deg);
+  transition: 0.5s;
+}
+
+.grid .card:hover::after {
+  inset: 0px;
+  transform: rotate(0deg);
+}
+
+.grid .card a {
+  position: relative;
+  text-decoration: none;
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.grid .card a i {
+  font-size: 2em;
+  transition: 0.5s;
+  color: var(--clr);
+  opacity: 1;
+}
+
+.grid .card:hover a i {
+  color: var(--clr);
+  transform: translateY(-20%);
+}
+
+/* 버튼 컨테이너 */
+.button-container {
+  margin-top: 20px;
+}
+
+button {
+  padding: 10px 20px;
+  background: #28a745;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 16px;
+  width: 100%;
+}
+
+button:disabled {
+  background: #cccccc;
+  cursor: not-allowed;
+}
