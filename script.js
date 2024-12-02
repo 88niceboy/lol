@@ -127,6 +127,7 @@ async function fetchUsers() {
         "Content-Type": "application/json",
       },
     });
+
     if (!response.ok) {
       throw new Error(`Failed to fetch users: ${response.statusText}`);
     }
@@ -134,8 +135,10 @@ async function fetchUsers() {
     const data = await response.json(); // 응답 데이터 가져오기
     console.log("Fetched users:", data); // 응답 데이터 구조 확인
 
-    // 응답 데이터가 배열인지 객체인지 확인
-    const users = Array.isArray(data) ? data : data.data; // 응답이 배열인지 확인 후 처리
+    // 데이터를 배열로 변환
+    const users = Array.isArray(data) ? data : [data]; // 배열이 아니라면 배열로 변환
+    console.log("Processed users:", users);
+
     populateUsers(users); // 유저 데이터를 페이지에 표시
   } catch (error) {
     console.error("Error fetching users:", error);
