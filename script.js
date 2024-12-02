@@ -150,8 +150,8 @@ function populateUsers(users) {
   users.forEach((user) => {
     const card = document.createElement("div");
     card.className = "card";
-    card.textContent = user.name; // 백엔드에서 가져온 유저 이름 사용
-    card.addEventListener("click", () => selectPerson(user.name, card));
+    card.textContent = user.Name; // 백엔드에서 가져온 유저 이름 사용
+    card.addEventListener("click", () => selectPerson(user.Name, card));
     peopleGrid.appendChild(card);
   });
 }
