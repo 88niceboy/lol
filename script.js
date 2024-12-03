@@ -39,7 +39,7 @@ function populateUsers(users) {
     const button = document.createElement("button");
     button.className = "custom-button";
     button.innerHTML = `
-      <img src="https://via.placeholder.com/20" alt="User Icon">
+      <img src="https://via.placeholder.com/40" alt="User Icon">
       <span>${user.Name}</span>
     `;
     button.addEventListener("click", () => selectPerson(user.Name, button));
@@ -69,7 +69,7 @@ function updateSelectedGroups() {
     const button = document.createElement("button");
     button.className = "custom-button selected";
     button.innerHTML = `
-      <img src="https://via.placeholder.com/20" alt="User Icon">
+      <img src="https://via.placeholder.com/40" alt="User Icon">
       <span>${person}</span>
     `;
     button.addEventListener("click", () => selectPerson(person, button));

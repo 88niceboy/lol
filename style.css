@@ -36,13 +36,14 @@ body {
   box-sizing: border-box;
 }
 
+/* 버튼 그리드 */
 .button-grid {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 20px;
-  justify-content: center;
-  align-items: flex-start;
-  width: 30%;
+  display: grid;
+  grid-template-columns: repeat(5, 1fr); /* 한 줄에 5개 버튼 */
+  gap: 10px; /* 버튼 간 간격 */
+  justify-items: center;
+  align-items: center;
+  width: 100%;
   max-height: 100%;
   overflow-y: auto;
   background-color: rgba(28, 35, 49, 0.8);
@@ -67,23 +68,24 @@ body {
 .custom-button {
   background: #ffffff;
   color: #333;
-  font-size: 16px;
+  font-size: 14px;
   font-weight: bold;
-  width: 140px;
-  height: 60px;
+  width: 100px; /* 정사각형 버튼 크기 */
+  height: 100px;
   border: 2px solid #333;
-  border-radius: 8px;
+  border-radius: 10px;
   cursor: pointer;
   transition: all 0.3s ease-in-out;
   display: flex;
+  flex-direction: column; /* 이미지와 텍스트 수직 정렬 */
   align-items: center;
   justify-content: center;
-  gap: 8px;
+  gap: 6px;
 }
 
 .custom-button img {
-  width: 20px;
-  height: 20px;
+  width: 40px;
+  height: 40px;
   border-radius: 50%;
 }
 
@@ -98,6 +100,7 @@ body {
   border-color: #ff758c;
 }
 
+/* 팀 디스플레이 */
 #teamDisplay {
   position: relative;
   width: 30%;
@@ -127,44 +130,39 @@ body {
 
 /* 반응형 디자인 */
 @media (max-width: 768px) {
-  .container {
-    flex-direction: column;
-    width: 100%;
-    height: auto;
-    gap: 10px;
-    padding: 10px;
-  }
-
+  /* 모바일에서도 동일하게 5개 버튼 유지 */
   .button-grid {
-    width: 90%;
+    grid-template-columns: repeat(5, 1fr); /* 한 줄에 5개 버튼 고정 */
     gap: 10px;
   }
 
   .custom-button {
-    width: 100%;
-    height: 50px;
+    width: 100px; /* 버튼 크기 고정 */
+    height: 100px;
     font-size: 14px;
   }
 
   .custom-button img {
-    width: 16px;
-    height: 16px;
-  }
-
-  #teamDisplay {
-    width: 90%;
-    padding: 10px;
+    width: 40px;
+    height: 40px;
   }
 }
 
 @media (max-width: 480px) {
+  /* 작은 화면에서도 5개 버튼 유지 */
+  .button-grid {
+    grid-template-columns: repeat(5, 1fr); /* 한 줄에 5개 버튼 고정 */
+    gap: 8px;
+  }
+
   .custom-button {
+    width: 90px;
+    height: 90px;
     font-size: 12px;
-    height: 45px;
   }
 
   .custom-button img {
-    width: 14px;
-    height: 14px;
+    width: 35px;
+    height: 35px;
   }
 }
