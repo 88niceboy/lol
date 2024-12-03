@@ -36,7 +36,6 @@ body {
   box-sizing: border-box;
 }
 
-/* 사용자 목록과 선택된 목록 */
 .button-grid {
   display: flex;
   flex-wrap: wrap;
@@ -46,7 +45,7 @@ body {
   width: 30%;
   max-height: 100%;
   overflow-y: auto;
-  background-color: rgba(28, 35, 49, 0.8); /* 배경 */
+  background-color: rgba(28, 35, 49, 0.8);
   padding: 10px;
   border-radius: 8px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
@@ -59,8 +58,6 @@ body {
   font-weight: bold;
   color: #fff;
   margin-bottom: 10px;
-  position: sticky;
-  top: 0;
   background-color: #1c2331;
   padding: 5px 0;
   z-index: 10;
@@ -72,7 +69,7 @@ body {
   color: #333;
   font-size: 16px;
   font-weight: bold;
-  width: 140px; /* 버튼 크기 고정 */
+  width: 140px;
   height: 60px;
   border: 2px solid #333;
   border-radius: 8px;
@@ -101,7 +98,6 @@ body {
   border-color: #ff758c;
 }
 
-/* 팀 나누기 */
 #teamDisplay {
   position: relative;
   width: 30%;
@@ -127,4 +123,48 @@ body {
   margin: 10px 0;
   font-size: 20px;
   font-weight: bold;
+}
+
+/* 반응형 디자인 */
+@media (max-width: 768px) {
+  .container {
+    flex-direction: column;
+    width: 100%;
+    height: auto;
+    gap: 10px;
+    padding: 10px;
+  }
+
+  .button-grid {
+    width: 90%;
+    gap: 10px;
+  }
+
+  .custom-button {
+    width: 100%;
+    height: 50px;
+    font-size: 14px;
+  }
+
+  .custom-button img {
+    width: 16px;
+    height: 16px;
+  }
+
+  #teamDisplay {
+    width: 90%;
+    padding: 10px;
+  }
+}
+
+@media (max-width: 480px) {
+  .custom-button {
+    font-size: 12px;
+    height: 45px;
+  }
+
+  .custom-button img {
+    width: 14px;
+    height: 14px;
+  }
 }

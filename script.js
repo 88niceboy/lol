@@ -25,9 +25,9 @@ async function fetchUsers() {
       throw new Error(`Failed to fetch users: ${response.statusText}`);
     }
 
-    const data = await response.json(); // 응답 데이터 가져오기
-    const users = Array.isArray(data) ? data : [data]; // 배열 형태로 변환
-    populateUsers(users); // 유저 데이터를 페이지에 표시
+    const data = await response.json();
+    const users = Array.isArray(data) ? data : [data];
+    populateUsers(users);
   } catch (error) {
     console.error("Error fetching users:", error);
   }
@@ -49,35 +49,25 @@ function populateUsers(users) {
 
 // 사람 선택 이벤트
 function selectPerson(person, buttonElement) {
-  // 선택된 카드가 이미 selected 상태라면, 선택 해제
   if (selectedPeople.includes(person)) {
-    // 선택 해제
     selectedPeople.splice(selectedPeople.indexOf(person), 1);
-    buttonElement.classList.remove("selected"); // 선택 해제 시 스타일 변경
+    buttonElement.classList.remove("selected");
   } else {
-    // 선택
     selectedPeople.push(person);
-    buttonElement.classList.add("selected"); // 선택 시 스타일 변경
+    buttonElement.classList.add("selected");
   }
 
-  // 우측 영역 업데이트
   updateSelectedGroups();
 
-  // 버튼 활성화
-  if (selectedPeople.length >= 10) {
-    teamButton.disabled = false;
-  } else {
-    teamButton.disabled = true;
-  }
+  teamButton.disabled = selectedPeople.length < 10;
 }
 
 // 선택된 사람 그룹 업데이트
 function updateSelectedGroups() {
-  selectedGroups.innerHTML = '<div class="group-title">선택한 인원</div>'; // 제목 고정
-  // 선택된 사람을 카드 형태로 우측 영역에 추가
+  selectedGroups.innerHTML = '<div class="group-title">선택한 인원</div>';
   selectedPeople.forEach((person) => {
     const button = document.createElement("button");
-    button.className = "custom-button selected"; // 선택된 카드 스타일
+    button.className = "custom-button selected";
     button.innerHTML = `
       <img src="https://via.placeholder.com/20" alt="User Icon">
       <span>${person}</span>
@@ -86,7 +76,6 @@ function updateSelectedGroups() {
     selectedGroups.appendChild(button);
   });
 
-  // "Make Teams" 버튼을 우측 영역에 추가
   selectedGroups.appendChild(teamButton);
 }
 
@@ -94,12 +83,10 @@ function updateSelectedGroups() {
 teamButton.addEventListener("click", () => {
   if (selectedPeople.length < 10) return;
 
-  // 랜덤으로 팀 나누기
   const shuffled = [...selectedPeople].sort(() => Math.random() - 0.5);
   const teamA = shuffled.slice(0, 5);
   const teamB = shuffled.slice(5, 10);
 
-  // 팀 결과 출력
   teamDisplay.innerHTML = `
     <div class="team-a team-members">
       <div class="team-name">팀 A</div>
