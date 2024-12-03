@@ -36,55 +36,20 @@ body {
   box-sizing: border-box;
 }
 
-/* 좌측: 사람 목록 */
-.grid {
-  position: relative;
+/* 사용자 목록과 선택된 목록 */
+.button-grid {
   display: flex;
   flex-wrap: wrap;
-  gap: 30px;
+  gap: 20px;
   justify-content: center;
-  align-items: center;
-  width: 30%; /* 좌측 크기 */
+  align-items: flex-start;
+  width: 30%;
   max-height: 100%;
   overflow-y: auto;
-  background-color: rgba(28, 35, 49, 0.8); /* Semi-transparent background for better visibility */
+  background-color: rgba(28, 35, 49, 0.8); /* 배경 */
   padding: 10px;
   border-radius: 8px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
-}
-
-/* 가운데: 선택된 사람들 */
-#selectedGroups {
-  position: relative;
-  display: flex;
-  flex-wrap: wrap;
-  gap: 30px;
-  justify-content: center;
-  align-items: center;
-  width: 30%; /* 가운데 크기 */
-  max-height: 100%;
-  overflow-y: auto;
-  background-color: rgba(28, 35, 49, 0.8); /* Semi-transparent background */
-  padding: 10px;
-  border-radius: 8px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
-}
-
-/* 우측: 팀 나누기 */
-#teamDisplay {
-  position: relative;
-  width: 30%; /* 우측 크기 */
-  background: url('https://github.com/88niceboy/lol/blob/main/vsImage.png?raw=true') no-repeat center center; /* 배경 이미지 */
-  background-size: cover; /* Ensures the image covers the area */
-  padding: 20px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-direction: column;
-  border-radius: 8px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
-  color: white;
-  text-align: center;
 }
 
 .group-title {
@@ -101,7 +66,56 @@ body {
   z-index: 10;
 }
 
-/* 팀 이름 (VS 위, 아래로) */
+/* 버튼 스타일 */
+.custom-button {
+  background: #ffffff;
+  color: #333;
+  font-size: 16px;
+  font-weight: bold;
+  width: 140px; /* 버튼 크기 고정 */
+  height: 60px;
+  border: 2px solid #333;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s ease-in-out;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.custom-button img {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+}
+
+.custom-button:hover {
+  background: #f0f0f0;
+  color: #000;
+}
+
+.custom-button.selected {
+  background: linear-gradient(135deg, #ff758c, #ff7eb3);
+  color: #fff;
+  border-color: #ff758c;
+}
+
+/* 팀 나누기 */
+#teamDisplay {
+  position: relative;
+  width: 30%;
+  padding: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+  color: white;
+  text-align: center;
+}
+
 .team-members {
   display: flex;
   flex-direction: column;
@@ -113,82 +127,4 @@ body {
   margin: 10px 0;
   font-size: 20px;
   font-weight: bold;
-}
-
-.team-a {
-  position: absolute;
-  top: 20%;
-}
-
-.team-b {
-  position: absolute;
-  bottom: 20%;
-}
-
-/* 카드 스타일 */
-.grid .card {
-  position: relative;
-  width: 100px; /* 카드 크기 */
-  height: 100px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  cursor: pointer;
-  transition: 0.5s;
-  --clr: #2483ff; /* 기본 카드 색상 */
-}
-
-.grid .card.selected {
-  --clr: #ffffff; /* 선택된 카드 색상 */
-  transform: scale(1.1); /* 선택된 카드 크기 확대 */
-  box-shadow: 0 0 15px var(--clr), 0 0 30px var(--clr);
-}
-
-.grid .card::before {
-  content: '';
-  position: absolute;
-  inset: 30px;
-  box-shadow: 0 0 0 10px var(--clr),
-              0 0 0 20px rgba(30, 32, 35, 0.8),
-              0 0 0 22px var(--clr);
-  transition: 0.5s;
-}
-
-.grid .card:hover::before {
-  inset: 15px;
-}
-
-.grid .card::after {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: rgba(30, 32, 35, 0.8);
-  transform: rotate(45deg);
-  transition: 0.5s;
-}
-
-.grid .card:hover::after {
-  inset: 0px;
-  transform: rotate(0deg);
-}
-
-/* 버튼 컨테이너 */
-.button-container {
-  margin-top: 20px;
-}
-
-button {
-  padding: 10px 20px;
-  background: #28a745;
-  color: white;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  font-size: 16px;
-  width: 100%;
-}
-
-button:disabled {
-  background: #cccccc;
-  cursor: not-allowed;
 }
