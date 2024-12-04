@@ -14,12 +14,15 @@
     <!-- 좌측: 사람 목록 -->
     <div class="grid button-grid" id="peopleGrid"></div>
 
-    <!-- 가운데: 선택된 사람들 -->
-    <div class="grid button-grid" id="selectedGroups">
-      <div class="group-title">선택한 인원</div>
+    <!-- 가운데: 선택된 사람들 + Make Team 버튼 -->
+    <div class="selected-container">
+      <div class="selected-groups" id="selectedGroups">
+        <div class="group-title">선택한 인원</div>
+      </div>
+      <button id="teamButton" class="make-team-button" disabled>Make Team</button>
     </div>
 
-    <!-- 우측: 팀 나누기 -->
+    <!-- 하단: 팀 나누기 결과 -->
     <div class="team-display" id="teamDisplay"></div>
   </div>
   <script src="script.js"></script>

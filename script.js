@@ -81,6 +81,7 @@ function updateSelectedGroups() {
 }
 
 // 팀 나누기 버튼 이벤트 (백엔드 POST 요청)
+// 팀 나누기 버튼 이벤트 (백엔드 POST 요청)
 teamButton.addEventListener("click", async () => {
   if (selectedPeople.length !== 10) return; // 10명이 선택되지 않으면 실행하지 않음
 
@@ -109,13 +110,45 @@ teamButton.addEventListener("click", async () => {
           <div class="team">
             <h4>Team A</h4>
             <ul>
-              ${result.teamA.map((user) => `<li>${user.Name} (${user.Position1})</li>`).join("")}
+              ${result.teamA
+                .map(
+                  (user) => `
+                <li class="user-info">
+                  <div class="user-name">${user.Name} (${user.Tier})</div>
+                  <div class="user-positions">
+                    Positions: 
+                    ${user.Position1 || "N/A"}, 
+                    ${user.Position2 || "N/A"}, 
+                    ${user.Position3 || "N/A"}, 
+                    ${user.Position4 || "N/A"}, 
+                    ${user.Position5 || "N/A"}
+                  </div>
+                </li>
+              `
+                )
+                .join("")}
             </ul>
           </div>
           <div class="team">
             <h4>Team B</h4>
             <ul>
-              ${result.teamB.map((user) => `<li>${user.Name} (${user.Position1})</li>`).join("")}
+              ${result.teamB
+                .map(
+                  (user) => `
+                <li class="user-info">
+                  <div class="user-name">${user.Name} (${user.Tier})</div>
+                  <div class="user-positions">
+                    Positions: 
+                    ${user.Position1 || "N/A"}, 
+                    ${user.Position2 || "N/A"}, 
+                    ${user.Position3 || "N/A"}, 
+                    ${user.Position4 || "N/A"}, 
+                    ${user.Position5 || "N/A"}
+                  </div>
+                </li>
+              `
+                )
+                .join("")}
             </ul>
           </div>
         </div>
@@ -129,6 +162,7 @@ teamButton.addEventListener("click", async () => {
     teamDisplay.innerHTML = `<div class="error">팀 생성 실패: ${error.message}</div>`;
   }
 });
+
 
 // 페이지 로드 시 유저 데이터를 가져오기
 fetchUsers();
