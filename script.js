@@ -33,15 +33,44 @@ async function fetchUsers() {
 }
 
 // 사람 카드 생성
+// function populateUsers(users) {
+//   users.forEach((user) => {
+//     const userCard = document.createElement("div");
+//     userCard.className = "user-card";
+
+//     const button = document.createElement("button");
+//     button.className = "custom-button";
+//     button.innerHTML = `
+//       <img src="https://via.placeholder.com/40" alt="User Icon">
+//       <span>${user.Name}</span>
+//     `;
+//     button.addEventListener("click", () => selectPerson(user.Name, button));
+
+//     const userInfo = document.createElement("div");
+//     userInfo.className = "user-info";
+//     userInfo.innerHTML = `
+//       <div class="user-tier">${user.Tier} ${user.TierRank}</div>
+//       <div class="user-positions">${[user.Position1, user.Position2, user.Position3, user.Position4, user.Position5].filter(Boolean).join(", ")}</div>
+//     `;
+
+//     userCard.appendChild(button);
+//     userCard.appendChild(userInfo);
+//     peopleGrid.appendChild(userCard);
+//   });
+// }
+
 function populateUsers(users) {
   users.forEach((user) => {
     const userCard = document.createElement("div");
     userCard.className = "user-card";
 
+    // 티어에 맞는 이미지 경로 설정
+    const tierImage = getTierImage(user.Tier);
+
     const button = document.createElement("button");
     button.className = "custom-button";
     button.innerHTML = `
-      <img src="https://via.placeholder.com/40" alt="User Icon">
+      <img src="${tierImage}" alt="${user.Tier} Icon">  <!-- 티어 이미지 -->
       <span>${user.Name}</span>
     `;
     button.addEventListener("click", () => selectPerson(user.Name, button));
@@ -58,6 +87,7 @@ function populateUsers(users) {
     peopleGrid.appendChild(userCard);
   });
 }
+
 
 // 유저 선택 이벤트
 function selectPerson(person, buttonElement) {
@@ -153,5 +183,21 @@ function displayTeams(results) {
     .join("");
 }
 
+function getTierImage(tier) {
+  const tierImages = {
+    "아이언": "C:/Project/lol/image/iron.png",
+    "브론즈": "C:/Project/lol/image/bronze.png",
+    "실버": "C:/Project/lol/image/silver.png",
+    "골드": "C:/Project/lol/image/gold.png",
+    "플레티넘": "C:/Project/lol/image/platinum.png",
+    "Emerald": "C:/Project/lol/image/emerald.png",
+    "Diamond": "C:/Project/lol/image/diamond.png",
+    "Master": "C:/Project/lol/image/master.png",
+    "Grandmaster": "C:/Project/lol/image/grandmaster.png",
+    "Challenger": "C:/Project/lol/image/challenger.png"
+  };
+
+  return tierImages[tier] || "C:/Project/lol/image/iron.png"; // 기본값은 아이언
+}
 // 페이지 로드 시 유저 데이터를 가져오기
 fetchUsers();

@@ -150,7 +150,7 @@ body {
 }
 
 .custom-button.selected {
-  background: linear-gradient(135deg, #b02cca, #f784e4);
+  background: linear-gradient(135deg, #0f0e57, #6d64ec);
   color: #fff;
   border-color: #ffffff;
 }
