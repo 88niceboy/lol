@@ -1,4 +1,5 @@
 const API_URL = "https://port-0-backend-m43n9mp6f1a95885.sel4.cloudtype.app/users"; // 백엔드 URL
+const TEAM_GENERATOR_URL = `${API_URL}/team-generator`; // 팀 생성 엔드포인트
 
 // DOM 요소
 const peopleGrid = document.getElementById("peopleGrid");
@@ -59,7 +60,7 @@ function selectPerson(person, buttonElement) {
 
   updateSelectedGroups();
 
-  teamButton.disabled = selectedPeople.length < 10;
+  teamButton.disabled = selectedPeople.length !== 10; // 정확히 10명이 선택되어야 활성화
 }
 
 // 선택된 사람 그룹 업데이트
@@ -79,25 +80,54 @@ function updateSelectedGroups() {
   selectedGroups.appendChild(teamButton);
 }
 
-// 팀 나누기 버튼 이벤트
-teamButton.addEventListener("click", () => {
-  if (selectedPeople.length < 10) return;
+// 팀 나누기 버튼 이벤트 (백엔드 POST 요청)
+teamButton.addEventListener("click", async () => {
+  if (selectedPeople.length !== 10) return; // 10명이 선택되지 않으면 실행하지 않음
 
-  const shuffled = [...selectedPeople].sort(() => Math.random() - 0.5);
-  const teamA = shuffled.slice(0, 5);
-  const teamB = shuffled.slice(5, 10);
+  try {
+    const response = await fetch(TEAM_GENERATOR_URL, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ userNames: selectedPeople }),
+    });
 
-  teamDisplay.innerHTML = `
-    <div class="team-a team-members">
-      <div class="team-name">팀 A</div>
-      <div>${teamA.join(", ")}</div>
-    </div>
-    <div class="vs">VS</div>
-    <div class="team-b team-members">
-      <div class="team-name">팀 B</div>
-      <div>${teamB.join(", ")}</div>
-    </div>
-  `;
+    if (!response.ok) {
+      throw new Error(`Failed to generate teams: ${response.statusText}`);
+    }
+
+    const results = await response.json();
+
+    // 팀 결과 표시
+    teamDisplay.innerHTML = results
+      .map(
+        (result, index) => `
+      <div class="team-set">
+        <h3>Team Set ${index + 1}</h3>
+        <div class="team-container">
+          <div class="team">
+            <h4>Team A</h4>
+            <ul>
+              ${result.teamA.map((user) => `<li>${user.Name} (${user.Position1})</li>`).join("")}
+            </ul>
+          </div>
+          <div class="team">
+            <h4>Team B</h4>
+            <ul>
+              ${result.teamB.map((user) => `<li>${user.Name} (${user.Position1})</li>`).join("")}
+            </ul>
+          </div>
+        </div>
+        <div class="mmr-diff">MMR 차이: ${result.mmrDiff}</div>
+      </div>
+      `
+      )
+      .join("");
+  } catch (error) {
+    console.error("Error generating teams:", error);
+    teamDisplay.innerHTML = `<div class="error">팀 생성 실패: ${error.message}</div>`;
+  }
 });
 
 // 페이지 로드 시 유저 데이터를 가져오기
