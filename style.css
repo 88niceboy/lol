@@ -150,9 +150,9 @@ body {
 }
 
 .custom-button.selected {
-  background: linear-gradient(135deg, #ff758c, #ff7eb3);
+  background: linear-gradient(135deg, #b02cca, #f784e4);
   color: #fff;
-  border-color: #ff758c;
+  border-color: #ffffff;
 }
 
 .custom-button img {
@@ -165,10 +165,11 @@ body {
 .user-info {
   margin-top: 10px;
   padding: 10px;
-  border: 1px solid rgba(255, 255, 255, 0.2);
+  border: 1px solid rgba(255, 254, 252, 0.486);
   border-radius: 5px;
   background-color: rgba(255, 255, 255, 0.1);
   font-size: 12px;
+  font-weight: bold;
   text-align: center;
   color: rgba(255, 255, 255, 0.8);
   width: 150px; /* 기존보다 넓은 고정된 너비 설정 */
@@ -181,4 +182,70 @@ body {
     width: 18vw;
     height: 18vw;
   }
+}
+
+/* Header 스타일 */
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start; /* 왼쪽 정렬 */
+  width: 100%;
+  padding: 10px 20px;
+  background-color: #121416;
+  border-bottom: 2px solid #333;
+}
+
+.header .logo {
+  width: 50px;
+  height: 50px;
+  margin-right: 30px; /* 로고와 메뉴 간격 최소화 */
+}
+
+nav a {
+  text-decoration: none;
+  color: #e0e0e0; /* 기본 글자 색상 */
+  font-family: 'Poppins', sans-serif; /* 세련된 Google Font 사용 */
+  font-weight: 600;
+  font-size: 20px; /* 폰트 크기 */
+  padding: 10px 20px;
+  position: relative;
+  transition: color 0.3s, transform 0.3s;
+}
+
+nav a::before {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background: linear-gradient(90deg, #145b96, #152270); /* 화려한 그라데이션 밑줄 */
+  transition: width 0.3s ease-in-out;
+}
+
+nav a:hover::before {
+  width: 100%; /* 밑줄이 펼쳐짐 */
+}
+
+nav a:hover {
+  color: #ffffff; /* 호버 시 색상 강조 */
+  transform: scale(1.1); /* 살짝 커지는 효과 */
+  text-shadow: 0px 0px 10px rgba(255, 255, 255, 0.8); /* 빛나는 텍스트 효과 */
+}
+
+/* 네비게이션바 배경 및 정렬 유지 */
+nav {
+  display: flex;
+  align-items: center;
+  gap: 20px; /* 메뉴 간격 */
+}
+
+#indicator {
+  position: absolute;
+  bottom: -2px;
+  width: 30px;
+  height: 3px;
+  background-color: #fff;
+  border-radius: 5px;
+  transition: 0.2s ease left;
 }

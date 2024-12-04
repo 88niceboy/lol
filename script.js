@@ -49,8 +49,8 @@ function populateUsers(users) {
     const userInfo = document.createElement("div");
     userInfo.className = "user-info";
     userInfo.innerHTML = `
-      <div class="user-tier">Tier: ${user.Tier} ${user.TierRank}</div>
-      <div class="user-positions">Positions: ${[user.Position1, user.Position2, user.Position3, user.Position4, user.Position5].filter(Boolean).join(", ")}</div>
+      <div class="user-tier">${user.Tier} ${user.TierRank}</div>
+      <div class="user-positions">${[user.Position1, user.Position2, user.Position3, user.Position4, user.Position5].filter(Boolean).join(", ")}</div>
     `;
 
     userCard.appendChild(button);
