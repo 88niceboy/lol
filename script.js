@@ -185,19 +185,18 @@ function displayTeams(results) {
 
 function getTierImage(tier) {
   const tierImages = {
-    "아이언": "C:/Project/lol/image/iron.png",
-    "브론즈": "C:/Project/lol/image/bronze.png",
-    "실버": "C:/Project/lol/image/silver.png",
-    "골드": "C:/Project/lol/image/gold.png",
-    "플레티넘": "C:/Project/lol/image/platinum.png",
-    "Emerald": "C:/Project/lol/image/emerald.png",
-    "Diamond": "C:/Project/lol/image/diamond.png",
-    "Master": "C:/Project/lol/image/master.png",
-    "Grandmaster": "C:/Project/lol/image/grandmaster.png",
-    "Challenger": "C:/Project/lol/image/challenger.png"
+    "아이언": "https://raw.githubusercontent.com/88niceboy/lol/main/image/iron.png",
+    "브론즈": "https://raw.githubusercontent.com/88niceboy/lol/main/image/bronze.png",
+    "실버": "https://raw.githubusercontent.com/88niceboy/lol/main/image/silver.png",
+    "골드": "https://raw.githubusercontent.com/88niceboy/lol/main/image/gold.png",
+    "플레티넘": "https://raw.githubusercontent.com/88niceboy/lol/main/image/platinum.png",
+    "다이아몬드": "https://raw.githubusercontent.com/88niceboy/lol/main/image/diamond.png",
+    "마스터": "https://raw.githubusercontent.com/88niceboy/lol/main/image/master.png",
+    "그랜드마스터": "https://raw.githubusercontent.com/88niceboy/lol/main/image/grandmaster.png",
+    "챌린저": "https://raw.githubusercontent.com/88niceboy/lol/main/image/challenger.png"
   };
 
-  return tierImages[tier] || "C:/Project/lol/image/iron.png"; // 기본값은 아이언
+  return tierImages[tier] || "https://raw.githubusercontent.com/88niceboy/lol/main/image/iron.png"; // 기본값은 아이언
 }
 // 페이지 로드 시 유저 데이터를 가져오기
 fetchUsers();
