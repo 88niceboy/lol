@@ -67,10 +67,10 @@ body {
 .custom-button {
   background: #ffffff;
   color: #333;
-  font-size: 14px;
+  font-size: 14px; /* PC 기본 글씨 크기 */
   font-weight: bold;
-  width: 100px;
-  height: 100px;
+  width: 100px; /* PC 기본 버튼 너비 */
+  height: 100px; /* PC 기본 버튼 높이 */
   border: 2px solid #333;
   border-radius: 10px;
   cursor: pointer;
@@ -80,23 +80,37 @@ body {
   align-items: center;
   justify-content: center;
   gap: 6px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3), 0 1px 3px rgba(0, 0, 0, 0.2);
 }
 
 .custom-button img {
   width: 40px;
   height: 40px;
   border-radius: 50%;
+  border: 2px solid white;
 }
 
 .custom-button:hover {
-  background: #f0f0f0;
-  color: #000;
+  background: linear-gradient(135deg, #ff758c, #ff7eb3);
+  transform: scale(1.1);
+  box-shadow: 0 6px 10px rgba(255, 0, 150, 0.5);
+}
+
+.custom-button:active {
+  transform: scale(0.95);
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.4);
 }
 
 .custom-button.selected {
-  background: linear-gradient(135deg, #ff758c, #ff7eb3);
+  background: linear-gradient(135deg, #42e695, #3bb2b8);
   color: #fff;
-  border-color: #ff758c;
+  border: none;
+  transform: scale(1.05);
+  box-shadow: 0 8px 12px rgba(0, 255, 150, 0.4);
+}
+
+.custom-button.selected img {
+  border-color: #42e695;
 }
 
 /* 팀 결과 표시 스타일 */
