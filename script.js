@@ -177,7 +177,11 @@ function displayTeams(results) {
               ${result.teamA
                 .map(
                   (user) =>
-                    `<li>${user.Name} (${user.Tier} ${user.TierRank}) - ${user.Position1}</li>`
+                    `<li>${user.Name} (${user.Tier} ${user.TierRank}) - 
+                    ${[1, 2, 3, 4, 5]
+                      .map((i) => user[`Position${i}`] || "")
+                      .filter(Boolean)
+                      .join(", ")}</li>`
                 )
                 .join("")}
             </ul>
@@ -188,7 +192,11 @@ function displayTeams(results) {
               ${result.teamB
                 .map(
                   (user) =>
-                    `<li>${user.Name} (${user.Tier} ${user.TierRank}) - ${user.Position1}</li>`
+                    `<li>${user.Name} (${user.Tier} ${user.TierRank}) - 
+                    ${[1, 2, 3, 4, 5]
+                      .map((i) => user[`Position${i}`] || "")
+                      .filter(Boolean)
+                      .join(", ")}</li>`
                 )
                 .join("")}
             </ul>
