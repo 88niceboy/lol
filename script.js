@@ -4,14 +4,14 @@ const API_URL = "https://port-0-backend-m43n9mp6f1a95885.sel4.cloudtype.app/user
 const peopleGrid = document.getElementById("peopleGrid");
 const selectedGroups = document.getElementById("selectedGroups");
 const teamButton = document.createElement("button");
-teamButton.textContent = "Make Teams";
+teamButton.textContent = "팀 뽑기";
 teamButton.className = "make-team-button";
 teamButton.disabled = true;
 const teamDisplay = document.getElementById("teamDisplay");
 
 // 선택된 사람 리스트
 const selectedPeople = [];
-
+let users = [];
 // 유저 데이터를 백엔드에서 가져오기
 async function fetchUsers() {
   try {
@@ -26,7 +26,8 @@ async function fetchUsers() {
     }
 
     const data = await response.json();
-    populateUsers(data);
+    users = data;  // 유저 데이터를 전역 변수에 저장
+    populateUsers(data);  // 사용자 데이터를 화면에 표시
   } catch (error) {
     console.error("Error fetching users:", error);
   }
@@ -64,13 +65,13 @@ function populateUsers(users) {
     const userCard = document.createElement("div");
     userCard.className = "user-card";
 
-    // 티어에 맞는 이미지 경로 설정
+    // 티어 이미지 설정
     const tierImage = getTierImage(user.Tier);
 
     const button = document.createElement("button");
     button.className = "custom-button";
     button.innerHTML = `
-      <img src="${tierImage}" alt="${user.Tier} Icon">  <!-- 티어 이미지 -->
+      <img src="${tierImage}" alt="${user.Tier} Icon"> <!-- 티어 이미지 -->
       <span>${user.Name}</span>
     `;
     button.addEventListener("click", () => selectPerson(user.Name, button));
@@ -92,31 +93,48 @@ function populateUsers(users) {
 // 유저 선택 이벤트
 function selectPerson(person, buttonElement) {
   if (selectedPeople.includes(person)) {
+    // 선택을 취소하면 배열에서 삭제하고 버튼에서 'selected' 클래스를 제거
     selectedPeople.splice(selectedPeople.indexOf(person), 1);
     buttonElement.classList.remove("selected");
   } else {
+    // 새로운 유저를 선택하면 배열에 추가하고 버튼에 'selected' 클래스를 추가
     selectedPeople.push(person);
     buttonElement.classList.add("selected");
   }
 
+  // 선택된 사람들을 표시
   updateSelectedGroups();
-  teamButton.disabled = selectedPeople.length !== 10; // 정확히 10명이 선택되어야 활성화
+
+  // 10명이 선택되었을 때만 '팀 뽑기' 버튼 활성화
+  teamButton.disabled = selectedPeople.length !== 10; 
 }
 
 // 선택된 사람 그룹 업데이트
 function updateSelectedGroups() {
   selectedGroups.innerHTML = '<div class="group-title">선택한 인원</div>';
+  
+  // selectedPeople에 있는 각 사람을 순회하면서 버튼 생성
   selectedPeople.forEach((person) => {
+    // person을 기반으로 user 객체 찾기
+    const user = users.find(u => u.Name === person);
+    if (!user) return;  // 유저 정보가 없다면 넘어가기
+
     const button = document.createElement("button");
     button.className = "custom-button selected";
+    
+    // 유저의 티어 이미지 설정
+    const tierImage = getTierImage(user.Tier);
+
     button.innerHTML = `
-      <img src="https://via.placeholder.com/40" alt="User Icon">
+      <img src="${tierImage}" alt="${user.Tier} Icon"> <!-- 티어 이미지 -->
       <span>${person}</span>
     `;
     button.addEventListener("click", () => selectPerson(person, button));
+
     selectedGroups.appendChild(button);
   });
 
+  // '팀 뽑기' 버튼을 마지막에 추가
   selectedGroups.appendChild(teamButton);
 }
 
@@ -190,6 +208,7 @@ function getTierImage(tier) {
     "실버": "https://raw.githubusercontent.com/88niceboy/lol/main/image/silver.png",
     "골드": "https://raw.githubusercontent.com/88niceboy/lol/main/image/gold.png",
     "플레티넘": "https://raw.githubusercontent.com/88niceboy/lol/main/image/platinum.png",
+    "에메랄드": "https://raw.githubusercontent.com/88niceboy/lol/main/image/emerald.png",
     "다이아몬드": "https://raw.githubusercontent.com/88niceboy/lol/main/image/diamond.png",
     "마스터": "https://raw.githubusercontent.com/88niceboy/lol/main/image/master.png",
     "그랜드마스터": "https://raw.githubusercontent.com/88niceboy/lol/main/image/grandmaster.png",
