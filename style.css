@@ -411,6 +411,6 @@ canvas {
 }
 
 :root {
-  --win-color: #4caf50;
-  --lose-color: #f44336;
+  --win-color: #198686;
+  --lose-color: #d33b30;
 }
