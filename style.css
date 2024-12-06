@@ -324,3 +324,93 @@ nav {
     width: 45%; /* 화면이 작아질 때 한 줄에 2개씩 배치 */
   }
 }
+
+/* 모달 스타일 */
+/* 모달 스타일 */
+.modal {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.8);
+}
+
+.modal-content {
+  width: 1000px;
+  height: 700px;
+  background-color: #1d1d1f;
+  border-radius: 10px;
+  padding: 20px;
+  display: grid;
+  grid-template-rows: 1fr auto auto;
+  grid-gap: 20px;
+}
+
+/* 닫기 버튼 */
+.close {
+  color: white;
+  font-size: 24px;
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  cursor: pointer;
+}
+
+.close:hover {
+  color: #aaa;
+}
+
+/* 그래프 섹션 */
+.graph-section {
+  text-align: center;
+}
+
+.graph-title {
+  font-size: 24px;
+  margin-bottom: 10px;
+}
+
+canvas {
+  width: 300px !important;
+  height: 300px !important;
+}
+
+/* 포지션 버튼 */
+.position-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+}
+
+.position-button {
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+}
+
+.position-button img {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  transition: transform 0.3s ease;
+}
+
+.position-button img:hover {
+  transform: scale(1.1);
+}
+
+/* 포지션 상세 정보 */
+.user-details {
+  text-align: left;
+  font-size: 18px;
+  padding: 20px;
+}
+
+:root {
+  --win-color: #4caf50;
+  --lose-color: #f44336;
+}

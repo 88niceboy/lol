@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>유저 정보</title>
   <link rel="stylesheet" href="style.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
   <div class="header">
@@ -19,6 +20,44 @@
   <div class="user-info-container">
      <div class="grid user-info-button-grid" id="userInfoPeopleGrid"></div>
   </div>
+
+  <!-- 모달 -->
+  <div id="userModal" class="modal">
+    <div class="modal-content">
+      <span class="close">&times;</span>
+      <div class="graph-section">
+        <div class="graph-title" id="graphTitle">총승률</div>
+        <canvas id="winRateChart"></canvas>
+      </div>
+      <div class="position-buttons">
+        <button class="position-button" data-position="Total">
+          <img src="path-to-total-icon.png" alt="Total">
+        </button>
+        <button class="position-button" data-position="Top">
+          <img src="path-to-top-icon.png" alt="Top">
+        </button>
+        <button class="position-button" data-position="Jungle">
+          <img src="path-to-jungle-icon.png" alt="Jungle">
+        </button>
+        <button class="position-button" data-position="Mid">
+          <img src="path-to-mid-icon.png" alt="Mid">
+        </button>
+        <button class="position-button" data-position="ADC">
+          <img src="path-to-adc-icon.png" alt="ADC">
+        </button>
+        <button class="position-button" data-position="Support">
+          <img src="path-to-support-icon.png" alt="Support">
+        </button>
+      </div>
+      <div class="user-details">
+        <h2 id="modalUserName">유저 이름</h2>
+        <p><strong>승리:</strong> <span id="userWins">0</span></p>
+        <p><strong>패배:</strong> <span id="userLoses">0</span></p>
+        <p><strong>승률:</strong> <span id="userRate">0%</span></p>
+      </div>
+    </div>
+  </div>
+
   <script src="user-info.js"></script>
 </body>
 </html>
