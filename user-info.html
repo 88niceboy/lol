@@ -25,35 +25,79 @@
   <div id="userModal" class="modal">
     <div class="modal-content">
       <span class="close">&times;</span>
-      <div class="graph-section">
-        <div class="graph-title" id="graphTitle">총승률</div>
-        <canvas id="winRateChart"></canvas>
-      </div>
-      <div class="position-buttons">
-        <button class="position-button" data-position="Total">
-          <img src="https://raw.githubusercontent.com/88niceboy/lol/main/image/total.png" alt="Total">
-        </button>
-        <button class="position-button" data-position="Top">
-          <img src="https://raw.githubusercontent.com/88niceboy/lol/main/image/top.png" alt="Top">
-        </button>
-        <button class="position-button" data-position="Jungle">
-          <img src="https://raw.githubusercontent.com/88niceboy/lol/main/image/jungle.png" alt="Jungle">
-        </button>
-        <button class="position-button" data-position="Mid">
-          <img src="https://raw.githubusercontent.com/88niceboy/lol/main/image/mid.png" alt="Mid">
-        </button>
-        <button class="position-button" data-position="ADC">
-          <img src="https://raw.githubusercontent.com/88niceboy/lol/main/image/ad.png" alt="ADC">
-        </button>
-        <button class="position-button" data-position="Support">
-          <img src="https://raw.githubusercontent.com/88niceboy/lol/main/image/support.png" alt="Support">
-        </button>
-      </div>
-      <div class="user-details">
-        <h2 id="modalUserName">유저 이름</h2>
-        <p><strong>승리:</strong> <span id="userWins">0</span></p>
-        <p><strong>패배:</strong> <span id="userLoses">0</span></p>
-        <p><strong>승률:</strong> <span id="userRate">0%</span></p>
+      <div class="position-section">
+        <div class="position-row">
+          <button class="position-button" data-position="Total">
+            <img src="https://raw.githubusercontent.com/88niceboy/lol/main/image/total.png" alt="Total">
+          </button>
+          <div class="position-details">
+            <p>승리: <span id="totalWins">0</span> | 패배: <span id="totalLoses">0</span></p>
+            <p>총 경기수: <span id="totalGames">0</span> | 승률: <span id="totalRate">0%</span></p>
+          </div>
+          <div class="position-graph">
+            <canvas id="totalChart"></canvas>
+          </div>
+        </div>
+        <div class="position-row">
+          <button class="position-button" data-position="Top">
+            <img src="https://raw.githubusercontent.com/88niceboy/lol/main/image/top.png" alt="Top">
+          </button>
+          <div class="position-details">
+            <p>승리: <span id="topWins">0</span> | 패배: <span id="topLoses">0</span></p>
+            <p>총 경기수: <span id="topGames">0</span> | 승률: <span id="topRate">0%</span></p>
+          </div>
+          <div class="position-graph">
+            <canvas id="topChart"></canvas>
+          </div>
+        </div>
+        <div class="position-row">
+          <button class="position-button" data-position="Jungle">
+            <img src="https://raw.githubusercontent.com/88niceboy/lol/main/image/jungle.png" alt="Jungle">
+          </button>
+          <div class="position-details">
+            <p>승리: <span id="jungleWins">0</span> | 패배: <span id="jungleLoses">0</span></p>
+            <p>총 경기수: <span id="jungleGames">0</span> | 승률: <span id="jungleRate">0%</span></p>
+          </div>
+          <div class="position-graph">
+            <canvas id="jungleChart"></canvas>
+          </div>
+        </div>
+        <div class="position-row">
+          <button class="position-button" data-position="Mid">
+            <img src="https://raw.githubusercontent.com/88niceboy/lol/main/image/mid.png" alt="Mid">
+          </button>
+          <div class="position-details">
+            <p>승리: <span id="midWins">0</span> | 패배: <span id="midLoses">0</span></p>
+            <p>총 경기수: <span id="midGames">0</span> | 승률: <span id="midRate">0%</span></p>
+          </div>
+          <div class="position-graph">
+            <canvas id="midChart"></canvas>
+          </div>
+        </div>
+        <div class="position-row">
+          <button class="position-button" data-position="ADC">
+            <img src="https://raw.githubusercontent.com/88niceboy/lol/main/image/ad.png" alt="ADC">
+          </button>
+          <div class="position-details">
+            <p>승리: <span id="adcWins">0</span> | 패배: <span id="adcLoses">0</span></p>
+            <p>총 경기수: <span id="adcGames">0</span> | 승률: <span id="adcRate">0%</span></p>
+          </div>
+          <div class="position-graph">
+            <canvas id="adcChart"></canvas>
+          </div>
+        </div>
+        <div class="position-row">
+          <button class="position-button" data-position="Support">
+            <img src="https://raw.githubusercontent.com/88niceboy/lol/main/image/support.png" alt="Support">
+          </button>
+          <div class="position-details">
+            <p>승리: <span id="supportWins">0</span> | 패배: <span id="supportLoses">0</span></p>
+            <p>총 경기수: <span id="supportGames">0</span> | 승률: <span id="supportRate">0%</span></p>
+          </div>
+          <div class="position-graph">
+            <canvas id="supportChart"></canvas>
+          </div>
+        </div>
       </div>
     </div>
   </div>

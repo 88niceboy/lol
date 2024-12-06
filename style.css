@@ -334,21 +334,23 @@ nav {
   position: fixed;
   top: 0;
   left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.8);
+  width: 100vw; /* 전체 화면 너비 */
+  height: 100vh; /* 전체 화면 높이 */
+  background-color: rgba(0, 0, 0, 0.8); /* 반투명 배경 */
+  z-index: 1000;
 }
 
 .modal-content {
-  width: 1000px;
-  height: 700px;
+  width: 80%;
+  height: 40%;
   background-color: #1d1d1f;
   border-radius: 10px;
-  padding: 20px;
+  padding: 30px;
   display: grid;
-  grid-template-rows: 1fr auto auto;
-  grid-gap: 20px;
+  grid-template-rows: 1fr 2fr 1fr; /* 영역을 적절히 분리 */
+  gap: 30px;
 }
+
 
 /* 닫기 버튼 */
 .close {
@@ -393,8 +395,8 @@ canvas {
 }
 
 .position-button img {
-  width: 60px;
-  height: 60px;
+  width: 120px;
+  height: 120px;
   border-radius: 50%;
   transition: transform 0.3s ease;
 }
@@ -414,3 +416,27 @@ canvas {
   --win-color: #198686;
   --lose-color: #d33b30;
 }
+
+.position-section {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.position-row {
+  display: grid;
+  grid-template-columns: 1fr 2fr 3fr;
+  align-items: center;
+  gap: 20px;
+}
+
+.position-details {
+  font-size: 16px;
+  color: #ffffff;
+}
+
+.position-graph canvas {
+  width: 150px !important;
+  height: 150px !important;
+}
+
