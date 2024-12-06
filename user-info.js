@@ -56,11 +56,32 @@ function displayUserCards(users) {
   });
 }
 
+// 모달 초기화 함수
+function resetModalData() {
+  // 모든 승리/패배/총 경기수/승률 초기화
+  const positions = ["Total", "Top", "Jungle", "Mid", "ADC", "Support"];
+  positions.forEach((position) => {
+    document.getElementById(`${position.toLowerCase()}Wins`).textContent = "0";
+    document.getElementById(`${position.toLowerCase()}Loses`).textContent = "0";
+    document.getElementById(`${position.toLowerCase()}Games`).textContent = "0";
+    document.getElementById(`${position.toLowerCase()}Rate`).textContent = "0%";
+    if (charts[position]) {
+      charts[position].destroy(); // 이전 차트 제거
+      charts[position] = null; // 차트 객체 초기화
+    }
+  });
+}
+
 // 모달 열기 및 그래프 초기화
 function showUserModal(user) {
+  resetModalData(); // 모달 데이터를 초기화
   modal.style.display = "flex";
 
-  // 총승률 및 포지션별 데이터 업데이트
+  // 유저 이름과 ID 설정
+  const nameAndId = `${user.Name || "이름없음"} / ${user.LolId || "아이디없음"}`;
+  document.getElementById("userNameAndId").textContent = nameAndId;
+
+  // 유저 데이터를 업데이트
   updatePosition("Total", user.Win, user.Lose);
   updatePosition("Top", user.TopWin, user.TopLose);
   updatePosition("Jungle", user.JungleWin, user.JungleLose);
@@ -84,12 +105,11 @@ function updatePosition(position, wins, loses) {
 
 // 그래프 업데이트 함수
 function updateChart(position, data, winRate) {
-  // CSS 변수를 사용해 색상 가져오기
-  const rootStyles = getComputedStyle(document.documentElement);
-  const winColor = rootStyles.getPropertyValue("--win-color").trim();
-  const loseColor = rootStyles.getPropertyValue("--lose-color").trim();
-  const winBorderColor = rootStyles.getPropertyValue("--win-border-color").trim();
-  const loseBorderColor = rootStyles.getPropertyValue("--lose-border-color").trim();
+  // CSS 변수에서 색상 읽기
+  const winColor = getComputedStyle(document.documentElement).getPropertyValue("--win-color").trim();
+  const loseColor = getComputedStyle(document.documentElement).getPropertyValue("--lose-color").trim();
+  const winBorderColor = getComputedStyle(document.documentElement).getPropertyValue("--win-color").trim();
+  const loseBorderColor = getComputedStyle(document.documentElement).getPropertyValue("--lose-color").trim();
 
   if (charts[position]) {
     charts[position].data.datasets[0].data = data;
@@ -103,7 +123,7 @@ function updateChart(position, data, winRate) {
         datasets: [
           {
             data,
-            backgroundColor: [winColor, loseColor],
+            backgroundColor: [winColor, loseColor], // CSS 변수에서 색상 사용
             borderColor: [winBorderColor, loseBorderColor],
             borderWidth: 1,
           },
@@ -125,8 +145,15 @@ function updateChart(position, data, winRate) {
             const centerY = (chartArea.top + chartArea.bottom) / 2;
 
             ctx.save();
-            ctx.font = "bold 18px Arial";
-            ctx.fillStyle = "#ffffff";
+            ctx.font = "bold 22px Arial";
+
+            // 승률이 70%를 넘으면 빨간 글씨, 아니면 흰 글씨
+            if (winRate > 70) {
+              ctx.fillStyle = "#ff4d4d"; // 빨간색
+            } else {
+              ctx.fillStyle = "#ffffff"; // 흰색
+            }
+
             ctx.textAlign = "center";
             ctx.textBaseline = "middle";
             ctx.fillText(`${winRate}%`, centerX, centerY);
