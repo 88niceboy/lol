@@ -8,6 +8,7 @@
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
+  <!-- 헤더 -->
   <div class="header">
     <img src="https://raw.githubusercontent.com/88niceboy/lol/main/lolLogo.png" alt="LOL Logo" class="logo">
     <nav>
@@ -17,21 +18,31 @@
     </nav>
   </div>
 
+  <!-- 유저 정보 컨테이너 -->
   <div class="user-info-container">
-     <div class="grid user-info-button-grid" id="userInfoPeopleGrid"></div>
+    <div id="userInfoPeopleGrid" class="user-info-button-grid">
+      <!-- 동적으로 유저 카드가 삽입됩니다 -->
+    </div>
   </div>
 
   <!-- 모달 -->
   <div id="userModal" class="modal">
     <div class="modal-content">
+      <!-- 닫기 버튼 -->
+      
+      <!-- 유저 이름 및 ID -->
       <div class="user-info-header">
-        <h2 id="userNameAndId"></h2>
+        <h2 id="userNameAndId">유저 이름 / ID</h2>
       </div>
+
+      <!-- 포지션 정보 섹션 -->
       <div class="position-section">
-        <button class="close">&times;</button>
+      <button class="close" aria-label="Close">&times;</button>
+
+        <!-- Total -->
         <div class="position-row">
           <button class="position-button" data-position="Total">
-            <img src="https://raw.githubusercontent.com/88niceboy/lol/main/image/total.png" alt="Total">
+            <img src="https://raw.githubusercontent.com/88niceboy/lol/main/image/total.png" alt="Total Position">
           </button>
           <div class="position-details">
             <p>승리: <span id="totalWins">0</span> | 패배: <span id="totalLoses">0</span></p>
@@ -41,9 +52,11 @@
             <canvas id="totalChart"></canvas>
           </div>
         </div>
+
+        <!-- Top -->
         <div class="position-row">
           <button class="position-button" data-position="Top">
-            <img src="https://raw.githubusercontent.com/88niceboy/lol/main/image/top.png" alt="Top">
+            <img src="https://raw.githubusercontent.com/88niceboy/lol/main/image/top.png" alt="Top Position">
           </button>
           <div class="position-details">
             <p>승리: <span id="topWins">0</span> | 패배: <span id="topLoses">0</span></p>
@@ -53,9 +66,11 @@
             <canvas id="topChart"></canvas>
           </div>
         </div>
+
+        <!-- Jungle -->
         <div class="position-row">
           <button class="position-button" data-position="Jungle">
-            <img src="https://raw.githubusercontent.com/88niceboy/lol/main/image/jungle.png" alt="Jungle">
+            <img src="https://raw.githubusercontent.com/88niceboy/lol/main/image/jungle.png" alt="Jungle Position">
           </button>
           <div class="position-details">
             <p>승리: <span id="jungleWins">0</span> | 패배: <span id="jungleLoses">0</span></p>
@@ -65,9 +80,11 @@
             <canvas id="jungleChart"></canvas>
           </div>
         </div>
+
+        <!-- Mid -->
         <div class="position-row">
           <button class="position-button" data-position="Mid">
-            <img src="https://raw.githubusercontent.com/88niceboy/lol/main/image/mid.png" alt="Mid">
+            <img src="https://raw.githubusercontent.com/88niceboy/lol/main/image/mid.png" alt="Mid Position">
           </button>
           <div class="position-details">
             <p>승리: <span id="midWins">0</span> | 패배: <span id="midLoses">0</span></p>
@@ -77,9 +94,11 @@
             <canvas id="midChart"></canvas>
           </div>
         </div>
+
+        <!-- ADC -->
         <div class="position-row">
           <button class="position-button" data-position="ADC">
-            <img src="https://raw.githubusercontent.com/88niceboy/lol/main/image/ad.png" alt="ADC">
+            <img src="https://raw.githubusercontent.com/88niceboy/lol/main/image/ad.png" alt="ADC Position">
           </button>
           <div class="position-details">
             <p>승리: <span id="adcWins">0</span> | 패배: <span id="adcLoses">0</span></p>
@@ -89,9 +108,11 @@
             <canvas id="adcChart"></canvas>
           </div>
         </div>
+
+        <!-- Support -->
         <div class="position-row">
           <button class="position-button" data-position="Support">
-            <img src="https://raw.githubusercontent.com/88niceboy/lol/main/image/support.png" alt="Support">
+            <img src="https://raw.githubusercontent.com/88niceboy/lol/main/image/support.png" alt="Support Position">
           </button>
           <div class="position-details">
             <p>승리: <span id="supportWins">0</span> | 패배: <span id="supportLoses">0</span></p>
@@ -102,26 +123,29 @@
           </div>
         </div>
       </div>
-    </div>
-    <div class="user-stats-table">
-      <h3>Position Stats</h3>
-      <table>
-        <thead>
-          <tr>
-            <th>Position</th>
-            <th>Wins</th>
-            <th>Loses</th>
-            <th>Total Games</th>
-            <th>Win Rate</th>
-          </tr>
-        </thead>
-        <tbody id="positionStatsTableBody">
-          <!-- 데이터가 여기에 동적으로 삽입됩니다 -->
-        </tbody>
-      </table>
+
+      <!-- 유저 통계 테이블 -->
+      <div class="user-stats-table">
+        <h3>Position Stats</h3>
+        <table>
+          <thead>
+            <tr>
+              <th>Position</th>
+              <th>Wins</th>
+              <th>Loses</th>
+              <th>Total Games</th>
+              <th>Win Rate</th>
+            </tr>
+          </thead>
+          <tbody id="positionStatsTableBody">
+            <!-- 동적으로 데이터 삽입 -->
+          </tbody>
+        </table>
+      </div>
     </div>
   </div>
 
+  <!-- JavaScript 파일 -->
   <script src="user-info.js"></script>
 </body>
 </html>
