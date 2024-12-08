@@ -356,7 +356,7 @@ nav {
 }
 
 /* 모바일 대응 */
-@media (max-width: 900px) {
+@media (max-width: 100%) {
   .modal-content {
     width: 100%; /* 모바일 화면 너비 조정 */
     height: 100%;
