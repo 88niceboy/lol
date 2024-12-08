@@ -93,7 +93,7 @@ async function showUserModal(user) {
   updatePosition("Mid", user.MidWin, user.MidLose);
   updatePosition("ADC", user.AdWin, user.AdLose);
   updatePosition("Support", user.SupportWin, user.SupportLose);
-
+  console.log("sdsdsdsdd")
   // 챔프 스코어 데이터 가져오기 및 테이블 업데이트
   await fetchChampScoreData(user.LolId);
 }
