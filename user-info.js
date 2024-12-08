@@ -1,9 +1,13 @@
 const API_URL = "https://port-0-backend-m43n9mp6f1a95885.sel4.cloudtype.app/users";
+const CHAMP_SCORE_URL = "https://port-0-backend-m43n9mp6f1a95885.sel4.cloudtype.app/champ-score";
 const userListContainer = document.getElementById("userInfoPeopleGrid");
 
 // 모달 관련 요소
 const modal = document.getElementById("userModal");
 const closeModal = document.querySelector(".close");
+
+// 유저 통계 테이블
+const userStatsTableBody = document.getElementById("positionStatsTableBody");
 
 // 그래프 관련 요소
 const chartElements = {
@@ -70,10 +74,11 @@ function resetModalData() {
       charts[position] = null; // 차트 객체 초기화
     }
   });
+  userStatsTableBody.innerHTML = ""; // 테이블 초기화
 }
 
 // 모달 열기 및 그래프 초기화
-function showUserModal(user) {
+async function showUserModal(user) {
   resetModalData(); // 모달 데이터를 초기화
   modal.style.display = "flex";
 
@@ -88,6 +93,9 @@ function showUserModal(user) {
   updatePosition("Mid", user.MidWin, user.MidLose);
   updatePosition("ADC", user.AdWin, user.AdLose);
   updatePosition("Support", user.SupportWin, user.SupportLose);
+
+  // 챔프 스코어 데이터 가져오기 및 테이블 업데이트
+  await fetchChampScoreData(user.LolId);
 }
 
 // 포지션 업데이트 함수
@@ -105,7 +113,6 @@ function updatePosition(position, wins, loses) {
 
 // 그래프 업데이트 함수
 function updateChart(position, data, winRate) {
-  // CSS 변수에서 색상 읽기
   const winColor = getComputedStyle(document.documentElement).getPropertyValue("--win-color").trim();
   const loseColor = getComputedStyle(document.documentElement).getPropertyValue("--lose-color").trim();
   const winBorderColor = getComputedStyle(document.documentElement).getPropertyValue("--win-color").trim();
@@ -123,7 +130,7 @@ function updateChart(position, data, winRate) {
         datasets: [
           {
             data,
-            backgroundColor: [winColor, loseColor], // CSS 변수에서 색상 사용
+            backgroundColor: [winColor, loseColor],
             borderColor: [winBorderColor, loseBorderColor],
             borderWidth: 1,
           },
@@ -147,7 +154,6 @@ function updateChart(position, data, winRate) {
             ctx.save();
             ctx.font = "bold 22px Arial";
 
-            // 승률이 70%를 넘으면 빨간 글씨, 아니면 흰 글씨
             if (winRate > 70) {
               ctx.fillStyle = "#ff4d4d"; // 빨간색
             } else {
@@ -165,7 +171,6 @@ function updateChart(position, data, winRate) {
   }
 }
 
-
 // 티어 이미지 반환
 function getTierImage(tier) {
   const tierImages = {
@@ -182,6 +187,29 @@ function getTierImage(tier) {
   };
 
   return tierImages[tier] || "https://raw.githubusercontent.com/88niceboy/lol/main/image/iron.png";
+}
+
+// 챔프 스코어 데이터 가져오기
+async function fetchChampScoreData(userId) {
+  try {
+    const response = await fetch(`${CHAMP_SCORE_URL}?LolId=${userId}`);
+    const data = await response.json();
+    
+    // 테이블에 데이터 표시
+    data.forEach((champ) => {
+      const row = document.createElement("tr");
+      row.innerHTML = `
+        <td>${champ.Champ}</td>
+        <td>${champ.Win}</td>
+        <td>${champ.Lose}</td>
+        <td>${parseInt(champ.Win) + parseInt(champ.Lose)}</td>
+        <td>${((parseInt(champ.Win) / (parseInt(champ.Win) + parseInt(champ.Lose))) * 100).toFixed(2)}%</td>
+      `;
+      userStatsTableBody.appendChild(row);
+    });
+  } catch (error) {
+    console.error("Error fetching champ score data:", error);
+  }
 }
 
 // 초기 실행
