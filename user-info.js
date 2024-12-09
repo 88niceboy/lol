@@ -1,5 +1,5 @@
 const API_URL = "https://port-0-backend-m43n9mp6f1a95885.sel4.cloudtype.app/users";
-const CHAMP_SCORE_URL = "https://port-0-backend-m43n9mp6f1a95885.sel4.cloudtype.app/champ-score";
+const CHAMP_SCORE_URL = "https://port-0-backend-m43n9mp6f1a95885.sel4.cloudtype.app/users/champ-score";
 const userListContainer = document.getElementById("userInfoPeopleGrid");
 
 // 모달 관련 요소
