@@ -190,9 +190,9 @@ function getTierImage(tier) {
 }
 
 // 챔프 스코어 데이터 가져오기
-async function fetchChampScoreData(userId) {
+async function fetchChampScoreData(name) {
   try {
-    const response = await fetch(`${CHAMP_SCORE_URL}?LolId=${userId}`);
+    const response = await fetch(`${CHAMP_SCORE_URL}?Name=${name}`);
     const data = await response.json();
     
     // 테이블에 데이터 표시
