@@ -93,7 +93,7 @@ async function showUserModal(user) {
   updatePosition("Mid", user.MidWin, user.MidLose);
   updatePosition("ADC", user.AdWin, user.AdLose);
   updatePosition("Support", user.SupportWin, user.SupportLose);
-  console.log("sdsdsdsdd")
+  console.log("userName",user.Name)
   // 챔프 스코어 데이터 가져오기 및 테이블 업데이트
   await fetchChampScoreData(user.Name);
 }
@@ -192,6 +192,7 @@ function getTierImage(tier) {
 // 챔프 스코어 데이터 가져오기
 async function fetchChampScoreData(name) {
   try {
+    console.log("fetchChampScoreData", name)
     const response = await fetch(`${CHAMP_SCORE_URL}?Name=${name}`);
     const data = await response.json();
     
