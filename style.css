@@ -383,10 +383,12 @@ nav {
   }
 
   .position-details {
-    font-size: 12px; /* 텍스트 크기 축소 */
+    font-size: 14px; /* 텍스트 크기 확대 */
     text-align: center;
-    width: 30%;
-    margin: 5px 0; /* 상하 간격 조정 */
+    width: 80%; /* 충분한 너비 확보 */
+    max-width: 250px; /* 최대 너비 제한 */
+    word-wrap: break-word; /* 텍스트 줄바꿈 처리 */
+    margin: 5px auto; /* 중앙 정렬 */
   }
 
   .position-graph canvas {

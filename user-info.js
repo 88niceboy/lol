@@ -8,7 +8,6 @@ const closeModal = document.querySelector(".close");
 
 // 유저 통계 테이블
 const userStatsTableBody = document.getElementById("positionStatsTableBody");
-
 // 그래프 관련 요소
 const chartElements = {
   Total: document.getElementById("totalChart"),
@@ -20,6 +19,9 @@ const chartElements = {
 };
 
 let charts = {}; // 저장된 차트 객체들
+
+document.addEventListener("DOMContentLoaded", fetchAndDisplayUsers);
+
 
 // 초기 모달 숨기기
 modal.style.display = "none";
