@@ -503,6 +503,9 @@ canvas {
   font-size: 24px; /* 글자 크기 확대 */
   font-weight: bold;
   margin: 0 20px; /* 양쪽 여백 추가 */
+  min-width: 200px; /* 최소 너비 설정 */
+  max-width: 300px; /* 최대 너비 설정 (원하는 경우) */
+  word-wrap: break-word; /* 텍스트가 길 경우 줄바꿈 */
 }
 
 
