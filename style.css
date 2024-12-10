@@ -385,7 +385,7 @@ nav {
   .position-details {
     font-size: 14px; /* 텍스트 크기 확대 */
     text-align: center;
-    width: 80%; /* 충분한 너비 확보 */
+    min-width: 250px; /* 최대 너비 제한 */
     max-width: 250px; /* 최대 너비 제한 */
     word-wrap: break-word; /* 텍스트 줄바꿈 처리 */
     margin: 5px auto; /* 중앙 정렬 */
@@ -494,7 +494,7 @@ canvas {
   justify-content: space-between; /* 양쪽 정렬 */
   align-items: center; /* 세로 정렬 */
   margin-bottom: 20px; /* 행 간 간격 추가 */
-  gap: 300px; /* 행 내의 요소 간 간격 추가 */
+  gap: 100px; /* 행 내의 요소 간 간격 추가 */
 }
 
 .position-details {
