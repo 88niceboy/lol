@@ -385,6 +385,7 @@ nav {
   .position-details {
     font-size: 12px; /* 텍스트 크기 축소 */
     text-align: center;
+    width: 30%;
     margin: 5px 0; /* 상하 간격 조정 */
   }
 
@@ -639,4 +640,34 @@ tbody tr:hover {
 
 .login-modal .modal-content button:hover {
   background-color: #0056b3;
+}
+
+#vote-container {
+  max-width: 600px;
+  margin: auto;
+  text-align: center;
+}
+
+.vote-option {
+  padding: 10px;
+  margin: 5px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  text-align: center;
+  cursor: pointer;
+}
+
+.vote-option:hover {
+  background-color: #f0f0f0;
+}
+
+.vote-option.selected {
+  background-color: #007bff;
+  color: white;
+}
+
+.vote-option.peak-time {
+  background-color: #ffa500;
+  color: white;
+  font-weight: bold;
 }
