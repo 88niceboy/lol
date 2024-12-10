@@ -1,4 +1,5 @@
 const API_URL = "https://port-0-backend-m43n9mp6f1a95885.sel4.cloudtype.app/users"; // 백엔드 URL
+const LOGIN_URL = "https://port-0-backend-m43n9mp6f1a95885.sel4.cloudtype.app/login"; // 로그인 URL
 
 // DOM 요소
 const peopleGrid = document.getElementById("peopleGrid");
@@ -8,10 +9,78 @@ teamButton.textContent = "팀 뽑기";
 teamButton.className = "make-team-button";
 teamButton.disabled = true;
 const teamDisplay = document.getElementById("teamDisplay");
+const loginButton = document.getElementById("loginButton");
+const loginModal = document.getElementById("login-modal");
+const loginForm = document.getElementById("loginForm");
+const closeLoginModal = document.getElementById("closeLoginModal");
 
 // 선택된 사람 리스트
 const selectedPeople = [];
 let users = [];
+
+// 로그인 상태 확인 및 버튼 텍스트 변경
+document.addEventListener("DOMContentLoaded", () => {
+  const isLoggedIn = localStorage.getItem("loggedIn");
+  if (isLoggedIn) {
+    loginButton.textContent = "로그아웃";
+  }
+});
+
+// 로그인 버튼 클릭 이벤트
+loginButton.addEventListener("click", () => {
+  const isLoggedIn = localStorage.getItem("loggedIn");
+  if (isLoggedIn) {
+    // 로그아웃 처리
+    localStorage.removeItem("loggedIn");
+    alert("로그아웃되었습니다.");
+    loginButton.textContent = "로그인";
+  } else {
+    // 로그인 모달 열기
+    loginModal.style.display = "flex";
+  }
+});
+
+// 로그인 폼 제출 이벤트
+loginForm.addEventListener("submit", async (event) => {
+  event.preventDefault();
+
+  // 입력된 ID와 Password 가져오기
+  const id = document.getElementById("loginId").value.trim();
+  const password = document.getElementById("loginPassword").value.trim();
+
+  try {
+    // 백엔드로 로그인 요청
+    const response = await fetch(LOGIN_URL, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ id, password }),
+    });
+
+    const data = await response.json();
+
+    if (response.ok && data.success) {
+      // 로그인 성공 처리
+      localStorage.setItem("loggedIn", true);
+      alert(`${id}님, 로그인 성공!`);
+      loginButton.textContent = "로그아웃";
+      loginModal.style.display = "none";
+    } else {
+      // 로그인 실패 처리
+      alert(data.message || "로그인 실패. 다시 시도해주세요.");
+    }
+  } catch (error) {
+    console.error("로그인 요청 실패:", error);
+    alert("서버와 연결할 수 없습니다. 잠시 후 다시 시도해주세요.");
+  }
+});
+
+// 모달 닫기 이벤트
+closeLoginModal.addEventListener("click", () => {
+  loginModal.style.display = "none";
+});
+
 // 유저 데이터를 백엔드에서 가져오기
 async function fetchUsers() {
   try {
@@ -26,40 +95,14 @@ async function fetchUsers() {
     }
 
     const data = await response.json();
-    users = data;  // 유저 데이터를 전역 변수에 저장
-    populateUsers(data);  // 사용자 데이터를 화면에 표시
+    users = data; // 유저 데이터를 전역 변수에 저장
+    populateUsers(data); // 사용자 데이터를 화면에 표시
   } catch (error) {
     console.error("Error fetching users:", error);
   }
 }
 
 // 사람 카드 생성
-// function populateUsers(users) {
-//   users.forEach((user) => {
-//     const userCard = document.createElement("div");
-//     userCard.className = "user-card";
-
-//     const button = document.createElement("button");
-//     button.className = "custom-button";
-//     button.innerHTML = `
-//       <img src="https://via.placeholder.com/40" alt="User Icon">
-//       <span>${user.Name}</span>
-//     `;
-//     button.addEventListener("click", () => selectPerson(user.Name, button));
-
-//     const userInfo = document.createElement("div");
-//     userInfo.className = "user-info";
-//     userInfo.innerHTML = `
-//       <div class="user-tier">${user.Tier} ${user.TierRank}</div>
-//       <div class="user-positions">${[user.Position1, user.Position2, user.Position3, user.Position4, user.Position5].filter(Boolean).join(", ")}</div>
-//     `;
-
-//     userCard.appendChild(button);
-//     userCard.appendChild(userInfo);
-//     peopleGrid.appendChild(userCard);
-//   });
-// }
-
 function populateUsers(users) {
   users.forEach((user) => {
     const userCard = document.createElement("div");
@@ -89,7 +132,6 @@ function populateUsers(users) {
   });
 }
 
-
 // 유저 선택 이벤트
 function selectPerson(person, buttonElement) {
   if (selectedPeople.includes(person)) {
@@ -117,7 +159,7 @@ function updateSelectedGroups() {
   selectedPeople.forEach((person) => {
     // person을 기반으로 user 객체 찾기
     const user = users.find(u => u.Name === person);
-    if (!user) return;  // 유저 정보가 없다면 넘어가기
+    if (!user) return; // 유저 정보가 없다면 넘어가기
 
     const button = document.createElement("button");
     button.className = "custom-button selected";
@@ -209,6 +251,7 @@ function displayTeams(results) {
     .join("");
 }
 
+// 티어 이미지 반환
 function getTierImage(tier) {
   const tierImages = {
     "아이언": "https://raw.githubusercontent.com/88niceboy/lol/main/image/iron.png",
@@ -220,10 +263,11 @@ function getTierImage(tier) {
     "다이아몬드": "https://raw.githubusercontent.com/88niceboy/lol/main/image/diamond.png",
     "마스터": "https://raw.githubusercontent.com/88niceboy/lol/main/image/master.png",
     "그랜드마스터": "https://raw.githubusercontent.com/88niceboy/lol/main/image/grandmaster.png",
-    "챌린저": "https://raw.githubusercontent.com/88niceboy/lol/main/image/challenger.png"
+    "챌린저": "https://raw.githubusercontent.com/88niceboy/lol/main/image/challenger.png",
   };
 
   return tierImages[tier] || "https://raw.githubusercontent.com/88niceboy/lol/main/image/iron.png"; // 기본값은 아이언
 }
+
 // 페이지 로드 시 유저 데이터를 가져오기
 fetchUsers();

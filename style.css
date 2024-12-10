@@ -570,3 +570,73 @@ tbody tr:hover {
   background-color: #16a085;
   cursor: pointer;
 }
+
+.login-button {
+  background-color: #123f6e;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  padding: 10px 20px;
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: bold;
+  margin-left: auto; /* 오른쪽 끝 정렬 */
+  transition: background-color 0.3s ease;
+}
+
+.login-button:hover {
+  background-color: #0056b3;
+}
+
+/* 로그인 모달 */
+.login-modal {
+  display: none;
+  align-items: center;
+  justify-content: center;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.8);
+  z-index: 1000;
+}
+
+.login-modal .modal-content {
+  background-color: #1d1d1f;
+  border-radius: 10px;
+  padding: 20px;
+  color: white;
+  text-align: center;
+  max-width: 400px;
+  width: 90%;
+}
+
+.login-modal .modal-content h2 {
+  margin-bottom: 20px;
+}
+
+.login-modal .modal-content form {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.login-modal .modal-content input {
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+.login-modal .modal-content button {
+  padding: 10px;
+  background-color: #123f6e;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.login-modal .modal-content button:hover {
+  background-color: #0056b3;
+}

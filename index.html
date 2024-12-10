@@ -3,21 +3,22 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>LOL 팀 나누기</title> <!-- 수정된 제목 -->
+  <title>LOL 팀 나누기</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
   <div class="header">
     <img src="https://raw.githubusercontent.com/88niceboy/lol/main/lolLogo.png" alt="LOL Logo" class="logo">
     <nav>
-      <a href="index.html">편뽑기 페이지</a> <!-- 팀뽑기 메뉴 링크 -->
+      <a href="index.html">편뽑기 페이지</a>
       <a href="random-ladder.html">랜덤 사다리</a>
       <a href="user-info.html">유저정보</a>
+      <a href="vote.html">투표하기</a>
+      <button class="login-button" id="loginButton">로그인</button>
       <div id="indicator"></div>
     </nav>
   </div>
   <div class="container">
-    <!-- 기존 코드 유지 -->
     <div class="grid button-grid" id="peopleGrid"></div>
     <div class="selected-container">
       <div class="selected-groups" id="selectedGroups">
@@ -26,6 +27,26 @@
     </div>
     <div class="team-display" id="teamDisplay"></div>
   </div>
+
+  <!-- 로그인 모달 -->
+  <div id="login-modal" class="login-modal" style="display: none;">
+    <div class="modal-content">
+      <h2>로그인</h2>
+      <form id="loginForm">
+        <div>
+          <label for="loginId">ID:</label>
+          <input type="text" id="loginId" required>
+        </div>
+        <div>
+          <label for="loginPassword">Password:</label>
+          <input type="password" id="loginPassword" required>
+        </div>
+        <button type="submit">로그인</button>
+      </form>
+      <button id="closeLoginModal" class="close">닫기</button>
+    </div>
+  </div>
+
   <script src="script.js"></script>
 </body>
 </html>
