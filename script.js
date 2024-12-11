@@ -25,7 +25,7 @@ const resetVoteButton = document.createElement("button");
 
 resetVoteButton.id = "reset-vote";
 resetVoteButton.textContent = "다시 투표하기";
-document.getElementById("vote-container").appendChild(resetVoteButton);
+//document.getElementById("vote-container").appendChild(resetVoteButton);
 
 // 선택된 사람 리스트
 const selectedPeople = [];
@@ -113,6 +113,7 @@ async function fetchUsers() {
     }
 
     const data = await response.json();
+    console.log("Fetched users:", data)
     users = data; // 유저 데이터를 전역 변수에 저장
     populateUsers(data); // 사용자 데이터를 화면에 표시
   } catch (error) {
