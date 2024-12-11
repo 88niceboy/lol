@@ -1,6 +1,6 @@
 const API_URL = "https://port-0-backend-m43n9mp6f1a95885.sel4.cloudtype.app/users"; // 백엔드 URL
 const LOGIN_URL = "https://port-0-backend-m43n9mp6f1a95885.sel4.cloudtype.app/users/login"; // 로그인 URL
-const VOTE_URL = "https://port-0-backend-m43n9mp6f1a95885.sel4.cloudtype.app/vote"; // 투표 관련 API URL
+const VOTE_URL = "https://port-0-backend-m43n9mp6f1a95885.sel4.cloudtype.app/votes/vote"; // 투표 관련 API URL
 
 // DOM 요소
 const peopleGrid = document.getElementById("peopleGrid");
@@ -14,6 +14,18 @@ const loginButton = document.getElementById("loginButton");
 const loginModal = document.getElementById("login-modal");
 const loginForm = document.getElementById("loginForm");
 const closeLoginModal = document.getElementById("closeLoginModal");
+
+
+// DOM 요소
+const voteTitle = document.getElementById("vote-title");
+const voteOptions = document.getElementById("vote-options");
+const submitVoteButton = document.getElementById("submit-vote");
+const voteStatusList = document.getElementById("vote-status-list");
+const resetVoteButton = document.createElement("button");
+
+resetVoteButton.id = "reset-vote";
+resetVoteButton.textContent = "다시 투표하기";
+document.getElementById("vote-container").appendChild(resetVoteButton);
 
 // 선택된 사람 리스트
 const selectedPeople = [];
@@ -267,12 +279,108 @@ function getTierImage(tier) {
 }
 
 // 투표 초기화
-function initializeVotePage() {
-  const voteContainer = document.getElementById("vote-container");
+// function initializeVotePage() {
+//   const voteContainer = document.getElementById("vote-container");
+//   const voteTitle = document.getElementById("vote-title");
+//   const voteOptions = document.getElementById("vote-options");
+//   const submitVoteButton = document.getElementById("submit-vote");
+//   const voteStatusList = document.getElementById("vote-status-list");
+
+//   const user = {
+//     Name: localStorage.getItem("userName"),
+//     LolId: localStorage.getItem("userLolId"),
+//   };
+
+//   if (!user.Name || !user.LolId) {
+//     alert("로그인이 필요합니다.");
+//     window.location.href = "index.html";
+//     return;
+//   }
+
+//   const today = new Date();
+//   const date = today.toLocaleDateString();
+//   voteTitle.innerText = `오늘의 투표 (${date})`;
+
+//   const times = [];
+//   for (let hour = 12; hour <= 23; hour++) {
+//     times.push(`${hour}:00`);
+//     times.push(`${hour}:30`);
+//   }
+//   times.push("24:00");
+
+//   times.forEach((time) => {
+//     const option = document.createElement("div");
+//     option.classList.add("vote-option");
+//     option.innerText = time;
+
+//     if (time === "21:30") {
+//       option.classList.add("peak-time");
+//     }
+
+//     option.addEventListener("click", () => {
+//       // 중복 투표 가능하도록 선택 상태 토글
+//       if (option.classList.contains("selected")) {
+//         option.classList.remove("selected");
+//       } else {
+//         option.classList.add("selected");
+//       }
+//       submitVoteButton.disabled = document.querySelectorAll(".vote-option.selected").length === 0;
+//     });
+
+//     voteOptions.appendChild(option);
+//   });
+
+//   submitVoteButton.addEventListener("click", async () => {
+//     const selectedOptions = Array.from(document.querySelectorAll(".vote-option.selected")).map(
+//       (el) => el.innerText
+//     );
+
+//     if (selectedOptions.length === 0) return;
+
+//     const voteData = {
+//       userName: user.Name,
+//       userLolId: user.LolId,
+//       selectedTimes: selectedOptions, // 여러 항목 전송
+//     };
+
+//     try {
+//       const response = await fetch(VOTE_URL, {
+//         method: "POST",
+//         headers: {
+//           "Content-Type": "application/json",
+//         },
+//         body: JSON.stringify(voteData),
+//       });
+
+//       if (response.ok) {
+//         alert("투표가 성공적으로 제출되었습니다!");
+//         fetchVoteStatus(voteStatusList);
+//         document.querySelectorAll(".vote-option.selected").forEach((el) => el.classList.remove("selected"));
+//         submitVoteButton.disabled = true;
+//       } else {
+//         alert("투표 제출 중 문제가 발생했습니다.");
+//       }
+//     } catch (error) {
+//       console.error("Error submitting vote:", error);
+//       alert("서버와 연결할 수 없습니다. 잠시 후 다시 시도해주세요.");
+//     }
+//   });
+
+//   fetchVoteStatus(voteStatusList);
+// }
+
+// 투표 초기화
+// 투표 초기화
+async function initializeVotePage() {
   const voteTitle = document.getElementById("vote-title");
   const voteOptions = document.getElementById("vote-options");
   const submitVoteButton = document.getElementById("submit-vote");
   const voteStatusList = document.getElementById("vote-status-list");
+  const resetVoteButton = document.createElement("button");
+
+  resetVoteButton.id = "reset-vote";
+  resetVoteButton.textContent = "다시 투표하기";
+  document.getElementById("vote-container").appendChild(resetVoteButton);
 
   const user = {
     Name: localStorage.getItem("userName"),
@@ -289,95 +397,107 @@ function initializeVotePage() {
   const date = today.toLocaleDateString();
   voteTitle.innerText = `오늘의 투표 (${date})`;
 
-  const times = [];
-  for (let hour = 12; hour <= 23; hour++) {
-    times.push(`${hour}:00`);
-    times.push(`${hour}:30`);
-  }
-  times.push("24:00");
+  // 서버에서 투표 항목 가져오기
+  try {
+    const response = await fetch(`${VOTE_URL}/options`);
+    if (!response.ok) throw new Error("Failed to fetch vote options");
 
-  times.forEach((time) => {
-    const option = document.createElement("div");
-    option.classList.add("vote-option");
-    option.innerText = time;
+    const options = await response.json();
 
-    if (time === "21:30") {
-      option.classList.add("peak-time");
-    }
+    // 투표 항목 생성
+    voteOptions.innerHTML = "";
+    options.forEach((option) => {
+      const optionElement = document.createElement("div");
+      optionElement.classList.add("vote-option");
+      optionElement.innerText = option.option_name;
 
-    option.addEventListener("click", () => {
-      // 중복 투표 가능하도록 선택 상태 토글
-      if (option.classList.contains("selected")) {
-        option.classList.remove("selected");
-      } else {
-        option.classList.add("selected");
-      }
-      submitVoteButton.disabled = document.querySelectorAll(".vote-option.selected").length === 0;
+      // 선택 이벤트 추가
+      optionElement.addEventListener("click", () => toggleVoteOption(optionElement, submitVoteButton));
+      voteOptions.appendChild(optionElement);
     });
 
-    voteOptions.appendChild(option);
-  });
+    // 제출 및 초기화 버튼 이벤트
+    submitVoteButton.addEventListener("click", () => submitVotes(user, submitVoteButton));
+    resetVoteButton.addEventListener("click", () => enableVoteOptions());
 
-  submitVoteButton.addEventListener("click", async () => {
-    const selectedOptions = Array.from(document.querySelectorAll(".vote-option.selected")).map(
-      (el) => el.innerText
-    );
+    fetchVoteStatus(voteStatusList);
+  } catch (error) {
+    console.error("Error initializing vote page:", error);
+    alert("투표 데이터를 불러오는데 실패했습니다.");
+  }
+}
 
-    if (selectedOptions.length === 0) return;
+// 투표 선택 상태 토글
+function toggleVoteOption(option, submitVoteButton) {
+  if (option.classList.contains("disabled")) return; // 비활성화된 항목은 클릭 무시
 
-    const voteData = {
-      userName: user.Name,
-      userLolId: user.LolId,
-      selectedTimes: selectedOptions, // 여러 항목 전송
-    };
+  option.classList.toggle("selected");
+  if (option.classList.contains("peak-time")) {
+    option.classList.toggle("selected-peak");
+  }
+  submitVoteButton.disabled = document.querySelectorAll(".vote-option.selected").length === 0;
+}
 
-    try {
-      const response = await fetch(VOTE_URL, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(voteData),
-      });
+// 투표 제출
+async function submitVotes(user, submitVoteButton) {
+  const selectedOptions = Array.from(document.querySelectorAll(".vote-option.selected")).map((el) => el.innerText);
 
-      if (response.ok) {
-        alert("투표가 성공적으로 제출되었습니다!");
-        fetchVoteStatus(voteStatusList);
-        document.querySelectorAll(".vote-option.selected").forEach((el) => el.classList.remove("selected"));
-        submitVoteButton.disabled = true;
-      } else {
-        alert("투표 제출 중 문제가 발생했습니다.");
-      }
-    } catch (error) {
-      console.error("Error submitting vote:", error);
-      alert("서버와 연결할 수 없습니다. 잠시 후 다시 시도해주세요.");
+  if (selectedOptions.length === 0) return;
+
+  try {
+    const response = await fetch(`${VOTE_URL}/submit`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ userName: user.Name, selectedOptions }),
+    });
+
+    if (response.ok) {
+      alert("투표가 성공적으로 제출되었습니다!");
+
+      // 선택한 항목 비활성화
+      document.querySelectorAll(".vote-option.selected").forEach((el) => el.classList.add("disabled"));
+      fetchVoteStatus(document.getElementById("vote-status-list"));
+      submitVoteButton.disabled = true;
+    } else {
+      alert("투표 제출 중 문제가 발생했습니다.");
     }
-  });
-
-  fetchVoteStatus(voteStatusList);
+  } catch (error) {
+    console.error("Error submitting vote:", error);
+    alert("서버와 연결할 수 없습니다. 잠시 후 다시 시도해주세요.");
+  }
 }
 
 // 투표 상태 조회
 async function fetchVoteStatus(voteStatusList) {
   try {
-    const response = await fetch(`${VOTE_URL}/status`, { method: "GET" });
+    const response = await fetch(`${VOTE_URL}/status`);
     if (!response.ok) throw new Error("Failed to fetch vote status");
 
     const votes = await response.json();
-    voteStatusList.innerHTML = "";
-
-    if (votes.length === 0) {
-      voteStatusList.innerHTML = "<li>아직 투표된 항목이 없습니다.</li>";
-      return;
-    }
-
-    votes.forEach((vote) => {
-      const listItem = document.createElement("li");
-      listItem.textContent = `${vote.SelectedTime} - ${vote.UserName}`;
-      voteStatusList.appendChild(listItem);
-    });
+    voteStatusList.innerHTML = votes.length
+      ? votes.map((vote) => `<li>${vote.SelectedTime} - ${vote.UserName}</li>`).join("")
+      : "<li>아직 투표된 항목이 없습니다.</li>";
   } catch (error) {
     console.error("Error fetching vote status:", error);
     voteStatusList.innerHTML = "<li>투표 상태를 불러오는 중 문제가 발생했습니다.</li>";
   }
 }
+
+// 다시 투표하기
+function enableVoteOptions() {
+  alert("다시 선택할 수 있습니다. 기존 투표 항목은 유지됩니다.");
+  document.querySelectorAll(".vote-option.disabled").forEach((el) => el.classList.remove("disabled"));
+}
+
+
+
+
+// 버튼 상태 업데이트
+function updateButtonStates(submitVoteButton, resetVoteButton) {
+  const hasSelection = document.querySelectorAll(".vote-option.selected").length > 0;
+  submitVoteButton.disabled = !hasSelection;
+  resetVoteButton.disabled = !hasSelection;
+}
+
