@@ -1,6 +1,7 @@
 const API_URL = "https://port-0-backend-m43n9mp6f1a95885.sel4.cloudtype.app/users"; // 백엔드 URL
 const LOGIN_URL = "https://port-0-backend-m43n9mp6f1a95885.sel4.cloudtype.app/users/login"; // 로그인 URL
-const VOTE_URL = "https://port-0-backend-m43n9mp6f1a95885.sel4.cloudtype.app/votes/vote"; // 투표 관련 API URL
+const VOTE_URL = "https://port-0-backend-m43n9mp6f1a95885.sel4.cloudtype.app/votes"; // 기본 URL로 수정
+
 
 // DOM 요소
 const peopleGrid = document.getElementById("peopleGrid");
@@ -379,9 +380,12 @@ async function initializeVotePage() {
   const voteStatusList = document.getElementById("vote-status-list");
   const resetVoteButton = document.createElement("button");
 
-  resetVoteButton.id = "reset-vote";
-  resetVoteButton.textContent = "다시 투표하기";
-  document.getElementById("vote-container").appendChild(resetVoteButton);
+  const voteContainer = document.getElementById("vote-container");
+  if (voteContainer) {
+    resetVoteButton.id = "reset-vote";
+    resetVoteButton.textContent = "다시 투표하기";
+    voteContainer.appendChild(resetVoteButton);
+  }
 
   const user = {
     Name: localStorage.getItem("userName"),
@@ -398,15 +402,21 @@ async function initializeVotePage() {
   const date = today.toLocaleDateString();
   voteTitle.innerText = `오늘의 투표 (${date})`;
 
-  // 서버에서 투표 항목 가져오기
   try {
-    const response = await fetch(`${VOTE_URL}/options`);
-    if (!response.ok) throw new Error("Failed to fetch vote options");
+    const formattedDate = today.toISOString().split('T')[0]; // YYYY-MM-DD 형식으로 변환
+    const response = await fetch(`${VOTE_URL}/options?date=${formattedDate}`);
+
+    if (!response.ok) {
+      throw new Error(`Failed to fetch vote options: ${response.statusText}`);
+    }
 
     const options = await response.json();
 
-    // 투표 항목 생성
-    voteOptions.innerHTML = "";
+    if (!options || options.length === 0) {
+      throw new Error("No vote options available for today.");
+    }
+
+    voteOptions.innerHTML = ""; // 기존 내용을 초기화
     options.forEach((option) => {
       const optionElement = document.createElement("div");
       optionElement.classList.add("vote-option");
@@ -417,16 +427,19 @@ async function initializeVotePage() {
       voteOptions.appendChild(optionElement);
     });
 
-    // 제출 및 초기화 버튼 이벤트
+    // 버튼 이벤트 추가
     submitVoteButton.addEventListener("click", () => submitVotes(user, submitVoteButton));
     resetVoteButton.addEventListener("click", () => enableVoteOptions());
 
+    // 투표 상태 조회
     fetchVoteStatus(voteStatusList);
   } catch (error) {
     console.error("Error initializing vote page:", error);
-    alert("투표 데이터를 불러오는데 실패했습니다.");
+    alert("투표 데이터를 불러오는데 실패했습니다. 다시 시도해주세요.");
   }
 }
+
+
 
 // 투표 선택 상태 토글
 function toggleVoteOption(option, submitVoteButton) {
