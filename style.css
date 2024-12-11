@@ -194,8 +194,23 @@ body {
   flex-wrap: wrap;
   gap: 10px;
   justify-content: center;
-  position: relative; /* 내부 요소 배치를 위한 기준 */
+  position: relative;
+  max-height: 200px; /* 최대 높이 설정 */
+  overflow-y: auto; /* 스크롤 활성화 */
   padding-bottom: 60px; /* 버튼 공간 확보 */
+}
+@media (max-width: 768px) {
+  .selected-groups {
+    max-height: 150px; /* 모바일에서는 최대 높이를 더 작게 설정 */
+    padding: 10px;
+  }
+}
+
+@media (max-width: 480px) {
+  .selected-groups {
+    max-height: 120px; /* 작은 화면에서의 최대 높이 */
+    padding: 8px;
+  }
 }
 
 .make-team-button {
@@ -319,12 +334,13 @@ body {
 
 nav a {
   text-decoration: none;
-  color: #e0e0e0; /* 기본 글자 색상 */
-  font-family: 'Poppins', sans-serif; /* 세련된 Google Font 사용 */
+  color: #e0e0e0;
+  font-family: 'Poppins', sans-serif;
   font-weight: 600;
-  font-size: 20px; /* 폰트 크기 */
-  padding: 10px 20px;
+  font-size: 16px; /* 모바일에서도 적절한 크기 설정 */
+  padding: 10px 15px;
   position: relative;
+  white-space: nowrap; /* 텍스트가 줄바꿈되지 않도록 설정 */
   transition: color 0.3s, transform 0.3s;
 }
 
@@ -351,9 +367,37 @@ nav a:hover {
 
 /* 네비게이션바 배경 및 정렬 유지 */
 nav {
-  display: flex;
-  align-items: center;
-  gap: 20px; /* 메뉴 간격 */
+  display: flex; /* 가로 정렬 유지 */
+  flex-wrap: nowrap; /* 메뉴가 세로로 쌓이는 것을 방지 */
+  justify-content: space-around; /* 메뉴 간 간격 조정 */
+  align-items: center; /* 수직 중앙 정렬 */
+  gap: 20px; /* 메뉴 간 간격 */
+}
+
+@media (max-width: 768px) {
+  nav {
+    flex-wrap: wrap; /* 화면이 좁아질 경우 줄바꿈 허용 */
+    justify-content: center; /* 메뉴를 중앙 정렬 */
+    gap: 15px; /* 간격 축소 */
+  }
+
+  nav a {
+    font-size: 14px; /* 작은 화면에서 글자 크기 축소 */
+    padding: 8px 12px; /* 패딩 축소 */
+  }
+}
+
+@media (max-width: 480px) {
+  nav {
+    flex-direction: column; /* 메뉴를 세로로 배치 */
+    align-items: center; /* 가운데 정렬 */
+    gap: 10px;
+  }
+
+  nav a {
+    font-size: 12px; /* 글자 크기 더 축소 */
+    padding: 5px 10px;
+  }
 }
 
 #indicator {
@@ -484,12 +528,30 @@ nav {
 
 /* 모바일 대응 */
 @media (max-width: 768px) {
-  .modal-content {
-    width: 90%; /* 더 넓게 설정하여 데스크탑과 비슷하게 */
-    height: auto;
-    max-height: 90%;
-    padding: 20px; /* 여백 확대 */
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3); /* 박스 그림자 유지 */
+  .modal {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.8); /* 반투명 배경 */
+    z-index: 1000;
+    overflow-y: auto; /* 내용이 많을 경우 스크롤 활성화 */
+  }
+
+   .modal-content {
+    width: 100%; /* 전체 화면에 맞춤 */
+    height: 100%; /* 전체 화면에 맞춤 */
+    max-width: none;
+    max-height: none;
+    padding: 15px;
+    background-color: #1d1d1f;
+    border-radius: 8px;
+    box-shadow: none; /* 간결한 디자인 */
+    overflow-y: auto; /* 내부 스크롤 */
   }
 
   .position-section {
@@ -500,32 +562,44 @@ nav {
   }
 
   .position-row {
-    flex-direction: row; /* 가로 정렬로 복원 */
-    align-items: flex-start; /* 상단 정렬 */
-    gap: 20px; /* 간격 확대 */
+    flex-direction: column; /* 세로 정렬 */
+    align-items: center;
+    gap: 10px; /* 간격 축소 */
   }
-
-  .position-button img {
-    width: 80px; /* 버튼 크기 조정 */
-    height: 80px;
+  .position-button {
+    width: 60px;
+    height: 60px;
   }
 
   .position-details {
-    font-size: 16px; /* 글자 크기 확대 */
-    text-align: left; /* 왼쪽 정렬로 변경 */
-    min-width: 200px;
-    max-width: 300px;
-    margin: 0; /* 중앙 정렬 제거 */
+    font-size: 14px;
+    text-align: center;
+    margin: 5px 0; /* 여백 축소 */
+    width: auto;
+    max-width: 200px;
   }
-
   .position-graph canvas {
-    width: 150px !important; /* 그래프 크기 확대 */
-    height: 150px !important;
+    width: 100px !important; /* 그래프 크기 축소 */
+    height: 100px !important;
   }
 
   .user-stats-table {
     font-size: 14px; /* 글자 크기 약간 확대 */
     padding: 15px; /* 여백 확대 */
+  }
+}
+
+@media (max-width: 768px) {
+  .position-button img {
+    width: 60px; /* 모바일에서 크기 축소 */
+    height: 60px;
+  }
+}
+
+@media (max-width: 480px) {
+  .position-button img {
+    width: 50px; /* 더 작은 화면에서는 크기 더 축소 */
+    height: 50px;
   }
 }
 
