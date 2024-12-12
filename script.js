@@ -456,15 +456,24 @@ function toggleVoteOption(option, submitVoteButton) {
 async function submitVotes(user, submitVoteButton) {
   const selectedOptions = Array.from(document.querySelectorAll(".vote-option.selected")).map((el) => el.innerText);
 
-  if (selectedOptions.length === 0) return;
+  if (selectedOptions.length === 0) {
+    alert("투표할 항목을 선택해주세요.");
+    return;
+  }
 
   try {
+    const payload = {
+      userName: user.Name,
+      lolId: user.LolId, // LolId 추가
+      selectedOptions,
+    };
+
     const response = await fetch(`${VOTE_URL}/submit`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ userName: user.Name, selectedOptions }),
+      body: JSON.stringify(payload), // JSON으로 데이터를 직렬화
     });
 
     if (response.ok) {
@@ -482,6 +491,7 @@ async function submitVotes(user, submitVoteButton) {
     alert("서버와 연결할 수 없습니다. 잠시 후 다시 시도해주세요.");
   }
 }
+
 
 // 투표 상태 조회
 async function fetchVoteStatus(voteStatusList) {
