@@ -439,6 +439,76 @@ function getTierImage(tier) {
 //   }
 // }
 
+// async function initializeVotePage() {
+//   const voteTitle = document.getElementById("vote-title");
+//   const voteOptions = document.getElementById("vote-options");
+//   const submitVoteButton = document.getElementById("submit-vote");
+//   const voteStatusList = document.getElementById("vote-status-list");
+//   const resetVoteButton = document.createElement("button");
+
+//   const voteContainer = document.getElementById("vote-container");
+//   if (voteContainer) {
+//     resetVoteButton.id = "reset-vote";
+//     resetVoteButton.textContent = "다시 투표하기";
+//     voteContainer.appendChild(resetVoteButton);
+//   }
+
+//   const user = {
+//     Name: localStorage.getItem("userName"),
+//     LolId: localStorage.getItem("userLolId"),
+//   };
+
+//   if (!user.Name || !user.LolId) {
+//     alert("로그인이 필요합니다.");
+//     window.location.href = "index.html";
+//     return;
+//   }
+
+//   const today = new Date();
+//   const date = today.toLocaleDateString();
+//   voteTitle.innerText = `오늘의 투표 (${date})`;
+
+//   try {
+//     const formattedDate = today.toISOString().split('T')[0]; // YYYY-MM-DD 형식으로 변환
+//     const response = await fetch(`${VOTE_URL}/options?date=${formattedDate}`);
+
+//     if (!response.ok) {
+//       throw new Error(`Failed to fetch vote options: ${response.statusText}`);
+//     }
+
+//     const options = await response.json();
+
+//     if (!options || options.length === 0) {
+//       throw new Error("No vote options available for today.");
+//     }
+
+//     // 기존 내용을 초기화
+//     voteOptions.innerHTML = ""; 
+
+//     // 여기에 새로운 코드 삽입
+//     options.forEach((option) => {
+//       const optionElement = document.createElement("div");
+//       optionElement.classList.add("vote-option");
+//       optionElement.innerText = option.option_name;
+//       optionElement.dataset.id = option.option_id; // id 저장
+
+//       // 선택 이벤트 추가
+//       optionElement.addEventListener("click", () => toggleVoteOption(optionElement, submitVoteButton));
+//       voteOptions.appendChild(optionElement);
+//     });
+
+//     // 버튼 이벤트 추가
+//     submitVoteButton.addEventListener("click", () => submitVotes(user, submitVoteButton));
+//     resetVoteButton.addEventListener("click", () => enableVoteOptions());
+
+//     // 투표 상태 조회
+//     fetchVoteStatus(voteStatusList);
+//   } catch (error) {
+//     console.error("Error initializing vote page:", error);
+//     alert("투표 데이터를 불러오는데 실패했습니다. 다시 시도해주세요.");
+//   }
+// }
+
 async function initializeVotePage() {
   const voteTitle = document.getElementById("vote-title");
   const voteOptions = document.getElementById("vote-options");
@@ -469,23 +539,22 @@ async function initializeVotePage() {
   voteTitle.innerText = `오늘의 투표 (${date})`;
 
   try {
-    const formattedDate = today.toISOString().split('T')[0]; // YYYY-MM-DD 형식으로 변환
-    const response = await fetch(`${VOTE_URL}/options?date=${formattedDate}`);
+    const formattedDate = today.toISOString().split("T")[0]; // YYYY-MM-DD 형식으로 변환
 
+    // 투표 옵션 가져오기
+    const response = await fetch(`${VOTE_URL}/options?date=${formattedDate}`);
     if (!response.ok) {
       throw new Error(`Failed to fetch vote options: ${response.statusText}`);
     }
-
     const options = await response.json();
-
     if (!options || options.length === 0) {
       throw new Error("No vote options available for today.");
     }
 
     // 기존 내용을 초기화
-    voteOptions.innerHTML = ""; 
+    voteOptions.innerHTML = "";
 
-    // 여기에 새로운 코드 삽입
+    // 투표 항목 생성
     options.forEach((option) => {
       const optionElement = document.createElement("div");
       optionElement.classList.add("vote-option");
@@ -496,6 +565,18 @@ async function initializeVotePage() {
       optionElement.addEventListener("click", () => toggleVoteOption(optionElement, submitVoteButton));
       voteOptions.appendChild(optionElement);
     });
+
+    // 사용자가 투표했던 항목 가져오기
+    const userVotesResponse = await fetch(`${VOTE_URL}/user-votes?userName=${user.Name}&userLolId=${user.LolId}`);
+    if (userVotesResponse.ok) {
+      const userVotes = await userVotesResponse.json();
+      userVotes.forEach((vote) => {
+        const optionElement = document.querySelector(`[data-id="${vote.game_option_id}"]`);
+        if (optionElement) {
+          optionElement.classList.add("selected", "disabled"); // 선택된 상태로 표시
+        }
+      });
+    }
 
     // 버튼 이벤트 추가
     submitVoteButton.addEventListener("click", () => submitVotes(user, submitVoteButton));
@@ -508,7 +589,6 @@ async function initializeVotePage() {
     alert("투표 데이터를 불러오는데 실패했습니다. 다시 시도해주세요.");
   }
 }
-
 
 
 
