@@ -345,20 +345,44 @@ async function initializeVotePage() {
     console.log("!!!!!!LolId : ", user.LolId)
 
     //const userVotesResponse = await fetch(`${VOTE_URL}/user-votes?userName=${user.Name}&userLolId=${user.LolId}`);
-    const userVotesResponse = await fetch(
-      `${VOTE_URL}/user-votes?userName=${encodeURIComponent(user.Name)}&userLolId=${encodeURIComponent(user.LolId)}`
-    );
+    // const userVotesResponse = await fetch(
+    //   `${VOTE_URL}/user-votes?userName=${encodeURIComponent(user.Name)}&userLolId=${encodeURIComponent(user.LolId)}`
+    // );
+    // if (userVotesResponse.ok) {
+    //   const userVotes = await userVotesResponse.json();
+    //   console.log("userVotes : ", userVotes)
+    //   userVotes.forEach((vote) => {
+    //     const optionElement = document.querySelector(`[data-id="${vote.game_option_id}"]`);
+    //     if (optionElement) {
+    //       optionElement.classList.add("selected", "disabled"); // 선택된 상태로 표시
+    //     }
+    //   });
+    // }
+    const userVotesResponse = await fetch(`${VOTE_URL}/user-votes`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        userName: user.Name,
+        userLolId: user.LolId,
+      }),
+    });
+    
     if (userVotesResponse.ok) {
       const userVotes = await userVotesResponse.json();
-      console.log("userVotes : ", userVotes)
+      console.log("userVotes : ", userVotes);
       userVotes.forEach((vote) => {
         const optionElement = document.querySelector(`[data-id="${vote.game_option_id}"]`);
         if (optionElement) {
           optionElement.classList.add("selected", "disabled"); // 선택된 상태로 표시
         }
       });
+    } else {
+      console.error("Failed to fetch user votes:", userVotesResponse.statusText);
     }
 
+    
     // 버튼 이벤트 추가
     submitVoteButton.addEventListener("click", () => submitVotes(user, submitVoteButton));
     resetVoteButton.addEventListener("click", () => enableVoteOptions());
