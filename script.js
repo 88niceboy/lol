@@ -473,15 +473,25 @@ async function fetchVoteStatus(voteStatusList) {
     const response = await fetch(`${VOTE_URL}/status`);
     if (!response.ok) throw new Error("Failed to fetch vote status");
 
-    const votes = await response.json();
-    voteStatusList.innerHTML = votes.length
-      ? votes.map((vote) => `<li>${vote.SelectedTime} - ${vote.UserName}</li>`).join("")
+    const { data } = await response.json(); // 데이터를 배열로 받음
+    console.log("VoteStatus:", data);
+
+    voteStatusList.innerHTML = data.length
+      ? data
+          .map(
+            (vote) =>
+              `<li>${vote.user_name} (${vote.LolId || "N/A"}) - Option ID: ${vote.game_option_id}, Votes: ${vote.voteCount}</li>`
+          )
+          .join("")
       : "<li>아직 투표된 항목이 없습니다.</li>";
   } catch (error) {
     console.error("Error fetching vote status:", error);
-    voteStatusList.innerHTML = "<li>투표 상태를 불러오는 중 문제가 발생했습니다.</li>";
+    voteStatusList.innerHTML =
+      "<li>투표 상태를 불러오는 중 문제가 발생했습니다.</li>";
   }
 }
+
+
 
 // 다시 투표하기
 function enableVoteOptions() {
