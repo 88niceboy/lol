@@ -64,12 +64,13 @@ document.addEventListener("DOMContentLoaded", () => {
         });
   
         const data = await response.json();
-  
+        console.log("$$data : ", data)
+        console.log("$$data : ", data.data.LolId)
         if (response.ok && data.success) {
           // 로그인 성공 처리
           localStorage.setItem("loggedIn", true);
-          localStorage.setItem("userName", id);
-          localStorage.setItem("userLolId", data.lolId);
+          localStorage.setItem("userName", data.data.Name); // 백엔드에서 Name 제공
+          localStorage.setItem("userLolId", data.data.LolId); // LolId 저장
           alert(`${id}님, 로그인 성공!`);
           loginModal.style.display = "none";
           window.location.reload();

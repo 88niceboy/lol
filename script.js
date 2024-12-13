@@ -58,42 +58,42 @@ loginButton.addEventListener("click", () => {
 });
 
 // 로그인 폼 제출 이벤트
-loginForm.addEventListener("submit", async (event) => {
-  event.preventDefault();
+// loginForm.addEventListener("submit", async (event) => {
+//   event.preventDefault();
 
-  // 입력된 ID와 Password 가져오기
-  const id = document.getElementById("loginId").value.trim();
-  const password = document.getElementById("loginPassword").value.trim();
+//   // 입력된 ID와 Password 가져오기
+//   const id = document.getElementById("loginId").value.trim();
+//   const password = document.getElementById("loginPassword").value.trim();
 
-  try {
-    // 백엔드로 로그인 요청
-    const response = await fetch(LOGIN_URL, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ id, password }),
-    });
+//   try {
+//     // 백엔드로 로그인 요청
+//     const response = await fetch(LOGIN_URL, {
+//       method: "POST",
+//       headers: {
+//         "Content-Type": "application/json",
+//       },
+//       body: JSON.stringify({ id, password }),
+//     });
 
-    const data = await response.json();
-
-    if (response.ok && data.success) {
-      // 로그인 성공 처리
-      localStorage.setItem("loggedIn", true);
-      localStorage.setItem("userName", data.data.Name); // 백엔드에서 Name 제공
-      localStorage.setItem("userLolId", data.data.LolId); // LolId 저장
-      alert(`${data.data.Name}님, 로그인 성공!`);
-      loginButton.textContent = "로그아웃";
-      loginModal.style.display = "none";
-    } else {
-      // 로그인 실패 처리
-      alert(data.error || "로그인 실패. 다시 시도해주세요.");
-    }
-  } catch (error) {
-    console.error("로그인 요청 실패:", error);
-    alert("서버와 연결할 수 없습니다. 잠시 후 다시 시도해주세요.");
-  }
-});
+//     const data = await response.json();
+//     console.log("Data : ", data.data.LolId)
+//     if (response.ok && data.success) {
+//       // 로그인 성공 처리
+//       localStorage.setItem("loggedIn", true);
+//       localStorage.setItem("userName", data.data.Name); // 백엔드에서 Name 제공
+//       localStorage.setItem("userLolId", data.data.LolId); // LolId 저장
+//       alert(`${data.data.Name}님, 로그인 성공!`);
+//       loginButton.textContent = "로그아웃";
+//       loginModal.style.display = "none";
+//     } else {
+//       // 로그인 실패 처리
+//       alert(data.error || "로그인 실패. 다시 시도해주세요.");
+//     }
+//   } catch (error) {
+//     console.error("로그인 요청 실패:", error);
+//     alert("서버와 연결할 수 없습니다. 잠시 후 다시 시도해주세요.");
+//   }
+// });
 
 
 // 모달 닫기 이벤트
@@ -299,7 +299,9 @@ async function initializeVotePage() {
     Name: localStorage.getItem("userName"),
     LolId: localStorage.getItem("userLolId"),
   };
-
+  console.log("##Name : ", user.Name)
+  console.log("##LolId : ", user.LolId)
+  
   if (!user.Name || !user.LolId) {
     alert("로그인이 필요합니다.");
     window.location.href = "index.html";
@@ -339,12 +341,16 @@ async function initializeVotePage() {
     });
 
     // 사용자가 투표했던 항목 가져오기
-    console.log("UserName : ", user.Name)
-    console.log("LolId : ", user.LolId)
+    console.log("!!!!!!UserName : ", user.Name)
+    console.log("!!!!!!LolId : ", user.LolId)
 
-    const userVotesResponse = await fetch(`${VOTE_URL}/user-votes?userName=${user.Name}&userLolId=${user.LolId}`);
+    //const userVotesResponse = await fetch(`${VOTE_URL}/user-votes?userName=${user.Name}&userLolId=${user.LolId}`);
+    const userVotesResponse = await fetch(
+      `${VOTE_URL}/user-votes?userName=${encodeURIComponent(user.Name)}&userLolId=${encodeURIComponent(user.LolId)}`
+    );
     if (userVotesResponse.ok) {
       const userVotes = await userVotesResponse.json();
+      console.log("userVotes : ", userVotes)
       userVotes.forEach((vote) => {
         const optionElement = document.querySelector(`[data-id="${vote.game_option_id}"]`);
         if (optionElement) {
