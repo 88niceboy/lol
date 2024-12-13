@@ -19,11 +19,34 @@
       <div id="indicator"></div>
     </nav>
   </div>
+
+  <!-- 투표 생성 섹션 -->
+  <div id="create-vote-container">
+    <h3>투표 생성</h3>
+    <label for="vote-phase">투표 단계 선택:</label>
+    <select id="vote-phase">
+      <option value="" disabled selected>단계를 선택하세요</option>
+      <option value="2">2차</option>
+      <option value="3">3차</option>
+      <option value="4">4차</option>
+      <option value="5">5차</option>
+      <option value="6">6차</option>
+      <option value="7">7차</option>
+      <option value="8">8차</option>
+      <option value="9">9차</option>
+      <option value="10">10차</option>
+    </select>
+    <button id="create-vote-button">투표 만들기</button>
+  </div>
+
   <div class="container">
     <div id="vote-container">
       <h2 id="vote-title"></h2>
       <div id="vote-options"></div>
-      <button id="submit-vote" disabled>투표 제출</button>
+      <div class="vote-buttons">
+        <button id="submit-vote" disabled>투표 제출</button>
+        <button id="reset-vote" disabled>다시 투표하기</button>
+      </div>
     </div>
     <div id="vote-status-container">
       <h2>현재 투표 상황</h2>

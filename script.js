@@ -286,14 +286,14 @@ async function initializeVotePage() {
   const voteOptions = document.getElementById("vote-options");
   const submitVoteButton = document.getElementById("submit-vote");
   const voteStatusList = document.getElementById("vote-status-list");
-  const resetVoteButton = document.createElement("button");
+  const resetVoteButton = document.getElementById("reset-vote"); // HTML에서 가져옴
 
-  const voteContainer = document.getElementById("vote-container");
-  if (voteContainer) {
-    resetVoteButton.id = "reset-vote";
-    resetVoteButton.textContent = "다시 투표하기";
-    voteContainer.appendChild(resetVoteButton);
-  }
+  // const voteContainer = document.getElementById("vote-container");
+  // if (voteContainer) {
+  //   resetVoteButton.id = "reset-vote";
+  //   resetVoteButton.textContent = "다시 투표하기";
+  //   voteContainer.appendChild(resetVoteButton);
+  // }
 
   const user = {
     Name: localStorage.getItem("userName"),
@@ -336,7 +336,7 @@ async function initializeVotePage() {
       optionElement.dataset.id = option.option_id; // id 저장
 
       // 선택 이벤트 추가
-      optionElement.addEventListener("click", () => toggleVoteOption(optionElement, submitVoteButton));
+      optionElement.addEventListener("click", () => toggleVoteOption(optionElement, submitVoteButton, resetVoteButton));
       voteOptions.appendChild(optionElement);
     });
 
@@ -385,8 +385,8 @@ async function initializeVotePage() {
     
     // 버튼 이벤트 추가
     submitVoteButton.addEventListener("click", () => submitVotes(user, submitVoteButton));
-    resetVoteButton.addEventListener("click", () => enableVoteOptions());
-
+    //resetVoteButton.addEventListener("click", () => enableVoteOptions());
+    resetVoteButton.addEventListener("click", () => enableVoteOptions(resetVoteButton));
     // 투표 상태 조회
     fetchVoteStatus(voteStatusList);
   } catch (error) {
@@ -396,17 +396,31 @@ async function initializeVotePage() {
 }
 
 
+function enableVoteOptions(resetVoteButton) {
+  alert("다시 선택할 수 있습니다. 기존 투표 항목은 유지됩니다.");
+  document.querySelectorAll(".vote-option.disabled").forEach((el) => el.classList.remove("disabled"));
+  resetVoteButton.disabled = true; // 다시 초기화
+}
 
 // 투표 선택 상태 토글
-function toggleVoteOption(option, submitVoteButton) {
+// function toggleVoteOption(option, submitVoteButton) {
+//   if (option.classList.contains("disabled")) return; // 비활성화된 항목은 클릭 무시
+
+//   option.classList.toggle("selected");
+//   if (option.classList.contains("peak-time")) {
+//     option.classList.toggle("selected-peak");
+//   }
+//   submitVoteButton.disabled = document.querySelectorAll(".vote-option.selected").length === 0;
+// }
+
+function toggleVoteOption(option, submitVoteButton, resetVoteButton) {
   if (option.classList.contains("disabled")) return; // 비활성화된 항목은 클릭 무시
 
   option.classList.toggle("selected");
-  if (option.classList.contains("peak-time")) {
-    option.classList.toggle("selected-peak");
-  }
   submitVoteButton.disabled = document.querySelectorAll(".vote-option.selected").length === 0;
+  resetVoteButton.disabled = false; // 선택하면 활성화
 }
+
 
 async function submitVotes(user, submitVoteButton) {
   // 선택한 항목의 ID 가져오기
@@ -420,9 +434,10 @@ async function submitVotes(user, submitVoteButton) {
     return;
   }
   try {
+    console.log("submit ID : ", user.LolId)
     const payload = {
       userName: user.Name,
-      userLolId: user.LolId, // LolId 전달
+      LolId: user.LolId, // LolId 전달
       selectedOptions: selectedOptions.map((option) => option.id), // 옵션 ID만 전송
     };
 

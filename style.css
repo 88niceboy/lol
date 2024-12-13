@@ -689,3 +689,20 @@ tbody tr:hover {
   opacity: 0.5; /* 흐리게 표시 */
   cursor: not-allowed; /* 클릭 금지 표시 */
 }
+
+.vote-buttons {
+  display: flex;
+  gap: 10px; /* 버튼 간격 */
+  margin-top: 10px;
+}
+
+#submit-vote, #reset-vote {
+  padding: 10px 20px;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+#submit-vote:disabled, #reset-vote:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+}
