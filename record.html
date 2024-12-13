@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>유저 정보</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+  <!-- 헤더 -->
+  <div class="header">
+    <img src="https://raw.githubusercontent.com/88niceboy/lol/main/lolLogo.png" alt="LOL Logo" class="logo">
+    <nav>
+      <a href="index.html">편뽑기 페이지</a>
+      <a href="random-ladder.html">랜덤 사다리</a>
+      <a href="user-info.html">유저정보</a>
+      <a href="vote.html">투표하기</a>
+      <a href="record.html">전적입력</a>
+      <button class="login-button" id="loginButton">로그인</button>
+      <div id="indicator"></div>
+    </nav>
+  </div>
+
+  <!-- 전적 입력 컨테이너 -->
+  <div class="container">
+    <h1>전적 입력</h1>
+    <form id="gameRecordsForm">
+      <!-- 1경기 -->
+      <div class="game-record">
+        <h2>1경기</h2>
+        <div class="record-row">
+          <label for="game1Result">결과:</label>
+          <select id="game1Result" required>
+            <option value="win">승리</option>
+            <option value="loss">패배</option>
+          </select>
+        </div>
+        <div class="record-row">
+          <label for="game1Champion">챔피언:</label>
+          <select id="game1Champion" required>
+            <option value="">선택하세요</option>
+            <option value="아리">아리</option>
+            <option value="가렌">가렌</option>
+            <option value="리신">리신</option>
+          </select>
+        </div>
+        <div class="record-row">
+          <label for="game1Kills">킬:</label>
+          <select id="game1Kills" class="number-select"></select>
+          <label for="game1Deaths">데스:</label>
+          <select id="game1Deaths" class="number-select"></select>
+          <label for="game1Assists">어시:</label>
+          <select id="game1Assists" class="number-select"></select>
+        </div>
+      </div>
+
+      <!-- 2경기 -->
+      <div class="game-record">
+        <h2>2경기</h2>
+        <div class="record-row">
+          <label for="game2Result">결과:</label>
+          <select id="game2Result" required>
+            <option value="win">승리</option>
+            <option value="loss">패배</option>
+          </select>
+        </div>
+        <div class="record-row">
+          <label for="game2Champion">챔피언:</label>
+          <select id="game2Champion" required>
+            <option value="">선택하세요</option>
+            <option value="아리">아리</option>
+            <option value="가렌">가렌</option>
+            <option value="리신">리신</option>
+          </select>
+        </div>
+        <div class="record-row">
+          <label for="game2Kills">킬:</label>
+          <select id="game2Kills" class="number-select"></select>
+          <label for="game2Deaths">데스:</label>
+          <select id="game2Deaths" class="number-select"></select>
+          <label for="game2Assists">어시:</label>
+          <select id="game2Assists" class="number-select"></select>
+        </div>
+      </div>
+
+      <!-- 3경기 -->
+      <div class="game-record">
+        <h2>3경기</h2>
+        <div class="record-row">
+          <label for="game3Result">결과:</label>
+          <select id="game3Result" required>
+            <option value="win">승리</option>
+            <option value="loss">패배</option>
+          </select>
+        </div>
+        <div class="record-row">
+          <label for="game3Champion">챔피언:</label>
+          <select id="game3Champion" required>
+            <option value="">선택하세요</option>
+            <option value="아리">아리</option>
+            <option value="가렌">가렌</option>
+            <option value="리신">리신</option>
+          </select>
+        </div>
+        <div class="record-row">
+          <label for="game3Kills">킬:</label>
+          <select id="game3Kills" class="number-select"></select>
+          <label for="game3Deaths">데스:</label>
+          <select id="game3Deaths" class="number-select"></select>
+          <label for="game3Assists">어시:</label>
+          <select id="game3Assists" class="number-select"></select>
+        </div>
+      </div>
+
+      <button type="submit">전적 저장</button>
+    </form>
+  </div>
+
+  <script>
+    // 숫자 콤보박스 채우기
+    document.addEventListener('DOMContentLoaded', () => {
+      const numberSelects = document.querySelectorAll('.number-select');
+      for (let i = 0; i <= 30; i++) {
+        numberSelects.forEach(select => {
+          const option = document.createElement('option');
+          option.value = i;
+          option.textContent = i;
+          select.appendChild(option);
+        });
+      }
+    });
+  </script>
+</body>
+</html>
