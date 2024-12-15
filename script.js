@@ -344,19 +344,29 @@ async function initializeVotePage() {
     console.log("!!!!!!UserName : ", user.Name)
     console.log("!!!!!!LolId : ", user.LolId)
 
-    //const userVotesResponse = await fetch(`${VOTE_URL}/user-votes?userName=${user.Name}&userLolId=${user.LolId}`);
-    // const userVotesResponse = await fetch(
-    //   `${VOTE_URL}/user-votes?userName=${encodeURIComponent(user.Name)}&userLolId=${encodeURIComponent(user.LolId)}`
-    // );
+
+    // const userVotesResponse = await fetch(`${VOTE_URL}/user-votes`, {
+    //   method: "POST",
+    //   headers: {
+    //     "Content-Type": "application/json",
+    //   },
+    //   body: JSON.stringify({
+    //     userName: user.Name,
+    //     userLolId: user.LolId,
+    //   }),
+    // });
+    
     // if (userVotesResponse.ok) {
     //   const userVotes = await userVotesResponse.json();
-    //   console.log("userVotes : ", userVotes)
+    //   console.log("userVotes : ", userVotes);
     //   userVotes.forEach((vote) => {
     //     const optionElement = document.querySelector(`[data-id="${vote.game_option_id}"]`);
     //     if (optionElement) {
     //       optionElement.classList.add("selected", "disabled"); // 선택된 상태로 표시
     //     }
     //   });
+    // } else {
+    //   console.error("Failed to fetch user votes:", userVotesResponse.statusText);
     // }
     const userVotesResponse = await fetch(`${VOTE_URL}/user-votes`, {
       method: "POST",
@@ -370,18 +380,57 @@ async function initializeVotePage() {
     });
     
     if (userVotesResponse.ok) {
-      const userVotes = await userVotesResponse.json();
-      console.log("userVotes : ", userVotes);
-      userVotes.forEach((vote) => {
-        const optionElement = document.querySelector(`[data-id="${vote.game_option_id}"]`);
-        if (optionElement) {
-          optionElement.classList.add("selected", "disabled"); // 선택된 상태로 표시
+      try {
+        // Destructure and log response
+        const { userVotes = [], allVotes = [] } = await userVotesResponse.json();
+        console.log("userVotes:", userVotes);
+        console.log("allVotes:", allVotes);
+    
+        // Ensure userVotes and allVotes are arrays
+        if (!Array.isArray(userVotes)) {
+          console.error("Expected userVotes to be an array, received:", userVotes);
+          return;
         }
-      });
+        if (!Array.isArray(allVotes)) {
+          console.error("Expected allVotes to be an array, received:", allVotes);
+          return;
+        }
+    
+        // Mark user-selected options
+        userVotes.forEach((vote) => {
+          const optionElement = document.querySelector(`[data-id="${vote.game_option_id}"]`);
+          if (optionElement) {
+            optionElement.classList.add("selected", "disabled"); // Mark as selected
+          } else {
+            console.warn(`Option element not found for game_option_id: ${vote.game_option_id}`);
+          }
+        });
+    
+        // Display total votes for all options
+        allVotes.forEach((vote) => {
+          const optionElement = document.querySelector(`[data-id="${vote.game_option_id}"]`);
+          if (optionElement) {
+            // Find or create vote count element
+            let voteCountElement = optionElement.querySelector(".vote-count");
+            if (!voteCountElement) {
+              voteCountElement = document.createElement("span");
+              voteCountElement.className = "vote-count";
+              optionElement.appendChild(voteCountElement);
+            }
+            // Update vote count text
+            voteCountElement.textContent = `Votes: ${vote.total_votes}`;
+          } else {
+            console.warn(`Option element not found for game_option_id: ${vote.game_option_id}`);
+          }
+        });
+      } catch (error) {
+        console.error("Error processing votes data:", error);
+      }
     } else {
       console.error("Failed to fetch user votes:", userVotesResponse.statusText);
     }
-
+    
+    
     
     // 버튼 이벤트 추가
     submitVoteButton.addEventListener("click", () => submitVotes(user, submitVoteButton));
