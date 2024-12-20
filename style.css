@@ -706,3 +706,22 @@ tbody tr:hover {
   background-color: #ccc;
   cursor: not-allowed;
 }
+
+.fetchcontainer {
+  display: flex;
+  justify-content: space-between;
+}
+
+#vote-container {
+  width: 60%;
+}
+
+.vote-details {
+  width: 35%;
+  padding: 10px;
+  border-left: 1px solid #ccc;
+}
+
+.vote-details h2 {
+  margin-top: 0;
+}

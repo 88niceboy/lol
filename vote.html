@@ -48,9 +48,15 @@
         <button id="reset-vote" disabled>다시 투표하기</button>
       </div>
     </div>
-    <div id="vote-status-container">
-      <h2>현재 투표 상황</h2>
-      <ul id="vote-status-list"></ul>
+    <div class="fetchcontainer">
+      <div id="vote-container">
+        <h2 id="vote-title"></h2>
+        <div id="vote-options"></div>
+      </div>
+      <div id="vote-details-container" class="vote-details">
+        <h2>투표 상세 정보</h2>
+        <div id="vote-details"></div>
+      </div>
     </div>
   </div>
   <script src="common.js"></script>
