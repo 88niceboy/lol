@@ -653,14 +653,17 @@ tbody tr:hover {
   max-width: 600px;
   margin: auto;
   text-align: center;
+  color: #e9e9e9;
 }
 
 .vote-option {
   padding: 10px;
   margin: 5px;
   border: 1px solid #ccc;
+  color: white;
   border-radius: 5px;
   text-align: center;
+  justify-content: center; 
   cursor: pointer;
 }
 
@@ -669,7 +672,7 @@ tbody tr:hover {
 }
 
 .vote-option.selected {
-  background-color: #007bff;
+  background-color: #5587bd;
   color: white;
 }
 
@@ -720,8 +723,65 @@ tbody tr:hover {
   width: 35%;
   padding: 10px;
   border-left: 1px solid #ccc;
+  font-size: 30px;
 }
 
 .vote-details h2 {
   margin-top: 0;
+}
+
+/* 기본 옵션 스타일 */
+.vote-option {
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  margin-bottom: 10px;
+  background-color: #1d1d1f;
+  color: white;
+  cursor: pointer;
+  justify-content: center; 
+}
+
+.vote-option:hover {
+  background-color: #e9e9e9;
+  transform: scale(1.02);
+}
+
+/* 동적 옵션 스타일 */
+.dynamic-option {
+  display: flex;
+  align-items: center;
+  justify-content: center; 
+}
+
+/* 옵션 이름 */
+.option-name {
+  font-weight: bold;
+  font-size: 16px;
+}
+
+/* 동적 투표 카운트 스타일 */
+.dynamic-vote-count {
+  font-size: 20px;
+  font-weight: bold;
+  color: #54e967;
+}
+
+/* "현황보기" 버튼 스타일 */
+.view-status-button {
+  padding: 5px 10px;
+  border: none;
+  border-radius: 5px;
+  background-color: #007bff;
+  color: white;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.view-status-button:hover {
+  background-color: #0056b3;
+}
+
+.dynamic-view-status-button {
+  margin-left: 15px;
 }
