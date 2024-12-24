@@ -785,3 +785,12 @@ tbody tr:hover {
 .dynamic-view-status-button {
   margin-left: 15px;
 }
+
+.vote-option.highlight {
+  background-color: lightgreen; /* 10명 이상인 경우 강조 */
+}
+
+.vote-option.first-ranked {
+  border: 2px solid gold; /* 가장 먼저 10명을 만족한 항목에 추가 하이라이트 */
+  background-color: yellow; /* 색상을 더 강조 */
+}
