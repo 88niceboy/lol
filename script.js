@@ -401,147 +401,171 @@ function getTierImage(tier) {
 //   }
 // }
 
-async function initializeVotePage() {
-  const voteTitle = document.getElementById("vote-title");
-  const voteOptions = document.getElementById("vote-options");
-  const submitVoteButton = document.getElementById("submit-vote");
-  const resetVoteButton = document.getElementById("reset-vote");
 
-  const user = {
-    Name: localStorage.getItem("userName"),
-    LolId: localStorage.getItem("userLolId"),
-  };
+// async function initializeVotePage() {
+//   const voteTitle = document.getElementById("vote-title");
+//   const voteOptions = document.getElementById("vote-options");
+//   const submitVoteButton = document.getElementById("submit-vote");
+//   const resetVoteButton = document.getElementById("reset-vote");
+//   const voteDetailsContainer = document.getElementById("vote-details");
 
-  if (!user.Name || !user.LolId) {
-    alert("로그인이 필요합니다.");
-    window.location.href = "index.html";
-    return;
-  }
+//   const user = {
+//     Name: localStorage.getItem("userName"),
+//     LolId: localStorage.getItem("userLolId"),
+//   };
 
-  const today = new Date();
-  const date = today.toLocaleDateString();
-  voteTitle.innerText = `오늘의 투표 (${date})`;
+//   if (!user.Name || !user.LolId) {
+//     alert("로그인이 필요합니다.");
+//     window.location.href = "index.html";
+//     return;
+//   }
 
-  try {
-    const formattedDate = today.toISOString().split("T")[0];
+//   const today = new Date();
+//   const date = today.toLocaleDateString();
+//   voteTitle.innerText = `오늘의 투표 (${date})`;
 
-    // Fetch vote options
-    const response = await fetch(`${VOTE_URL}/options?date=${formattedDate}`);
-    if (!response.ok) {
-      throw new Error(`Failed to fetch vote options: ${response.statusText}`);
-    }
-    const options = await response.json();
-    if (!options || options.length === 0) {
-      throw new Error("No vote options available for today.");
-    }
+//   try {
+//     const formattedDate = today.toISOString().split("T")[0];
 
-    // Fetch user's previous votes
-    const userVotesResponse = await fetch(`${VOTE_URL}/user-votes`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        userName: user.Name,
-        userLolId: user.LolId,
-      }),
-    });
+//     // Fetch vote options
+//     const response = await fetch(`${VOTE_URL}/options?date=${formattedDate}`);
+//     if (!response.ok) {
+//       throw new Error(`Failed to fetch vote options: ${response.statusText}`);
+//     }
+//     const options = await response.json();
+//     if (!options || options.length === 0) {
+//       throw new Error("No vote options available for today.");
+//     }
 
-    const { userVotes = [], allVotes = [] } = userVotesResponse.ok
-      ? await userVotesResponse.json()
-      : { userVotes: [], allVotes: [] };
+//     // Fetch user's previous votes
+//     const userVotesResponse = await fetch(`${VOTE_URL}/user-votes`, {
+//       method: "POST",
+//       headers: {
+//         "Content-Type": "application/json",
+//       },
+//       body: JSON.stringify({
+//         userName: user.Name,
+//         userLolId: user.LolId,
+//       }),
+//     });
 
-    // Clear previous options
-    voteOptions.innerHTML = "";
+//     const { userVotes = [], allVotes = [] } = userVotesResponse.ok
+//       ? await userVotesResponse.json()
+//       : { userVotes: [], allVotes: [] };
 
-    // Populate vote options
-    options.forEach((option) => {
-      const optionElement = document.createElement("div");
-      optionElement.classList.add("vote-option");
-      optionElement.dataset.id = option.option_id;
+//     // Clear previous options
+//     voteOptions.innerHTML = "";
 
-      // Option name
-      const optionName = document.createElement("div");
-      optionName.className = "option-name";
-      optionName.textContent = option.option_name;
+//     // Populate vote options
+//     options.forEach((option) => {
+//       const optionElement = document.createElement("div");
+//       optionElement.classList.add("vote-option-container", "dynamic-option-container");
+//       optionElement.style.display = "flex";
+//       optionElement.style.alignItems = "center";
 
-      // Current vote status
-      const currentVote = allVotes.find((vote) => vote.game_option_id === option.option_id);
-      const totalVotes = currentVote ? currentVote.total_votes : 0;
+//       // Option content
+//       const optionContent = document.createElement("div");
+//       optionContent.classList.add("vote-option", "dynamic-option");
+//       optionContent.dataset.id = option.option_id;
+//       optionContent.style.flex = "1";
 
-      // Highlight if totalVotes >= 10
-      if (totalVotes >= 10) {
-        optionElement.classList.add("highlight"); // 10명 이상인 경우 강조 표시
-      }
+//       const optionName = document.createElement("div");
+//       optionName.className = "option-name";
+//       optionName.textContent = option.option_name;
 
-      // Voting order
-      const votingOrder = document.createElement("div");
-      votingOrder.className = "voting-order";
-      votingOrder.innerHTML = currentVote?.voting_order
-        ? `<strong>투표 순서:</strong> ${currentVote.voting_order
-            .split(",")
-            .map((entry, index) => `<div>${index + 1}. ${entry}</div>`)
-            .join("")}`
-        : "아직 투표한 유저가 없습니다.";
+//       // Add current vote count next to the option name
+//       const currentVote = allVotes.find((vote) => vote.game_option_id === option.option_id);
+//       const totalVotes = currentVote ? currentVote.total_votes : 0;
 
-      // Append to optionElement
-      optionElement.appendChild(optionName);
-      optionElement.innerHTML += `<div>(총 투표 수: ${totalVotes})</div>`;
-      optionElement.appendChild(votingOrder);
+//       const voteCount = document.createElement("span");
+//       voteCount.className = "vote-count dynamic-vote-count";
+//       voteCount.style.marginLeft = "10px";
+//       voteCount.textContent = `(${totalVotes}명 투표)`; // Add vote count text
 
-      // Add event listener for selecting options
-      optionElement.addEventListener("click", () =>
-        toggleVoteOption(optionElement, submitVoteButton, resetVoteButton)
-      );
+//       optionName.appendChild(voteCount);
+//       optionContent.appendChild(optionName);
 
-      // Highlight user's previous votes
-      if (userVotes.some((vote) => vote.game_option_id === option.option_id)) {
-        optionElement.classList.add("selected", "disabled");
-        const userVoteInfo = document.createElement("div");
-        userVoteInfo.className = "user-vote-info";
-        userVoteInfo.textContent = `당신의 순번: ${
-          userVotes.find((vote) => vote.game_option_id === option.option_id)?.vote_rank || "N/A"
-        }`;
-        optionElement.appendChild(userVoteInfo);
-      }
+//       // Add event listener for selecting options
+//       optionContent.addEventListener("click", () =>
+//         toggleVoteOption(optionContent, submitVoteButton, resetVoteButton)
+//       );
 
-      voteOptions.appendChild(optionElement);
-    });
+//       // Highlight user's previous votes
+//       if (userVotes.some((vote) => vote.game_option_id === option.option_id)) {
+//         optionContent.classList.add("selected", "disabled");
+//       }
 
-    // Determine the first option to reach 10 votes
-    const rankedOptions = allVotes
-      .filter((vote) => vote.total_votes >= 10) // 10명 이상 만족한 항목 필터링
-      .sort((a, b) => new Date(a.timestamp) - new Date(b.timestamp)); // 시간 순으로 정렬
+//       // Add "현황보기" button
+//       const viewStatusButton = document.createElement("button");
+//       viewStatusButton.textContent = "현황보기";
+//       viewStatusButton.className = "view-status-button dynamic-view-status-button";
+//       viewStatusButton.style.marginLeft = "10px";
+//       viewStatusButton.addEventListener("click", () =>
+//         showVoteDetails(option, userVotes, allVotes)
+//       );
 
-    if (rankedOptions.length > 0) {
-      // 첫 번째로 10명을 만족한 항목 찾기
-      const firstRankedOptionId = rankedOptions[0].game_option_id;
+//       // Append option content and button
+//       optionElement.appendChild(optionContent);
+//       optionElement.appendChild(viewStatusButton);
+//       voteOptions.appendChild(optionElement);
+//     });
 
-      // 1순위로 추가 하이라이트 표시
-      const firstRankedElement = document.querySelector(
-        `.vote-option[data-id="${firstRankedOptionId}"]`
-      );
-      if (firstRankedElement) {
-        firstRankedElement.classList.add("first-ranked");
-      }
-    }
+//     // Disable submit button if user has already voted
+//     submitVoteButton.disabled = userVotes.length > 0;
 
-    // Disable submit button if user has already voted
-    submitVoteButton.disabled = userVotes.length > 0;
+//     // Add event listeners for buttons
+//     submitVoteButton.addEventListener("click", () => submitVotes(user, submitVoteButton));
+//     resetVoteButton.addEventListener("click", () => {
+//       enableVoteOptions(resetVoteButton, submitVoteButton);
+//     });
 
-    // Add event listeners for buttons
-    submitVoteButton.addEventListener("click", () => submitVotes(user, submitVoteButton));
-    resetVoteButton.addEventListener("click", () => {
-      enableVoteOptions(resetVoteButton, submitVoteButton);
-    });
+//     // Ensure resetVoteButton is always enabled
+//     resetVoteButton.disabled = false;
+//   } catch (error) {
+//     console.error("Error initializing vote page:", error);
+//     alert("투표 데이터를 불러오는데 실패했습니다. 다시 시도해주세요.");
+//   }
+  
 
-    // Ensure resetVoteButton is always enabled
-    resetVoteButton.disabled = false;
-  } catch (error) {
-    console.error("Error initializing vote page:", error);
-    alert("투표 데이터를 불러오는데 실패했습니다. 다시 시도해주세요.");
-  }
-}
+//   // Function to display details in the right container
+//   function showVoteDetails(option, userVotes, allVotes) {
+//     // Clear existing details
+//     voteDetailsContainer.innerHTML = "";
+
+//     // Option details
+//     const optionName = document.createElement("h3");
+//     optionName.textContent = option.option_name;
+
+//     // Current vote status
+//     const currentVote = allVotes.find((vote) => vote.game_option_id === option.option_id);
+//     const totalVotes = currentVote ? currentVote.total_votes : 0;
+
+//     const totalVotesText = document.createElement("p");
+//     totalVotesText.textContent = `총 투표 수: ${totalVotes}`;
+
+//     // Voting order
+//     const votingOrder = document.createElement("div");
+//     votingOrder.innerHTML = currentVote?.voting_order
+//       ? `<strong>투표 순서:</strong> ${currentVote.voting_order
+//           .split(",")
+//           .map((entry, index) => `<div>${index + 1}. ${entry}</div>`)
+//           .join("")}`
+//       : "아직 투표한 유저가 없습니다.";
+
+//     // User's vote info
+//     const userVote = userVotes.find((vote) => vote.game_option_id === option.option_id);
+//     const userVoteInfo = document.createElement("p");
+//     userVoteInfo.textContent = userVote
+//       ? `당신의 순번: ${userVote.vote_rank}`
+//       : "당신은 아직 투표하지 않았습니다.";
+
+//     // Append details to the container
+//     voteDetailsContainer.appendChild(optionName);
+//     voteDetailsContainer.appendChild(totalVotesText);
+//     voteDetailsContainer.appendChild(votingOrder);
+//     voteDetailsContainer.appendChild(userVoteInfo);
+//   }
+// }
 
 
 async function initializeVotePage() {
@@ -598,57 +622,54 @@ async function initializeVotePage() {
     // Clear previous options
     voteOptions.innerHTML = "";
 
+    // Find the first option to reach 10 votes
+    const optionsWithTenVotes = allVotes.filter((vote) => vote.total_votes >= 10);
+    const firstOptionWithTenVotes = optionsWithTenVotes.length > 0 
+      ? optionsWithTenVotes.sort((a, b) => new Date(a.timestamp) - new Date(b.timestamp))[0].game_option_id 
+      : null;
+
     // Populate vote options
     options.forEach((option) => {
       const optionElement = document.createElement("div");
-      optionElement.classList.add("vote-option-container", "dynamic-option-container");
-      optionElement.style.display = "flex";
-      optionElement.style.alignItems = "center";
-
-      // Option content
-      const optionContent = document.createElement("div");
-      optionContent.classList.add("vote-option", "dynamic-option");
-      optionContent.dataset.id = option.option_id;
-      optionContent.style.flex = "1";
+      optionElement.classList.add("vote-option");
+      optionElement.dataset.id = option.option_id;
 
       const optionName = document.createElement("div");
       optionName.className = "option-name";
       optionName.textContent = option.option_name;
 
-      // Add current vote count next to the option name
+      // Current vote status
       const currentVote = allVotes.find((vote) => vote.game_option_id === option.option_id);
       const totalVotes = currentVote ? currentVote.total_votes : 0;
 
+      // Highlight if totalVotes >= 10
+      if (totalVotes >= 10) {
+        if (option.option_id === firstOptionWithTenVotes) {
+          // First option to reach 10 votes
+          optionElement.classList.add("highlight-first");
+        } else {
+          // Other options with 10+ votes
+          optionElement.classList.add("highlight");
+        }
+      }
+
       const voteCount = document.createElement("span");
-      voteCount.className = "vote-count dynamic-vote-count";
-      voteCount.style.marginLeft = "10px";
-      voteCount.textContent = `(${totalVotes}명 투표)`; // Add vote count text
+      voteCount.className = "vote-count";
+      voteCount.textContent = `(${totalVotes}명 투표)`;
 
       optionName.appendChild(voteCount);
-      optionContent.appendChild(optionName);
+      optionElement.appendChild(optionName);
 
       // Add event listener for selecting options
-      optionContent.addEventListener("click", () =>
-        toggleVoteOption(optionContent, submitVoteButton, resetVoteButton)
+      optionElement.addEventListener("click", () =>
+        toggleVoteOption(optionElement, submitVoteButton, resetVoteButton)
       );
 
       // Highlight user's previous votes
       if (userVotes.some((vote) => vote.game_option_id === option.option_id)) {
-        optionContent.classList.add("selected", "disabled");
+        optionElement.classList.add("selected", "disabled");
       }
 
-      // Add "현황보기" button
-      const viewStatusButton = document.createElement("button");
-      viewStatusButton.textContent = "현황보기";
-      viewStatusButton.className = "view-status-button dynamic-view-status-button";
-      viewStatusButton.style.marginLeft = "10px";
-      viewStatusButton.addEventListener("click", () =>
-        showVoteDetails(option, userVotes, allVotes)
-      );
-
-      // Append option content and button
-      optionElement.appendChild(optionContent);
-      optionElement.appendChild(viewStatusButton);
       voteOptions.appendChild(optionElement);
     });
 
@@ -661,54 +682,12 @@ async function initializeVotePage() {
       enableVoteOptions(resetVoteButton, submitVoteButton);
     });
 
-    // Ensure resetVoteButton is always enabled
     resetVoteButton.disabled = false;
   } catch (error) {
     console.error("Error initializing vote page:", error);
     alert("투표 데이터를 불러오는데 실패했습니다. 다시 시도해주세요.");
   }
-
-  // Function to display details in the right container
-  function showVoteDetails(option, userVotes, allVotes) {
-    // Clear existing details
-    voteDetailsContainer.innerHTML = "";
-
-    // Option details
-    const optionName = document.createElement("h3");
-    optionName.textContent = option.option_name;
-
-    // Current vote status
-    const currentVote = allVotes.find((vote) => vote.game_option_id === option.option_id);
-    const totalVotes = currentVote ? currentVote.total_votes : 0;
-
-    const totalVotesText = document.createElement("p");
-    totalVotesText.textContent = `총 투표 수: ${totalVotes}`;
-
-    // Voting order
-    const votingOrder = document.createElement("div");
-    votingOrder.innerHTML = currentVote?.voting_order
-      ? `<strong>투표 순서:</strong> ${currentVote.voting_order
-          .split(",")
-          .map((entry, index) => `<div>${index + 1}. ${entry}</div>`)
-          .join("")}`
-      : "아직 투표한 유저가 없습니다.";
-
-    // User's vote info
-    const userVote = userVotes.find((vote) => vote.game_option_id === option.option_id);
-    const userVoteInfo = document.createElement("p");
-    userVoteInfo.textContent = userVote
-      ? `당신의 순번: ${userVote.vote_rank}`
-      : "당신은 아직 투표하지 않았습니다.";
-
-    // Append details to the container
-    voteDetailsContainer.appendChild(optionName);
-    voteDetailsContainer.appendChild(totalVotesText);
-    voteDetailsContainer.appendChild(votingOrder);
-    voteDetailsContainer.appendChild(userVoteInfo);
-  }
 }
-
-
 
 
 
