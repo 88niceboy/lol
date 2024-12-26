@@ -618,24 +618,67 @@ async function initializeVotePage() {
   }
 }
 
-function enableVoteOptions(resetVoteButton) {
-  alert("다시 선택할 수 있습니다. 기존 투표 항목은 유지됩니다.");
+function enableVoteOptions(resetVoteButton, submitVoteButton) {
+  alert("다시 선택할 수 있습니다.");
+
+  // 비활성화된 항목 다시 활성화
   document.querySelectorAll(".vote-option.disabled").forEach((el) => el.classList.remove("disabled"));
-  resetVoteButton.disabled = true; // 다시 초기화
+
+  // 주황색 강조 상태 재확인
+  updateHighlightOnTenVotes();
+
+  // 제출하기 버튼 활성화
+  submitVoteButton.disabled = false;
+  resetVoteButton.disabled = false;
 }
 
 
 function toggleVoteOption(option, submitVoteButton, resetVoteButton) {
   if (option.classList.contains("disabled")) return; // 비활성화된 항목은 클릭 무시
 
-  option.classList.toggle("selected"); // 선택 상태 토글
+  const isSelected = option.classList.toggle("selected"); // 선택 상태 토글
+  const voteCountElement = option.querySelector(".vote-count");
+  const voteCount = parseInt(voteCountElement.textContent.match(/\d+/)[0], 10);
 
-  // 제출하기 버튼은 선택 항목이 있을 때만 활성화
-  submitVoteButton.disabled = document.querySelectorAll(".vote-option.selected").length === 0;
+  if (voteCount >= 10) {
+    if (isSelected) {
+      option.style.backgroundColor = "orange"; // 선택 시 주황색 유지
+    } else {
+      option.style.backgroundColor = ""; // 취소 시 기본색으로 변경
+    }
+  }
 
-  // 다시 투표하기 버튼은 항상 활성화
+  // 제출하기 버튼 활성화 조건 업데이트
+  updateButtonStates(submitVoteButton, resetVoteButton);
+
+  // 다시 투표하기 버튼 활성화
   resetVoteButton.disabled = false;
 }
+
+
+function updateHighlightOnTenVotes() {
+  const voteOptions = document.querySelectorAll(".vote-option");
+  let firstTenVotesOptionId = null;
+
+  voteOptions.forEach((option) => {
+    const voteCountElement = option.querySelector(".vote-count");
+    const voteCount = parseInt(voteCountElement.textContent.match(/\d+/)[0], 10);
+
+    if (voteCount >= 10) {
+      if (!firstTenVotesOptionId) {
+        firstTenVotesOptionId = option.dataset.id; // 첫 번째로 10명이 된 항목 ID
+        option.style.backgroundColor = "orange"; // 주황색 강조
+      } else if (firstTenVotesOptionId === option.dataset.id) {
+        option.style.backgroundColor = "orange"; // 주황색 유지
+      } else {
+        option.style.backgroundColor = ""; // 다른 항목은 해제
+      }
+    } else {
+      option.style.backgroundColor = ""; // 10명 미만인 항목 해제
+    }
+  });
+}
+
 
 
 async function submitVotes(user, submitVoteButton) {
@@ -691,23 +734,11 @@ async function submitVotes(user, submitVoteButton) {
   }
 }
 
-function enableVoteOptions(resetVoteButton, submitVoteButton) {
-  alert("다시 선택할 수 있습니다.");
 
-  // 비활성화된 항목 다시 활성화
-  document.querySelectorAll(".vote-option.disabled").forEach((el) => el.classList.remove("disabled"));
 
-  // 제출하기 버튼 활성화
-  submitVoteButton.disabled = false;
 
-  // 다시 투표하기 버튼은 항상 활성화
-  resetVoteButton.disabled = false;
-}
-
-// 버튼 상태 업데이트
 function updateButtonStates(submitVoteButton, resetVoteButton) {
   const hasSelection = document.querySelectorAll(".vote-option.selected").length > 0;
   submitVoteButton.disabled = !hasSelection;
-  resetVoteButton.disabled = !hasSelection;
+  resetVoteButton.disabled = false; // 다시 투표하기 버튼은 항상 활성화
 }
-
