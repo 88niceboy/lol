@@ -742,3 +742,17 @@ function updateButtonStates(submitVoteButton, resetVoteButton) {
   submitVoteButton.disabled = !hasSelection;
   resetVoteButton.disabled = false; // 다시 투표하기 버튼은 항상 활성화
 }
+
+const fetchVoteDataForDate = async (date) => {
+  try {
+    const response = await fetch(`${VOTE_URL}/options?date=${date}`);
+    if (!response.ok) {
+      throw new Error(`Failed to fetch vote options for date ${date}: ${response.statusText}`);
+    }
+    const options = await response.json();
+    return options;
+  } catch (error) {
+    console.error('Error fetching vote options:', error);
+    return [];
+  }
+};

@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>유저 정보</title>
+  <title>전적 입력</title>
   <link rel="stylesheet" href="style.css">
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
@@ -25,110 +25,131 @@
   <!-- 전적 입력 컨테이너 -->
   <div class="container">
     <h1>전적 입력</h1>
-    <form id="gameRecordsForm">
-      <!-- 1경기 -->
-      <div class="game-record">
-        <h2>1경기</h2>
-        <div class="record-row">
-          <label for="game1Result">결과:</label>
-          <select id="game1Result" required>
-            <option value="win">승리</option>
-            <option value="loss">패배</option>
-          </select>
-        </div>
-        <div class="record-row">
-          <label for="game1Champion">챔피언:</label>
-          <select id="game1Champion" required>
-            <option value="">선택하세요</option>
-            <option value="아리">아리</option>
-            <option value="가렌">가렌</option>
-            <option value="리신">리신</option>
-          </select>
-        </div>
-        <div class="record-row">
-          <label for="game1Kills">킬:</label>
-          <select id="game1Kills" class="number-select"></select>
-          <label for="game1Deaths">데스:</label>
-          <select id="game1Deaths" class="number-select"></select>
-          <label for="game1Assists">어시:</label>
-          <select id="game1Assists" class="number-select"></select>
-        </div>
-      </div>
-
-      <!-- 2경기 -->
-      <div class="game-record">
-        <h2>2경기</h2>
-        <div class="record-row">
-          <label for="game2Result">결과:</label>
-          <select id="game2Result" required>
-            <option value="win">승리</option>
-            <option value="loss">패배</option>
-          </select>
-        </div>
-        <div class="record-row">
-          <label for="game2Champion">챔피언:</label>
-          <select id="game2Champion" required>
-            <option value="">선택하세요</option>
-            <option value="아리">아리</option>
-            <option value="가렌">가렌</option>
-            <option value="리신">리신</option>
-          </select>
-        </div>
-        <div class="record-row">
-          <label for="game2Kills">킬:</label>
-          <select id="game2Kills" class="number-select"></select>
-          <label for="game2Deaths">데스:</label>
-          <select id="game2Deaths" class="number-select"></select>
-          <label for="game2Assists">어시:</label>
-          <select id="game2Assists" class="number-select"></select>
-        </div>
-      </div>
-
-      <!-- 3경기 -->
-      <div class="game-record">
-        <h2>3경기</h2>
-        <div class="record-row">
-          <label for="game3Result">결과:</label>
-          <select id="game3Result" required>
-            <option value="win">승리</option>
-            <option value="loss">패배</option>
-          </select>
-        </div>
-        <div class="record-row">
-          <label for="game3Champion">챔피언:</label>
-          <select id="game3Champion" required>
-            <option value="">선택하세요</option>
-            <option value="아리">아리</option>
-            <option value="가렌">가렌</option>
-            <option value="리신">리신</option>
-          </select>
-        </div>
-        <div class="record-row">
-          <label for="game3Kills">킬:</label>
-          <select id="game3Kills" class="number-select"></select>
-          <label for="game3Deaths">데스:</label>
-          <select id="game3Deaths" class="number-select"></select>
-          <label for="game3Assists">어시:</label>
-          <select id="game3Assists" class="number-select"></select>
-        </div>
-      </div>
-
-      <button type="submit">전적 저장</button>
-    </form>
+    <div id="gameRecordsContainer"></div>
+    <button id="saveRecordsButton" type="button">전적 저장</button>
   </div>
 
   <script>
+    const API_URL = "https://port-0-backend-m43n9mp6f1a95885.sel4.cloudtype.app/votes/unrecorded-games";
+    const SAVE_URL = "https://port-0-backend-m43n9mp6f1a95885.sel4.cloudtype.app/votes/save-records";
+
     // 숫자 콤보박스 채우기
-    document.addEventListener('DOMContentLoaded', () => {
-      const numberSelects = document.querySelectorAll('.number-select');
+    const populateNumberSelect = (select) => {
       for (let i = 0; i <= 30; i++) {
-        numberSelects.forEach(select => {
-          const option = document.createElement('option');
-          option.value = i;
-          option.textContent = i;
-          select.appendChild(option);
-        });
+        const option = document.createElement('option');
+        option.value = i;
+        option.textContent = i;
+        select.appendChild(option);
       }
+    };
+
+    // 전적 입력 폼 생성
+    const createGameRecordForm = (game, index) => {
+      const recordDiv = document.createElement('div');
+      recordDiv.className = 'game-record';
+      recordDiv.innerHTML = `
+        <h2>${index + 1}차 투표 - ${game.option_name}</h2>
+        <div class="record-row">
+          <label for="result${index}">결과:</label>
+          <select id="result${index}" required>
+            <option value="win">승리</option>
+            <option value="loss">패배</option>
+          </select>
+        </div>
+        <div class="record-row">
+          <label for="champion${index}">챔피언:</label>
+          <select id="champion${index}" required>
+            <option value="">선택하세요</option>
+            <option value="아리">아리</option>
+            <option value="가렌">가렌</option>
+            <option value="리신">리신</option>
+          </select>
+        </div>
+        <div class="record-row">
+          <label for="kills${index}">킬:</label>
+          <select id="kills${index}" class="number-select"></select>
+          <label for="deaths${index}">데스:</label>
+          <select id="deaths${index}" class="number-select"></select>
+          <label for="assists${index}">어시:</label>
+          <select id="assists${index}" class="number-select"></select>
+        </div>
+      `;
+
+      // 숫자 콤보박스 채우기
+      populateNumberSelect(recordDiv.querySelector(`#kills${index}`));
+      populateNumberSelect(recordDiv.querySelector(`#deaths${index}`));
+      populateNumberSelect(recordDiv.querySelector(`#assists${index}`));
+
+      return recordDiv;
+    };
+
+    // 전적 입력 데이터 로드
+    const loadGameRecords = async () => {
+      try {
+        const response = await fetch(API_URL);
+        if (!response.ok) {
+          throw new Error("Failed to fetch unrecorded games.");
+        }
+
+        const games = await response.json();
+        const container = document.getElementById('gameRecordsContainer');
+        container.innerHTML = '';
+
+        if (games.length === 0) {
+          container.innerHTML = '<p>전적을 입력할 게임이 없습니다.</p>';
+          return;
+        }
+
+        games.forEach((game, index) => {
+          const form = createGameRecordForm(game, index);
+          container.appendChild(form);
+        });
+      } catch (error) {
+        console.error("Error loading game records:", error);
+      }
+    };
+
+    // 전적 저장
+    const saveGameRecords = async () => {
+      try {
+        const records = [];
+        const container = document.getElementById('gameRecordsContainer');
+        const forms = container.querySelectorAll('.game-record');
+
+        forms.forEach((form, index) => {
+          const gameRecord = {
+            option_id: form.querySelector(`#champion${index}`).value,
+            result: form.querySelector(`#result${index}`).value,
+            champion: form.querySelector(`#champion${index}`).value,
+            kills: form.querySelector(`#kills${index}`).value,
+            deaths: form.querySelector(`#deaths${index}`).value,
+            assists: form.querySelector(`#assists${index}`).value,
+          };
+          records.push(gameRecord);
+        });
+
+        const response = await fetch(SAVE_URL, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ records }),
+        });
+
+        if (response.ok) {
+          alert("전적이 성공적으로 저장되었습니다!");
+          loadGameRecords(); // 새로고침
+        } else {
+          alert("전적 저장에 실패했습니다.");
+        }
+      } catch (error) {
+        console.error("Error saving game records:", error);
+      }
+    };
+
+    document.addEventListener('DOMContentLoaded', () => {
+      loadGameRecords();
+      document.getElementById('saveRecordsButton').addEventListener('click', saveGameRecords);
     });
   </script>
 </body>
