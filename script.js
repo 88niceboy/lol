@@ -757,13 +757,9 @@ const fetchVoteDataForDate = async (date) => {
   }
 };
 
-const SAVE_URL = "https://port-0-backend-m43n9mp6f1a95885.sel4.cloudtype.app/votes/save-game-records";
+///////////////////////////////////////////////
 
-// 현재 로그인한 유저 정보
-const getUserInfo = () => ({
-  user_name: localStorage.getItem("userName"),
-  lolId: localStorage.getItem("userLolId"),
-});
+const SAVE_URL = `${VOTE_URL}/save-game-records`;
 
 // 숫자 콤보박스 채우기
 const populateNumberSelect = (select) => {
@@ -830,11 +826,16 @@ const createGameRecordForm = (game, index) => {
 
 // 전적 입력 데이터 로드
 const loadGameRecords = async () => {
-  const { user_name, lolId } = getUserInfo();
-
   try {
-    // API 호출 경로 수정
-    const response = await fetch(`${VOTE_URL}/user-unrecorded-games?user_name=${user_name}&lolId=${lolId}`);
+    // 이미 정의된 글로벌 변수에서 user_name과 lolId 사용
+    const userName = window.userName; // 글로벌 변수에서 가져오기
+    const lolId = window.lolId; // 글로벌 변수에서 가져오기
+
+    if (!userName || !lolId) {
+      throw new Error("로그인 정보가 누락되었습니다.");
+    }
+
+    const response = await fetch(`${VOTE_URL}/user-unrecorded-games?user_name=${userName}&lolId=${lolId}`);
     if (!response.ok) {
       throw new Error("Failed to fetch unrecorded games for user.");
     }
@@ -848,7 +849,6 @@ const loadGameRecords = async () => {
       return;
     }
 
-    // 전적 입력 폼 생성
     games.forEach((game, index) => {
       const form = createGameRecordForm(game, index);
       container.appendChild(form);
@@ -857,7 +857,6 @@ const loadGameRecords = async () => {
     console.error("Error loading game records:", error);
   }
 };
-
 
 // 전적 저장
 const saveGameRecords = async () => {
