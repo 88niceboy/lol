@@ -38,7 +38,11 @@ document.addEventListener("DOMContentLoaded", () => {
   if (window.location.pathname.includes("index.html")) {
     fetchUsers();
   } else if (window.location.pathname.includes("vote.html")) {
+    console.log("initializePage!")
     initializeVotePage();
+  } else if (window.location.pathname.includes("record.html")) {
+    console.log("loadGameRecords!")
+    loadGameRecords();
   }
 });
 
@@ -57,6 +61,7 @@ loginButton.addEventListener("click", () => {
     loginModal.style.display = "flex";
   }
 });
+
 
 // 로그인 폼 제출 이벤트
 // loginForm.addEventListener("submit", async (event) => {
@@ -463,6 +468,54 @@ document.addEventListener("DOMContentLoaded", () => {
   } else if (window.location.pathname.includes("vote.html")) {
     initializeVotePage();
   } else if (window.location.pathname.includes("record.html")) {
+    console.log("loadGameRecords!")
+    initializeRecordPage(); // Record 페이지 초기화
+  }
+});
+
+document.addEventListener("DOMContentLoaded", () => {
+  console.log("DOMContentLoaded triggered");
+  console.log("Current Pathname:", window.location.pathname);
+  if (window.location.pathname.includes("record.html")) {
+    console.log("Calling initializeRecordPage()");
+    initializeRecordPage();
+  } else if (window.location.pathname.includes("vote.html")) {
+    console.log("Calling initializeVotePage()");
+    initializeVotePage();
+  }
+});
+
+
+
+// 전적 입력 페이지 초기화
+// const initializeRecordPage = () => {
+//   // 전적 데이터를 로드합니다.
+//   loadGameRecords();
+
+//   // 전적 저장 버튼 클릭 이벤트 추가
+//   const saveRecordsButton = document.getElementById("saveRecordsButton");
+//   if (saveRecordsButton) {
+//     saveRecordsButton.addEventListener("click", saveGameRecords);
+//   }
+// };
+async function initializeRecordPage () {
+  console.log("initializeRecordPage started");
+  loadGameRecords();
+
+  // 전적 저장 버튼 클릭 이벤트 추가
+  const saveRecordsButton = document.getElementById("saveRecordsButton");
+  if (saveRecordsButton) {
+    saveRecordsButton.addEventListener("click", saveGameRecords);
+  }
+};
+
+// DOMContentLoaded 이벤트에서 페이지별 초기화
+document.addEventListener("DOMContentLoaded", () => {
+  if (window.location.pathname.includes("index.html")) {
+    fetchUsers();
+  } else if (window.location.pathname.includes("vote.html")) {
+    initializeVotePage();
+  } else if (window.location.pathname.includes("record.html")) {
     initializeRecordPage(); // Record 페이지 초기화
   }
 });
@@ -643,43 +696,7 @@ async function initializeVotePage() {
 }
 
 //const loadGameRecords = async () => {
-//   async function loadGameRecords() {
-//   try {
-//     const user = {
-//       Name: localStorage.getItem("userName"),
-//       LolId: localStorage.getItem("userLolId"),
-//     };
-  
-//     if (!user.Name || !user.LolId) {
-//       alert("로그인이 필요합니다.");
-//       window.location.href = "index.html";
-//       return;
-//     }
-
-//     const response = await fetch(`${VOTE_URL}/user-unrecorded-games?user_name=${user.Name}&lolId=${user.LolId}`);
-//     if (!response.ok) {
-//       throw new Error("Failed to fetch unrecorded games for user.");
-//     }
-
-//     const games = await response.json();
-//     const container = document.getElementById("gameRecordsContainer");
-//     container.innerHTML = "";
-
-//     if (games.length === 0) {
-//       container.innerHTML = "<p>전적을 입력할 게임이 없습니다.</p>";
-//       return;
-//     }
-
-//     games.forEach((game, index) => {
-//       const form = createGameRecordForm(game, index);
-//       container.appendChild(form);
-//     });
-//   } catch (error) {
-//     console.error("Error loading game records:", error);
-//   }
-// };
-
-const loadGameRecords = async () => {
+  async function loadGameRecords() {
   try {
     const user = {
       Name: localStorage.getItem("userName"),
@@ -687,7 +704,6 @@ const loadGameRecords = async () => {
     };
   
     if (!user.Name || !user.LolId) {
-      console.log("User not logged in");
       alert("로그인이 필요합니다.");
       window.location.href = "index.html";
       return;
@@ -699,12 +715,7 @@ const loadGameRecords = async () => {
     }
 
     const games = await response.json();
-    console.log("Fetched games:", games);
     const container = document.getElementById("gameRecordsContainer");
-    if (!container) {
-      console.error("gameRecordsContainer not found");
-      return;
-    }
     container.innerHTML = "";
 
     if (games.length === 0) {
@@ -721,19 +732,20 @@ const loadGameRecords = async () => {
   }
 };
 
+
 // 로그인 상태 확인 및 버튼 텍스트 변경
-document.addEventListener("DOMContentLoaded", () => {
-  if (window.location.pathname.includes("index.html")) {
-    fetchUsers();
-  } else if (window.location.pathname.includes("vote.html")) {
-    console.log("initializePage!")
-    initializeVotePage();
-  } else if (window.location.pathname.includes("record.html")) {
-    console.log("loadGameRecords!")
-    //loadGameRecords();
-    initializeRecordPage();
-  }
-});
+// document.addEventListener("DOMContentLoaded", () => {
+//   if (window.location.pathname.includes("index.html")) {
+//     fetchUsers();
+//   } else if (window.location.pathname.includes("vote.html")) {
+//     console.log("initializePage!")
+//     initializeVotePage();
+//   } else if (window.location.pathname.includes("record.html")) {
+//     console.log("loadGameRecords!")
+//     //loadGameRecords();
+//     initializeRecordPage();
+//   }
+// });
 
 // 전적 저장
 const saveGameRecords = async () => {
@@ -1038,84 +1050,9 @@ const createGameRecordForm = (game, index) => {
 
 
 // 전적 입력 데이터 로드
-const loadGameRecords = async () => {
-  try {
-    // 이미 정의된 글로벌 변수에서 user_name과 lolId 사용
-    const userName = window.userName; // 글로벌 변수에서 가져오기
-    const lolId = window.lolId; // 글로벌 변수에서 가져오기
 
-    if (!userName || !lolId) {
-      throw new Error("로그인 정보가 누락되었습니다.");
-    }
 
-    const response = await fetch(`${VOTE_URL}/user-unrecorded-games?user_name=${userName}&lolId=${lolId}`);
-    if (!response.ok) {
-      throw new Error("Failed to fetch unrecorded games for user.");
-    }
-
-    const games = await response.json();
-    const container = document.getElementById("gameRecordsContainer");
-    container.innerHTML = "";
-
-    if (games.length === 0) {
-      container.innerHTML = "<p>전적을 입력할 게임이 없습니다.</p>";
-      return;
-    }
-
-    games.forEach((game, index) => {
-      const form = createGameRecordForm(game, index);
-      container.appendChild(form);
-    });
-  } catch (error) {
-    console.error("Error loading game records:", error);
-  }
-};
-
-// 전적 저장
-const saveGameRecords = async () => {
-  try {
-    const records = [];
-    const container = document.getElementById("gameRecordsContainer");
-    const forms = container.querySelectorAll(".game-record");
-
-    forms.forEach((form, index) => {
-      [1, 2, 3].forEach((match) => {
-        const result = form.querySelector(`#result${index}-${match}`).value;
-        if (result) {
-          const gameRecord = {
-            game_option_id: form.dataset.optionId,
-            match_number: match,
-            result,
-            champion: form.querySelector(`#champion${index}-${match}`).value,
-            kills: form.querySelector(`#kills${index}-${match}`).value,
-            deaths: form.querySelector(`#deaths${index}-${match}`).value,
-            assists: form.querySelector(`#assists${index}-${match}`).value,
-          };
-          records.push(gameRecord);
-        }
-      });
-    });
-
-    const response = await fetch(SAVE_URL, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ records }),
-    });
-
-    if (response.ok) {
-      alert("전적이 성공적으로 저장되었습니다!");
-      loadGameRecords(); // 새로고침
-    } else {
-      alert("전적 저장에 실패했습니다.");
-    }
-  } catch (error) {
-    console.error("Error saving game records:", error);
-  }
-};
-
-document.addEventListener("DOMContentLoaded", () => {
-  loadGameRecords();
-  document.getElementById("saveRecordsButton").addEventListener("click", saveGameRecords);
-});
+// document.addEventListener("DOMContentLoaded", () => {
+//   loadGameRecords();
+//   document.getElementById("saveRecordsButton").addEventListener("click", saveGameRecords);
+// });
