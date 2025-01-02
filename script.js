@@ -450,40 +450,40 @@ function getTierImage(tier) {
 // }
 
 // 전적 입력 페이지 초기화
-const initializeRecordPage = () => {
-  // 전적 데이터를 로드합니다.
-  loadGameRecords();
+// const initializeRecordPage = () => {
+//   // 전적 데이터를 로드합니다.
+//   loadGameRecords();
 
-  // 전적 저장 버튼 클릭 이벤트 추가
-  const saveRecordsButton = document.getElementById("saveRecordsButton");
-  if (saveRecordsButton) {
-    saveRecordsButton.addEventListener("click", saveGameRecords);
-  }
-};
+//   // 전적 저장 버튼 클릭 이벤트 추가
+//   const saveRecordsButton = document.getElementById("saveRecordsButton");
+//   if (saveRecordsButton) {
+//     saveRecordsButton.addEventListener("click", saveGameRecords);
+//   }
+// };
 
 // DOMContentLoaded 이벤트에서 페이지별 초기화
-document.addEventListener("DOMContentLoaded", () => {
-  if (window.location.pathname.includes("index.html")) {
-    fetchUsers();
-  } else if (window.location.pathname.includes("vote.html")) {
-    initializeVotePage();
-  } else if (window.location.pathname.includes("record.html")) {
-    console.log("loadGameRecords!")
-    initializeRecordPage(); // Record 페이지 초기화
-  }
-});
+// document.addEventListener("DOMContentLoaded", () => {
+//   if (window.location.pathname.includes("index.html")) {
+//     fetchUsers();
+//   } else if (window.location.pathname.includes("vote.html")) {
+//     initializeVotePage();
+//   } else if (window.location.pathname.includes("record.html")) {
+//     console.log("loadGameRecords!")
+//     initializeRecordPage(); // Record 페이지 초기화
+//   }
+// });
 
-document.addEventListener("DOMContentLoaded", () => {
-  console.log("DOMContentLoaded triggered");
-  console.log("Current Pathname:", window.location.pathname);
-  if (window.location.pathname.includes("record.html")) {
-    console.log("Calling initializeRecordPage()");
-    initializeRecordPage();
-  } else if (window.location.pathname.includes("vote.html")) {
-    console.log("Calling initializeVotePage()");
-    initializeVotePage();
-  }
-});
+// document.addEventListener("DOMContentLoaded", () => {
+//   console.log("DOMContentLoaded triggered");
+//   console.log("Current Pathname:", window.location.pathname);
+//   if (window.location.pathname.includes("record.html")) {
+//     console.log("Calling initializeRecordPage()");
+//     initializeRecordPage();
+//   } else if (window.location.pathname.includes("vote.html")) {
+//     console.log("Calling initializeVotePage()");
+//     initializeVotePage();
+//   }
+// });
 
 
 
