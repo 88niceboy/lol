@@ -1,33 +1,79 @@
 // common.js
+// document.addEventListener("DOMContentLoaded", () => {
+//     const isLoggedIn = localStorage.getItem("loggedIn");
+//     const userName = localStorage.getItem("userName");
+//     const loginButton = document.getElementById("loginButton");
+  
+//     // 로그인 상태 확인 및 버튼 텍스트 변경
+//     if (isLoggedIn && userName) {
+//       loginButton.textContent = "로그아웃";
+//       displayUserStatus(userName);
+//     } else {
+//       loginButton.textContent = "로그인";
+//       displayUserStatus(null);
+//     }
+  
+//     // 로그인 버튼 클릭 이벤트
+//     loginButton.addEventListener("click", () => {
+//       if (isLoggedIn) {
+//         // 로그아웃 처리
+//         localStorage.removeItem("loggedIn");
+//         localStorage.removeItem("userName");
+//         localStorage.removeItem("userLolId");
+//         alert("로그아웃되었습니다.");
+//         window.location.reload(); // 페이지 새로고침
+//       } else {
+//         // 로그인 페이지로 이동
+//         openLoginModal();
+//       }
+//     });
+//   });
+
 document.addEventListener("DOMContentLoaded", () => {
-    const isLoggedIn = localStorage.getItem("loggedIn");
-    const userName = localStorage.getItem("userName");
-    const loginButton = document.getElementById("loginButton");
-  
-    // 로그인 상태 확인 및 버튼 텍스트 변경
-    if (isLoggedIn && userName) {
-      loginButton.textContent = "로그아웃";
-      displayUserStatus(userName);
+  const pathname = window.location.pathname;
+  const isLoggedIn = localStorage.getItem("loggedIn");
+  const userName = localStorage.getItem("userName");
+  const loginButton = document.getElementById("loginButton");
+
+  // 로그인 상태 확인 및 버튼 텍스트 변경
+  if (isLoggedIn && userName) {
+    loginButton.textContent = "로그아웃";
+    displayUserStatus(userName);
+  } else {
+    loginButton.textContent = "로그인";
+    displayUserStatus(null);
+  }
+
+  // 로그인 버튼 클릭 이벤트
+  loginButton.addEventListener("click", () => {
+    if (isLoggedIn) {
+      // 로그아웃 처리
+      localStorage.removeItem("loggedIn");
+      localStorage.removeItem("userName");
+      localStorage.removeItem("userLolId");
+      alert("로그아웃되었습니다.");
+      window.location.reload(); // 페이지 새로고침
     } else {
-      loginButton.textContent = "로그인";
-      displayUserStatus(null);
+      // 로그인 페이지로 이동
+      openLoginModal();
     }
-  
-    // 로그인 버튼 클릭 이벤트
-    loginButton.addEventListener("click", () => {
-      if (isLoggedIn) {
-        // 로그아웃 처리
-        localStorage.removeItem("loggedIn");
-        localStorage.removeItem("userName");
-        localStorage.removeItem("userLolId");
-        alert("로그아웃되었습니다.");
-        window.location.reload(); // 페이지 새로고침
-      } else {
-        // 로그인 페이지로 이동
-        openLoginModal();
-      }
-    });
   });
+
+  // 페이지별 초기화
+  console.log("Current Pathname:", pathname);
+
+  if (pathname === "/" || pathname.includes("index.html")) {
+    fetchUsers();
+  } else if (pathname.includes("vote") || pathname.includes("vote.html")) {
+    initializeVotePage();
+  } else if (pathname.includes("record") || pathname.includes("record.html")) {
+    initializeRecordPage();
+  } else if (pathname.includes("user-info") || pathname.includes("user-info.html")) {
+    fetchAndDisplayUsers();
+  } else {
+    console.log("No specific initialization for this page.");
+  }
+});
   
   function displayUserStatus(userName) {
     const statusIndicator = document.getElementById("indicator");

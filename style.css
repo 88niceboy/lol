@@ -831,6 +831,34 @@ tbody tr:hover {
   color: white;
 }
 
+
+.record-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center; /* 내용물 수평 중앙 정렬 */
+  justify-content: flex-start; /* 내용물 위쪽부터 정렬 */
+  width: 50%; /* 화면의 70% 너비 */
+  max-height: 80vh; /* 화면 높이의 80%까지만 확장 */
+  overflow-y: auto; /* 내용물이 많아지면 스크롤 활성화 */
+  padding: 20px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  background-color: #fff;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* 살짝 음영 추가 */
+  margin-bottom: 20px; /* 버튼과의 간격 */
+  box-sizing: border-box;
+}
+
+#gameRecordsContainer {
+  width: 100%; /* 부모 컨테이너의 너비에 맞게 확장 */
+  max-height: 80vh; /* 화면 높이의 80%까지만 확장 */
+  background-color: #f9f9f9; /* 살짝 다른 배경색 */
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  box-sizing: border-box;
+}
+
 /* 버튼 활성화 및 호버 */
 #saveRecordsButton {
   background-color: #4caf50;

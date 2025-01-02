@@ -20,7 +20,7 @@ const chartElements = {
 
 let charts = {}; // 저장된 차트 객체들
 
-document.addEventListener("DOMContentLoaded", fetchAndDisplayUsers);
+// document.addEventListener("DOMContentLoaded", fetchAndDisplayUsers);
 
 
 // 초기 모달 숨기기
