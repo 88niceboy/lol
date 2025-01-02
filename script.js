@@ -618,6 +618,88 @@ async function initializeVotePage() {
   }
 }
 
+//const loadGameRecords = async () => {
+  async function loadGameRecords() {
+  try {
+    const user = {
+      Name: localStorage.getItem("userName"),
+      LolId: localStorage.getItem("userLolId"),
+    };
+  
+    if (!user.Name || !user.LolId) {
+      alert("로그인이 필요합니다.");
+      window.location.href = "index.html";
+      return;
+    }
+
+    const response = await fetch(`${VOTE_URL}/user-unrecorded-games?user_name=${user.Name}&lolId=${user.LolId}`);
+    if (!response.ok) {
+      throw new Error("Failed to fetch unrecorded games for user.");
+    }
+
+    const games = await response.json();
+    const container = document.getElementById("gameRecordsContainer");
+    container.innerHTML = "";
+
+    if (games.length === 0) {
+      container.innerHTML = "<p>전적을 입력할 게임이 없습니다.</p>";
+      return;
+    }
+
+    games.forEach((game, index) => {
+      const form = createGameRecordForm(game, index);
+      container.appendChild(form);
+    });
+  } catch (error) {
+    console.error("Error loading game records:", error);
+  }
+};
+
+
+// 전적 저장
+const saveGameRecords = async () => {
+  try {
+    const records = [];
+    const container = document.getElementById("gameRecordsContainer");
+    const forms = container.querySelectorAll(".game-record");
+
+    forms.forEach((form, index) => {
+      [1, 2, 3].forEach((match) => {
+        const result = form.querySelector(`#result${index}-${match}`).value;
+        if (result) {
+          const gameRecord = {
+            game_option_id: form.dataset.optionId,
+            match_number: match,
+            result,
+            champion: form.querySelector(`#champion${index}-${match}`).value,
+            kills: form.querySelector(`#kills${index}-${match}`).value,
+            deaths: form.querySelector(`#deaths${index}-${match}`).value,
+            assists: form.querySelector(`#assists${index}-${match}`).value,
+          };
+          records.push(gameRecord);
+        }
+      });
+    });
+
+    const response = await fetch(SAVE_URL, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ records }),
+    });
+
+    if (response.ok) {
+      alert("전적이 성공적으로 저장되었습니다!");
+      loadGameRecords(); // 새로고침
+    } else {
+      alert("전적 저장에 실패했습니다.");
+    }
+  } catch (error) {
+    console.error("Error saving game records:", error);
+  }
+};
+
 function enableVoteOptions(resetVoteButton, submitVoteButton) {
   alert("다시 선택할 수 있습니다.");
 
@@ -772,6 +854,57 @@ const populateNumberSelect = (select) => {
 };
 
 // 전적 입력 폼 생성
+// const createGameRecordForm = (game, index) => {
+//   const recordDiv = document.createElement("div");
+//   recordDiv.className = "game-record";
+//   recordDiv.dataset.optionId = game.option_id;
+
+//   recordDiv.innerHTML = `
+//     <h2>${index + 1}차 투표 - ${game.option_name}</h2>
+//     ${[1, 2, 3]
+//       .map(
+//         (match) => `
+//       <div class="match-record">
+//         <h3>${match}경기</h3>
+//         <div class="record-row">
+//           <label for="result${index}-${match}">결과:</label>
+//           <select id="result${index}-${match}" required>
+//             <option value="">선택</option>
+//             <option value="win">승리</option>
+//             <option value="loss">패배</option>
+//           </select>
+//         </div>
+//         <div class="record-row">
+//           <label for="champion${index}-${match}">챔피언:</label>
+//           <select id="champion${index}-${match}" required>
+//             <option value="">선택하세요</option>
+//             <option value="아리">아리</option>
+//             <option value="가렌">가렌</option>
+//             <option value="리신">리신</option>
+//           </select>
+//         </div>
+//         <div class="record-row">
+//           <label for="kills${index}-${match}">킬:</label>
+//           <select id="kills${index}-${match}" class="number-select"></select>
+//           <label for="deaths${index}-${match}">데스:</label>
+//           <select id="deaths${index}-${match}" class="number-select"></select>
+//           <label for="assists${index}-${match}">어시:</label>
+//           <select id="assists${index}-${match}" class="number-select"></select>
+//         </div>
+//       </div>
+//     `
+//       )
+//       .join("")}
+//   `;
+
+//   [1, 2, 3].forEach((match) => {
+//     populateNumberSelect(recordDiv.querySelector(`#kills${index}-${match}`));
+//     populateNumberSelect(recordDiv.querySelector(`#deaths${index}-${match}`));
+//     populateNumberSelect(recordDiv.querySelector(`#assists${index}-${match}`));
+//   });
+
+//   return recordDiv;
+// };
 const createGameRecordForm = (game, index) => {
   const recordDiv = document.createElement("div");
   recordDiv.className = "game-record";
@@ -823,6 +956,7 @@ const createGameRecordForm = (game, index) => {
 
   return recordDiv;
 };
+
 
 // 전적 입력 데이터 로드
 const loadGameRecords = async () => {
