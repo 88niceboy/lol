@@ -32,6 +32,7 @@ resetVoteButton.textContent = "다시 투표하기";
 const selectedPeople = [];
 let users = [];
 
+
 // 로그인 상태 확인 및 버튼 텍스트 변경
 document.addEventListener("DOMContentLoaded", () => {
   if (window.location.pathname.includes("index.html")) {
@@ -443,6 +444,29 @@ function getTierImage(tier) {
 //   }
 // }
 
+// 전적 입력 페이지 초기화
+const initializeRecordPage = () => {
+  // 전적 데이터를 로드합니다.
+  loadGameRecords();
+
+  // 전적 저장 버튼 클릭 이벤트 추가
+  const saveRecordsButton = document.getElementById("saveRecordsButton");
+  if (saveRecordsButton) {
+    saveRecordsButton.addEventListener("click", saveGameRecords);
+  }
+};
+
+// DOMContentLoaded 이벤트에서 페이지별 초기화
+document.addEventListener("DOMContentLoaded", () => {
+  if (window.location.pathname.includes("index.html")) {
+    fetchUsers();
+  } else if (window.location.pathname.includes("vote.html")) {
+    initializeVotePage();
+  } else if (window.location.pathname.includes("record.html")) {
+    initializeRecordPage(); // Record 페이지 초기화
+  }
+});
+
 async function initializeVotePage() {
   const voteTitle = document.getElementById("vote-title");
   const voteOptions = document.getElementById("vote-options");
@@ -619,7 +643,43 @@ async function initializeVotePage() {
 }
 
 //const loadGameRecords = async () => {
-  async function loadGameRecords() {
+//   async function loadGameRecords() {
+//   try {
+//     const user = {
+//       Name: localStorage.getItem("userName"),
+//       LolId: localStorage.getItem("userLolId"),
+//     };
+  
+//     if (!user.Name || !user.LolId) {
+//       alert("로그인이 필요합니다.");
+//       window.location.href = "index.html";
+//       return;
+//     }
+
+//     const response = await fetch(`${VOTE_URL}/user-unrecorded-games?user_name=${user.Name}&lolId=${user.LolId}`);
+//     if (!response.ok) {
+//       throw new Error("Failed to fetch unrecorded games for user.");
+//     }
+
+//     const games = await response.json();
+//     const container = document.getElementById("gameRecordsContainer");
+//     container.innerHTML = "";
+
+//     if (games.length === 0) {
+//       container.innerHTML = "<p>전적을 입력할 게임이 없습니다.</p>";
+//       return;
+//     }
+
+//     games.forEach((game, index) => {
+//       const form = createGameRecordForm(game, index);
+//       container.appendChild(form);
+//     });
+//   } catch (error) {
+//     console.error("Error loading game records:", error);
+//   }
+// };
+
+const loadGameRecords = async () => {
   try {
     const user = {
       Name: localStorage.getItem("userName"),
@@ -627,6 +687,7 @@ async function initializeVotePage() {
     };
   
     if (!user.Name || !user.LolId) {
+      console.log("User not logged in");
       alert("로그인이 필요합니다.");
       window.location.href = "index.html";
       return;
@@ -638,7 +699,12 @@ async function initializeVotePage() {
     }
 
     const games = await response.json();
+    console.log("Fetched games:", games);
     const container = document.getElementById("gameRecordsContainer");
+    if (!container) {
+      console.error("gameRecordsContainer not found");
+      return;
+    }
     container.innerHTML = "";
 
     if (games.length === 0) {
@@ -655,6 +721,19 @@ async function initializeVotePage() {
   }
 };
 
+// 로그인 상태 확인 및 버튼 텍스트 변경
+document.addEventListener("DOMContentLoaded", () => {
+  if (window.location.pathname.includes("index.html")) {
+    fetchUsers();
+  } else if (window.location.pathname.includes("vote.html")) {
+    console.log("initializePage!")
+    initializeVotePage();
+  } else if (window.location.pathname.includes("record.html")) {
+    console.log("loadGameRecords!")
+    //loadGameRecords();
+    initializeRecordPage();
+  }
+});
 
 // 전적 저장
 const saveGameRecords = async () => {
