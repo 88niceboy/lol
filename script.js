@@ -1171,6 +1171,7 @@ async function initializeVotePage() {
     Object.entries(groupedOptions).forEach(([gameName, gameOptions]) => {
       const sectionDiv = document.createElement("div");
       sectionDiv.classList.add("vote-section");
+      sectionDiv.dataset.section = gameName;
 
       const sectionTitle = document.createElement("h3");
       sectionTitle.textContent = gameName;
@@ -1181,7 +1182,7 @@ async function initializeVotePage() {
 
       gameOptions.forEach((option) => {
         const isVoted = userVotes.some((vote) => vote.game_option_id === option.option_id);
-        const optionElement = createVoteOption(option, allVotes, isVoted); // 투표 상태 전달
+        const optionElement = createVoteOption(option, allVotes, isVoted, gameName);
         sectionOptionsDiv.appendChild(optionElement);
       });
 
@@ -1195,7 +1196,7 @@ async function initializeVotePage() {
       const submitButton = document.createElement("button");
       submitButton.textContent = `${gameName} 제출하기`;
       submitButton.classList.add("submit-button");
-      submitButton.disabled = false; // 항상 활성화 상태로 설정
+      submitButton.disabled = false;
 
       const resetButton = document.createElement("button");
       resetButton.textContent = `${gameName} 다시 투표하기`;
@@ -1203,11 +1204,11 @@ async function initializeVotePage() {
       resetButton.disabled = false;
 
       submitButton.addEventListener("click", () =>
-        submitSectionVotes(user, gameOptions, submitButton, resetButton)
+        submitSectionVotes(user, gameOptions, sectionOptionsDiv, submitButton, resetButton)
       );
 
       resetButton.addEventListener("click", () =>
-        enableVoteOptionsForSection(gameOptions, submitButton, resetButton)
+        enableVoteOptionsForSection(sectionOptionsDiv, submitButton, resetButton)
       );
 
       buttonContainer.appendChild(submitButton);
@@ -1221,58 +1222,58 @@ async function initializeVotePage() {
     alert("투표 데이터를 불러오는데 실패했습니다. 다시 시도해주세요.");
   }
 
-  function createVoteOption(option, allVotes, isVoted) {
+  function createVoteOption(option, allVotes, isVoted, sectionName) {
     const optionElement = document.createElement("div");
     optionElement.classList.add("vote-option-container");
     optionElement.style.display = "flex";
     optionElement.style.alignItems = "center";
-  
+
     const optionContent = document.createElement("div");
     optionContent.classList.add("vote-option");
     optionContent.dataset.id = option.option_id;
-  
-    // 현재 투표 수 확인
+    optionContent.dataset.section = sectionName;
+
     const currentVote = allVotes.find((vote) => vote.game_option_id === option.option_id);
     const totalVotes = currentVote ? currentVote.total_votes : 0;
-  
-    // 10명 이상 투표된 경우 highlight 클래스 추가
+
     if (totalVotes >= 10) {
       optionContent.classList.add("highlight");
     }
-  
+
     if (isVoted) {
-      optionContent.classList.add("selected"); // 사용자가 직접 선택한 상태
+      optionContent.classList.add("selected");
+      optionContent.classList.add("disabled");
     }
-  
+
     const optionName = document.createElement("div");
     optionName.textContent = option.option_name;
-  
+
     const voteCount = document.createElement("span");
     voteCount.textContent = `(${totalVotes}명 투표)`;
     voteCount.classList.add("dynamic-vote-count");
     voteCount.style.marginLeft = "10px";
     voteCount.style.color = "#54e967";
-  
+
     optionName.appendChild(voteCount);
     optionContent.appendChild(optionName);
     optionElement.appendChild(optionContent);
-  
-    // 현황보기 버튼 추가
+
+    // "현황보기" 버튼 추가
     const viewStatusButton = document.createElement("button");
     viewStatusButton.textContent = "현황보기";
     viewStatusButton.classList.add("view-status-button");
     viewStatusButton.style.marginLeft = "10px";
-  
+
     viewStatusButton.addEventListener("click", () => {
       const voteDetailsContainer = document.getElementById("vote-details");
       voteDetailsContainer.innerHTML = "";
-  
+
       const optionName = document.createElement("h3");
       optionName.textContent = option.option_name;
-  
+
       const totalVotesText = document.createElement("p");
       totalVotesText.textContent = `총 투표 수: ${totalVotes}`;
-  
+
       const votingOrder = document.createElement("div");
       votingOrder.innerHTML = currentVote?.voting_order
         ? `<strong>투표 순서:</strong> ${currentVote.voting_order
@@ -1280,38 +1281,37 @@ async function initializeVotePage() {
             .map((entry, index) => `<div>${index + 1}. ${entry}</div>`)
             .join("")}`
         : "아직 투표한 유저가 없습니다.";
-  
+
       voteDetailsContainer.appendChild(optionName);
       voteDetailsContainer.appendChild(totalVotesText);
       voteDetailsContainer.appendChild(votingOrder);
     });
-  
+
     optionElement.appendChild(viewStatusButton);
-  
+
+    // 섹션별로 선택 상태를 관리
     optionContent.addEventListener("click", () => {
-      toggleVoteOption(optionContent, totalVotes); // 클릭 시 toggleVoteOption 호출
+      toggleExclusiveVoteOption(optionContent, sectionName);
     });
-  
+
     return optionElement;
   }
 
-
-  function enableVoteOptionsForSection(sectionOptions, submitButton, resetButton) {
+  function enableVoteOptionsForSection(sectionOptionsDiv, submitButton, resetButton) {
     alert("다시 선택할 수 있습니다. 기존 선택 항목이 유지됩니다.");
   
-    sectionOptions.forEach((option) => {
-      const optionElement = document.querySelector(`[data-id='${option.option_id}']`);
-      if (!optionElement) return;
+    const options = sectionOptionsDiv.querySelectorAll(".vote-option");
+    options.forEach((option) => {
+      // 비활성화 상태를 해제하지만 선택 상태는 유지
+      option.classList.remove("disabled");
   
-      optionElement.classList.remove("disabled"); // 비활성화 상태 해제
-  
-      // 선택된 상태 유지
-      if (optionElement.classList.contains("selected")) {
-        optionElement.style.backgroundColor = ""; // 선택 상태 유지
-      } else if (optionElement.classList.contains("highlight")) {
-        optionElement.style.backgroundColor = ""; // 10명 이상 투표된 상태 유지
+      // 선택 상태에 따라 스타일 복원
+      if (option.classList.contains("selected")) {
+        option.style.backgroundColor = ""; // 선택 상태 유지
+      } else if (option.classList.contains("highlight")) {
+        option.style.backgroundColor = ""; // 10명 이상 투표된 상태 유지
       } else {
-        optionElement.style.backgroundColor = ""; // 기본 상태 복원
+        option.style.backgroundColor = ""; // 기본 상태 복원
       }
     });
   
@@ -1319,24 +1319,24 @@ async function initializeVotePage() {
     resetButton.disabled = true; // 다시 투표하기 버튼 비활성화
   }
   
-  async function submitSectionVotes(user, sectionOptions, submitButton, resetButton) {
-    // 선택된 항목의 ID 가져오기
-    console.log("******************")
+
+  async function submitSectionVotes(user, sectionOptions, sectionOptionsDiv, submitButton, resetButton) {
     const selectedOptionIds = Array.from(
-      document.querySelectorAll(".vote-option.selected")
-    ).map((el) => parseInt(el.dataset.id, 10));
-  
+      sectionOptionsDiv.querySelectorAll(".vote-option.selected")
+    ).map((option) => parseInt(option.dataset.id, 10));
+
+    if (selectedOptionIds.length === 0) {
+      alert("선택된 항목이 없습니다. 선택 후 다시 시도해주세요.");
+      return;
+    }
+
     try {
-      console.log("Submit payload:", { userName: user.Name, userLolId: user.LolId, votes: selectedOptionIds });
-  
-      // 서버에 보낼 데이터 생성
       const payload = {
         userName: user.Name,
         userLolId: user.LolId,
-        votes: selectedOptionIds, // 선택된 옵션 ID 배열 (선택되지 않은 경우 빈 배열)
+        votes: selectedOptionIds,
       };
-  
-      // POST 요청으로 데이터 전송
+
       const response = await fetch(`${VOTE_URL}/submit`, {
         method: "POST",
         headers: {
@@ -1344,49 +1344,49 @@ async function initializeVotePage() {
         },
         body: JSON.stringify(payload),
       });
-  
+
       const result = await response.json();
-  
+
       if (response.ok && result.success) {
         alert("투표가 성공적으로 제출되었습니다!");
-  
-        // 선택된 옵션 비활성화 및 상태 갱신
-        document.querySelectorAll(".vote-option.selected").forEach((el) => {
-          el.classList.add("disabled");
-          el.classList.remove("selected");
+        sectionOptionsDiv.querySelectorAll(".vote-option.selected").forEach((option) => {
+          option.classList.add("disabled");
+          option.classList.remove("selected");
         });
-  
-        // 모든 옵션에 대해 highlight 상태 갱신
-        document.querySelectorAll(".vote-option").forEach((el) => {
-          const voteCount = parseInt(el.querySelector(".dynamic-vote-count")?.textContent.match(/\d+/)?.[0] || 0, 10);
-          if (voteCount >= 10) {
-            el.classList.add("highlight");
-          } else {
-            el.classList.remove("highlight");
-          }
-        });
-  
-        // 제출하기 버튼 비활성화
         submitButton.disabled = true;
-  
-        // 다시 투표하기 버튼 활성화
         resetButton.disabled = false;
-  
-        // 페이지 초기화
         initializeVotePage();
       } else {
-        console.error("Error submitting votes:", result.error || "Unknown error");
-        alert(result.error || "투표 제출에 실패했습니다. 다시 시도해주세요.");
+        alert(result.error || "투표 제출에 실패했습니다.");
+        initializeVotePage();
       }
     } catch (error) {
       console.error("Error submitting votes:", error);
       alert("서버와 연결할 수 없습니다. 잠시 후 다시 시도해주세요.");
+      initializeVotePage();
     }
   }
-  
-  
-  
+
+  function toggleExclusiveVoteOption(option, sectionName) {
+    if (option.classList.contains("disabled")) return;
+
+    const sectionDiv = option.closest(".vote-section");
+    const options = sectionDiv.querySelectorAll(".vote-option");
+
+    // 참/불 중 하나만 선택 가능 (2차, 3차, 4차, 5차 투표 섹션)
+    if (["2차 투표", "3차 투표", "4차 투표", "5차 투표"].includes(sectionName)) {
+      options.forEach((otherOption) => {
+        if (otherOption !== option) {
+          otherOption.classList.remove("selected");
+        }
+      });
+    }
+
+    option.classList.toggle("selected");
+  }
 }
+
+
 
 
 
@@ -1575,10 +1575,20 @@ function enableVoteOptions(resetVoteButton, submitVoteButton) {
 //   resetVoteButton.disabled = false;
 // }
 
-function toggleVoteOption(option, totalVotes) {
+function toggleVoteOption(option, totalVotes, sectionName) {
   if (option.classList.contains("disabled")) return; // 비활성화된 항목은 무시
 
   const isSelected = option.classList.toggle("selected"); // 선택 상태 토글
+
+  // 특정 섹션(2차, 3차, ...)에서 한 번에 하나만 선택 가능
+  if (["2차 투표", "3차 투표", "4차 투표", "5차 투표"].includes(sectionName)) {
+    const sectionOptions = document.querySelectorAll(`.vote-section[data-section='${sectionName}'] .vote-option`);
+    sectionOptions.forEach((otherOption) => {
+      if (otherOption !== option) {
+        otherOption.classList.remove("selected");
+      }
+    });
+  }
 
   // 선택 상태에 따라 클래스와 색상 업데이트
   if (isSelected) {
@@ -1593,7 +1603,23 @@ function toggleVoteOption(option, totalVotes) {
   }
 }
 
+// function toggleExclusiveVoteOption(option, sectionName) {
+//   if (option.classList.contains("disabled")) return; // 비활성화된 항목은 무시
 
+//   // 현재 섹션 내의 모든 옵션만 가져오기
+//   const section = option.closest(".vote-section"); // 클릭된 항목의 섹션
+//   const sectionOptions = section.querySelectorAll(".vote-option");
+
+//   // 같은 섹션의 다른 항목 선택 해제
+//   sectionOptions.forEach((otherOption) => {
+//     if (otherOption !== option) {
+//       otherOption.classList.remove("selected");
+//     }
+//   });
+
+//   // 현재 클릭된 항목 선택/해제
+//   option.classList.toggle("selected");
+// }
 
 
 function updateHighlightOnTenVotes() {
