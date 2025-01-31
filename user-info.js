@@ -80,8 +80,29 @@ function resetModalData() {
 }
 
 // 모달 열기 및 그래프 초기화
+// async function showUserModal(user) {
+//   resetModalData(); // 모달 데이터를 초기화
+//   modal.style.display = "flex";
+
+//   // 유저 이름과 ID 설정
+//   const nameAndId = `${user.Name || "이름없음"} / ${user.LolId || "아이디없음"}`;
+//   document.getElementById("userNameAndId").textContent = nameAndId;
+
+//   // 유저 데이터를 업데이트
+//   updatePosition("Total", user.Win, user.Lose);
+//   updatePosition("Top", user.TopWin, user.TopLose);
+//   updatePosition("Jungle", user.JungleWin, user.JungleLose);
+//   updatePosition("Mid", user.MidWin, user.MidLose);
+//   updatePosition("ADC", user.AdWin, user.AdLose);
+//   updatePosition("Support", user.SupportWin, user.SupportLose);
+
+//   console.log("userNamesdfsdf",user.Name)
+//   // 챔프 스코어 데이터 가져오기 및 테이블 업데이트
+//   await fetchChampScoreData(user.Name);
+// }
+
 async function showUserModal(user) {
-  resetModalData(); // 모달 데이터를 초기화
+  resetModalData(); // 모달 데이터 초기화
   modal.style.display = "flex";
 
   // 유저 이름과 ID 설정
@@ -89,17 +110,20 @@ async function showUserModal(user) {
   document.getElementById("userNameAndId").textContent = nameAndId;
 
   // 유저 데이터를 업데이트
-  updatePosition("Total", user.Win, user.Lose);
+  updatePosition("Total", 
+    user.TopWin + user.JungleWin + user.MidWin + user.AdWin + user.SupportWin,
+    user.TopLose + user.JungleLose + user.MidLose + user.AdLose + user.SupportLose
+  );
+
   updatePosition("Top", user.TopWin, user.TopLose);
   updatePosition("Jungle", user.JungleWin, user.JungleLose);
   updatePosition("Mid", user.MidWin, user.MidLose);
   updatePosition("ADC", user.AdWin, user.AdLose);
   updatePosition("Support", user.SupportWin, user.SupportLose);
 
-  console.log("userNamesdfsdf",user.Name)
-  // 챔프 스코어 데이터 가져오기 및 테이블 업데이트
   await fetchChampScoreData(user.Name);
 }
+
 
 // 포지션 업데이트 함수
 function updatePosition(position, wins, loses) {
