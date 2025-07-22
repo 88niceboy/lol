@@ -32,7 +32,7 @@ resetVoteButton.textContent = "다시 투표하기";
 // 선택된 사람 리스트
 const selectedPeople = [];
 let users = [];
-
+let championList = [];
 
 
 
@@ -357,6 +357,22 @@ function populateNumberSelect(select) {
 //   return recordDiv;
 // }
 
+
+async function loadChampions() {
+  try {
+    const response = await fetch(`${VOTE_URL}/champions`); 
+    if (!response.ok) throw new Error("Failed to load champions");
+
+    championList = await response.json();
+    console.log("Champion List Loaded:", championList);
+  } catch (error) {
+    console.error("Error loading champions:", error);
+    championList = ["아리", "가렌", "리신"]; // ✅ 서버 오류 시 기본값
+  }
+}
+
+
+
 function createGameRecordForm() {
   const recordDiv = document.createElement("div");
   recordDiv.className = "game-record";
@@ -400,9 +416,6 @@ function createGameRecordForm() {
       <label for="champion-${uniqueId}">챔피언:</label>
       <select id="champion-${uniqueId}">
         <option value="">선택</option>
-        <option value="아리">아리</option>
-        <option value="가렌">가렌</option>
-        <option value="리신">리신</option>
       </select>
     </div>
     <div class="record-row">
@@ -426,6 +439,14 @@ function createGameRecordForm() {
     </div>
     <button type="button" class="add-more-button" title="전적 추가">+</button>
   `;
+
+   const championSelect = recordDiv.querySelector(`#champion-${uniqueId}`);
+  championList.forEach((champ) => {
+    const option = document.createElement("option");
+    option.value = champ;
+    option.textContent = champ;
+    championSelect.appendChild(option);
+  });
 
   populateNumberSelect(recordDiv.querySelector(`#kills-${uniqueId}`));
   populateNumberSelect(recordDiv.querySelector(`#deaths-${uniqueId}`));
@@ -599,6 +620,7 @@ async function addNewRecord(container) {
 // 전적 입력 페이지 초기화 함수
 async function initializeRecordPage() {
   console.log("Initializing Record Page...");
+   await loadChampions();
   loadGameRecords();
 
   const container = document.getElementById("gameRecordsContainer");
