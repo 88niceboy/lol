@@ -360,70 +360,132 @@ function populateNumberSelect(select) {
 function createGameRecordForm() {
   const recordDiv = document.createElement("div");
   recordDiv.className = "game-record";
-  //recordDiv.dataset.optionId = game.option_id;
 
-  // 날짜 형식 단순화: 한국 시간 그대로 사용
-  const formattedDate = `${game.created_at.slice(0, 10)} ${game.created_at.slice(11, 16)}`;
+  const uniqueId = "id" + Date.now() + Math.floor(Math.random() * 1000);
 
-  // 날짜가 앞에 오도록 수정
   recordDiv.innerHTML = `
-    <h2>${formattedDate} - 투표: ${game.option_name}</h2>
-    ${[1, 2, 3]
-      .map(
-        (match) => `
-      <div class="match-record">
-        <h3>${match}경기</h3>
-        <div class="record-row">
-          <label for="result${index}-${match}">결과:</label>
-          <select id="result${index}-${match}" required>
-            <option value="">선택</option>
-            <option value="win">승리</option>
-            <option value="loss">패배</option>
-          </select>
-        </div>
-        <div class="record-row">
-          <label for="champion${index}-${match}">챔피언:</label>
-          <select id="champion${index}-${match}" required>
-            <option value="">선택하세요</option>
-            <option value="아리">아리</option>
-            <option value="가렌">가렌</option>
-            <option value="리신">리신</option>
-          </select>
-        </div>
-        <div class="record-row">
-          <label for="position${index}-${match}">포지션:</label>
-          <select id="position${index}-${match}" required>
-            <option value="">선택하세요</option>
-            <option value="Top">탑</option>
-            <option value="Jungle">정글</option>
-            <option value="Mid">미드</option>
-            <option value="ADC">원딜</option>
-            <option value="Support">서포터</option>
-          </select>
-        </div>
-        <div class="record-row">
-          <label for="kills${index}-${match}">킬:</label>
-          <select id="kills${index}-${match}" class="number-select"></select>
-          <label for="deaths${index}-${match}">데스:</label>
-          <select id="deaths${index}-${match}" class="number-select"></select>
-          <label for="assists${index}-${match}">어시:</label>
-          <select id="assists${index}-${match}" class="number-select"></select>
-        </div>
-      </div>
-    `
-      )
-      .join("")}
+    <div class="record-row">
+      <label for="date-${uniqueId}">날짜:</label>
+      <input type="date" id="date-${uniqueId}" required />
+    </div>
+    <div class="record-row">
+      <label for="round-${uniqueId}">차전:</label>
+      <select id="round-${uniqueId}">
+        <option value="">선택</option>
+        <option value="1차전">1차전</option>
+        <option value="2차전">2차전</option>
+        <option value="3차전">3차전</option>
+        <option value="4차전">4차전</option>
+        <option value="5차전">5차전</option>
+      </select>
+    </div>
+    <div class="record-row">
+      <label for="match-${uniqueId}">경기:</label>
+      <select id="match-${uniqueId}">
+        <option value="">선택</option>
+        <option value="1경기">1경기</option>
+        <option value="2경기">2경기</option>
+        <option value="3경기">3경기</option>
+      </select>
+    </div>
+    <div class="record-row">
+      <label for="result-${uniqueId}">결과:</label>
+      <select id="result-${uniqueId}">
+        <option value="">선택</option>
+        <option value="승리">승리</option>
+        <option value="패배">패배</option>
+      </select>
+    </div>
+    <div class="record-row">
+      <label for="champion-${uniqueId}">챔피언:</label>
+      <select id="champion-${uniqueId}">
+        <option value="">선택</option>
+        <option value="아리">아리</option>
+        <option value="가렌">가렌</option>
+        <option value="리신">리신</option>
+      </select>
+    </div>
+    <div class="record-row">
+      <label for="position-${uniqueId}">포지션:</label>
+      <select id="position-${uniqueId}">
+        <option value="">선택</option>
+        <option value="Top">탑</option>
+        <option value="Jungle">정글</option>
+        <option value="Mid">미드</option>
+        <option value="ADC">원딜</option>
+        <option value="Support">서포터</option>
+      </select>
+    </div>
+    <div class="record-row">
+      <label>킬:</label>
+      <select id="kills-${uniqueId}" class="number-select"></select>
+      <label>데스:</label>
+      <select id="deaths-${uniqueId}" class="number-select"></select>
+      <label>어시:</label>
+      <select id="assists-${uniqueId}" class="number-select"></select>
+    </div>
+    <button type="button" class="add-more-button" title="전적 추가">+</button>
   `;
 
-  // 숫자 옵션 추가
-  [1, 2, 3].forEach((match) => {
-    populateNumberSelect(recordDiv.querySelector(`#kills${index}-${match}`));
-    populateNumberSelect(recordDiv.querySelector(`#deaths${index}-${match}`));
-    populateNumberSelect(recordDiv.querySelector(`#assists${index}-${match}`));
-  });
+  populateNumberSelect(recordDiv.querySelector(`#kills-${uniqueId}`));
+  populateNumberSelect(recordDiv.querySelector(`#deaths-${uniqueId}`));
+  populateNumberSelect(recordDiv.querySelector(`#assists-${uniqueId}`));
 
   return recordDiv;
 }
+
+function populateNumberSelect(selectElement) {
+  if (!selectElement) return;
+  for (let i = 0; i <= 20; i++) {
+    const option = document.createElement("option");
+    option.value = i;
+    option.textContent = i;
+    selectElement.appendChild(option);
+  }
+}
+
+// document.addEventListener("DOMContentLoaded", () => {
+//   const container = document.getElementById("gameRecordsContainer");
+//  async function addNewRecord(container) {
+//     const form = createGameRecordForm();
+//     container.appendChild(form);
+//   }
+
+//   // 초기 1개 폼 추가
+//   addNewRecord(container);
+
+//   // + 버튼 이벤트 위임 (새 폼 추가)
+//   const addMoreBtn = document.getElementById("addmorebutton");
+//     addMoreBtn.addEventListener("click", () => {
+//       console.log("########################")
+//       addNewRecord(container);
+// });
+  
+
+//   // 저장 버튼 클릭 이벤트 (데이터 수집 예시)
+//   const saveButton = document.getElementById("saveRecordsButton");
+//   saveButton.addEventListener("click", () => {
+//     const records = [];
+//     document.querySelectorAll(".game-record").forEach((recordDiv) => {
+//       const date = recordDiv.querySelector("input[type='date']").value;
+//       const round = recordDiv.querySelector("select[id^='round']").value;
+//       const match = recordDiv.querySelector("select[id^='match']").value;
+//       const result = recordDiv.querySelector("select[id^='result']").value;
+//       const champion = recordDiv.querySelector("select[id^='champion']").value;
+//       const position = recordDiv.querySelector("select[id^='position']").value;
+//       const kills = recordDiv.querySelector("select[id^='kills']").value;
+//       const deaths = recordDiv.querySelector("select[id^='deaths']").value;
+//       const assists = recordDiv.querySelector("select[id^='assists']").value;
+
+//       records.push({ date, round, match, result, champion, position, kills, deaths, assists });
+//     });
+
+//     console.log("저장할 전적들:", records);
+//     alert(`총 ${records.length}개의 전적이 저장됩니다. (콘솔 확인)`);
+//     // 서버 전송 등의 실제 저장 처리 여기에 구현 가능
+//   });
+// });
+
 
 
 // 전적 데이터를 로드하는 함수
@@ -529,16 +591,44 @@ async function loadGameRecords() {
   }
 }
 
+async function addNewRecord(container) {
+  const form = createGameRecordForm();
+  container.appendChild(form);
+}
 
 // 전적 입력 페이지 초기화 함수
 async function initializeRecordPage() {
   console.log("Initializing Record Page...");
   loadGameRecords();
 
+  const container = document.getElementById("gameRecordsContainer");
+
+  // ✅ 초기 1개 폼 추가
+  addNewRecord(container);
+
+  // ✅ + 버튼 클릭 이벤트 등록
+  const addMoreBtn = document.getElementById("addmorebutton");
+  if (addMoreBtn) {
+    addMoreBtn.addEventListener("click", () => {
+      console.log("########################");
+      addNewRecord(container);
+      container.scrollTo({ top: container.scrollHeight, behavior: "smooth" });
+       addMoreBtn.scrollIntoView({ behavior: "smooth", block: "end" });
+       saveButton.scrollIntoView({ behavior: "smooth", block: "center" });
+
+    });
+  }
+
+
   const saveRecordsButton = document.getElementById("saveRecordsButton");
   if (saveRecordsButton) {
     saveRecordsButton.addEventListener("click", saveGameRecords);
   }
+
+  //  const addRecordsButton = document.getElementById("addmorebutton");
+  // if (addRecordsButton) {
+  //   addRecordsButton.addEventListener("click", addNewRecord);
+  // }
 }
 
 // async function initializeVotePage() {
