@@ -386,12 +386,12 @@ async function loadGameRecords() {
       return;
     }
 
-    container.innerHTML = "";
+    // container.innerHTML = "";
 
-    if (games.length === 0) {
-      container.innerHTML = "<p>전적을 입력할 게임이 없습니다.</p>";
-      return;
-    }
+    // if (games.length === 0) {
+    //   container.innerHTML = "<p>전적을 입력할 게임이 없습니다.</p>";
+    //   return;
+    // }
 
     games.forEach((game, index) => {
       try {
@@ -410,8 +410,6 @@ async function loadGameRecords() {
     }
   }
 }
-
-
 
 
 // 전적 입력 페이지 초기화 함수
