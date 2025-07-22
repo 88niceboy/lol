@@ -289,7 +289,75 @@ function populateNumberSelect(select) {
   }
 }
 
-function createGameRecordForm(game, index) {
+// function createGameRecordForm(game, index) {
+//   const recordDiv = document.createElement("div");
+//   recordDiv.className = "game-record";
+//   recordDiv.dataset.optionId = game.option_id;
+
+//   // 날짜 형식 단순화: 한국 시간 그대로 사용
+//   const formattedDate = `${game.created_at.slice(0, 10)} ${game.created_at.slice(11, 16)}`;
+
+//   // 날짜가 앞에 오도록 수정
+//   recordDiv.innerHTML = `
+//     <h2>${formattedDate} - 투표: ${game.option_name}</h2>
+//     ${[1, 2, 3]
+//       .map(
+//         (match) => `
+//       <div class="match-record">
+//         <h3>${match}경기</h3>
+//         <div class="record-row">
+//           <label for="result${index}-${match}">결과:</label>
+//           <select id="result${index}-${match}" required>
+//             <option value="">선택</option>
+//             <option value="win">승리</option>
+//             <option value="loss">패배</option>
+//           </select>
+//         </div>
+//         <div class="record-row">
+//           <label for="champion${index}-${match}">챔피언:</label>
+//           <select id="champion${index}-${match}" required>
+//             <option value="">선택하세요</option>
+//             <option value="아리">아리</option>
+//             <option value="가렌">가렌</option>
+//             <option value="리신">리신</option>
+//           </select>
+//         </div>
+//         <div class="record-row">
+//           <label for="position${index}-${match}">포지션:</label>
+//           <select id="position${index}-${match}" required>
+//             <option value="">선택하세요</option>
+//             <option value="Top">탑</option>
+//             <option value="Jungle">정글</option>
+//             <option value="Mid">미드</option>
+//             <option value="ADC">원딜</option>
+//             <option value="Support">서포터</option>
+//           </select>
+//         </div>
+//         <div class="record-row">
+//           <label for="kills${index}-${match}">킬:</label>
+//           <select id="kills${index}-${match}" class="number-select"></select>
+//           <label for="deaths${index}-${match}">데스:</label>
+//           <select id="deaths${index}-${match}" class="number-select"></select>
+//           <label for="assists${index}-${match}">어시:</label>
+//           <select id="assists${index}-${match}" class="number-select"></select>
+//         </div>
+//       </div>
+//     `
+//       )
+//       .join("")}
+//   `;
+
+//   // 숫자 옵션 추가
+//   [1, 2, 3].forEach((match) => {
+//     populateNumberSelect(recordDiv.querySelector(`#kills${index}-${match}`));
+//     populateNumberSelect(recordDiv.querySelector(`#deaths${index}-${match}`));
+//     populateNumberSelect(recordDiv.querySelector(`#assists${index}-${match}`));
+//   });
+
+//   return recordDiv;
+// }
+
+function createGameRecordForm() {
   const recordDiv = document.createElement("div");
   recordDiv.className = "game-record";
   recordDiv.dataset.optionId = game.option_id;
@@ -359,6 +427,58 @@ function createGameRecordForm(game, index) {
 
 
 // 전적 데이터를 로드하는 함수
+// async function loadGameRecords() {
+//   try {
+//     const user = {
+//       Name: localStorage.getItem("userName"),
+//       LolId: localStorage.getItem("userLolId"),
+//     };
+
+//     if (!user.Name || !user.LolId) {
+//       alert("로그인이 필요합니다.");
+//       window.location.href = "index.html";
+//       return;
+//     }
+
+//     const response = await fetch(`${VOTE_URL}/user-unrecorded-games?user_name=${user.Name}&lolId=${user.LolId}`);
+//     if (!response.ok) {
+//       throw new Error("Failed to fetch unrecorded games for user.");
+//     }
+
+//     const games = await response.json();
+//     console.log("Fetched games:", games);
+
+//     const container = document.getElementById("gameRecordsContainer");
+//     if (!container) {
+//       console.error("gameRecordsContainer not found");
+//       return;
+//     }
+
+//     // container.innerHTML = "";
+
+//     // if (games.length === 0) {
+//     //   container.innerHTML = "<p>전적을 입력할 게임이 없습니다.</p>";
+//     //   return;
+//     // }
+
+//     games.forEach((game, index) => {
+//       try {
+//         const form = createGameRecordForm(game, index);
+//         container.appendChild(form);
+//       } catch (formError) {
+//         console.error(`Error creating form for game at index ${index}:`, formError);
+//       }
+//     });
+//   } catch (error) {
+//     console.error("Error loading game records:", error);
+
+//     const container = document.getElementById("gameRecordsContainer");
+//     if (container) {
+//       container.innerHTML = "<p>데이터를 불러오는 데 실패했습니다. 잠시 후 다시 시도해주세요.</p>";
+//     }
+//   }
+// }
+
 async function loadGameRecords() {
   try {
     const user = {
@@ -393,14 +513,12 @@ async function loadGameRecords() {
     //   return;
     // }
 
-    games.forEach((game, index) => {
-      try {
-        const form = createGameRecordForm(game, index);
+     try {
+        const form = createGameRecordForm();
         container.appendChild(form);
       } catch (formError) {
         console.error(`Error creating form for game at index ${index}:`, formError);
       }
-    });
   } catch (error) {
     console.error("Error loading game records:", error);
 
