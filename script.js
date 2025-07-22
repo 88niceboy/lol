@@ -360,7 +360,7 @@ function populateNumberSelect(select) {
 function createGameRecordForm() {
   const recordDiv = document.createElement("div");
   recordDiv.className = "game-record";
-  recordDiv.dataset.optionId = game.option_id;
+  //recordDiv.dataset.optionId = game.option_id;
 
   // 날짜 형식 단순화: 한국 시간 그대로 사용
   const formattedDate = `${game.created_at.slice(0, 10)} ${game.created_at.slice(11, 16)}`;
