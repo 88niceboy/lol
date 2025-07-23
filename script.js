@@ -620,7 +620,7 @@ async function addNewRecord(container) {
 // 전적 입력 페이지 초기화 함수
 async function initializeRecordPage() {
   console.log("Initializing Record Page...");
-   await loadChampions();
+  loadChampions();
   loadGameRecords();
 
   const container = document.getElementById("gameRecordsContainer");
