@@ -287,8 +287,8 @@ function createGameRecordForm() {
       <input type="date" id="date-${uniqueId}" required />
     </div>
     <div class="record-row">
-      <label for="match-${uniqueId}">그룹:</label>
-      <select id="match-${uniqueId}">
+      <label for="group-${uniqueId}">그룹:</label>
+      <select id="group-${uniqueId}">
         <option value="">선택</option>
         <option value="일반경기">일반</option>
         <option value="1그룹(상위)">1그룹</option>
@@ -348,10 +348,18 @@ function createGameRecordForm() {
       <label>어시:</label>
       <select id="assists-${uniqueId}" class="number-select"></select>
     </div>
-    <button type="button" class="add-more-button" title="전적 추가">+</button>
+    <button type="button" class="delete-record-button" style="
+      background:#ff4d4d;
+      color:#fff;
+      border:none;
+      border-radius:4px;
+      padding:5px 10px;
+      cursor:pointer;
+      margin-top:5px;">X 삭제</button>
   `;
 
-   const championSelect = recordDiv.querySelector(`#champion-${uniqueId}`);
+  // ✅ 챔피언 목록 추가
+  const championSelect = recordDiv.querySelector(`#champion-${uniqueId}`);
   championList.forEach((champ) => {
     const option = document.createElement("option");
     option.value = champ;
@@ -362,6 +370,12 @@ function createGameRecordForm() {
   populateNumberSelect(recordDiv.querySelector(`#kills-${uniqueId}`));
   populateNumberSelect(recordDiv.querySelector(`#deaths-${uniqueId}`));
   populateNumberSelect(recordDiv.querySelector(`#assists-${uniqueId}`));
+
+  // ✅ 삭제 버튼 이벤트 등록
+  const deleteButton = recordDiv.querySelector(".delete-record-button");
+  deleteButton.addEventListener("click", () => {
+    recordDiv.remove();
+  });
 
   return recordDiv;
 }
@@ -737,9 +751,9 @@ async function saveGameRecords() {
     const records = [];
     document.querySelectorAll(".game-record").forEach((recordDiv) => {
       const date = recordDiv.querySelector("input[type='date']").value;
-      const group = recordDiv.querySelector("select[id^='match']").value; // 그룹
-      const round = recordDiv.querySelector("select[id^='round']").value; // 차전
-      const match = recordDiv.querySelectorAll("select[id^='match']")[1].value; // 두 번째 match = 경기
+      const group = recordDiv.querySelector("select[id^='group']").value;
+      const round = recordDiv.querySelector("select[id^='round']").value;
+      const match = recordDiv.querySelector("select[id^='match']").value;
       const result = recordDiv.querySelector("select[id^='result']").value;
       const champion = recordDiv.querySelector("select[id^='champion']").value;
       const position = recordDiv.querySelector("select[id^='position']").value;
@@ -749,7 +763,7 @@ async function saveGameRecords() {
 
       if (!date || !group || !round || !match || !result || !champion || !position) {
         alert("모든 필드를 입력해주세요.");
-        return;
+        throw new Error("필수 항목 누락");
       }
 
       records.push({
@@ -769,7 +783,21 @@ async function saveGameRecords() {
       });
     });
 
-    //console.log("전송할 기록:", records);
+    // ✅ 팝업용 요약 메시지 생성
+    let confirmMessage = `아래 전적을 저장하시겠습니까?\n\n`;
+    records.forEach((r, i) => {
+      confirmMessage +=
+        `[${i + 1}] ${r.game_date} | ${r.group_name} | ${r.round_name} | ${r.match_number}경기\n` +
+        `결과: ${r.result}, 챔피언: ${r.champion}, 포지션: ${r.position}\n` +
+        `K/D/A: ${r.kills}/${r.deaths}/${r.assists}\n\n`;
+    });
+
+    // ✅ 사용자 확인 후 진행
+    if (!confirm(confirmMessage)) {
+      alert("전적 저장이 취소되었습니다.");
+      return;
+    }
+
     console.log("전송할 기록:", JSON.stringify(records, null, 2));
 
     const response = await fetch(`${VOTE_URL}/save-game-records`, {
@@ -786,9 +814,12 @@ async function saveGameRecords() {
     }
   } catch (error) {
     console.error("Error saving game records:", error);
-    alert("서버 오류로 저장에 실패했습니다.");
+    if (error.message !== "필수 항목 누락") {
+      alert("서버 오류로 저장에 실패했습니다.");
+    }
   }
 }
+
 
 
 
