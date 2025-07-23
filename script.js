@@ -396,6 +396,15 @@ function createGameRecordForm() {
       <input type="date" id="date-${uniqueId}" required />
     </div>
     <div class="record-row">
+      <label for="match-${uniqueId}">그룹:</label>
+      <select id="match-${uniqueId}">
+        <option value="">선택</option>
+        <option value="일반경기">일반</option>
+        <option value="1그룹(상위)">1그룹</option>
+        <option value="2그룹(하위)">2그룹</option>
+      </select>
+    </div>
+    <div class="record-row">
       <label for="round-${uniqueId}">차전:</label>
       <select id="round-${uniqueId}">
         <option value="">선택</option>
