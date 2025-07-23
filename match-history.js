@@ -1,4 +1,4 @@
-const MATCH_HISTORY_URL = `${VOTE_URL}/match-history`; // 백엔드 API
+const MATCH_HISTORY_URL = "https://port-0-backend-m43n9mp6f1a95885.sel4.cloudtype.app/votes/match-history"; // 백엔드 API
 
 document.addEventListener("DOMContentLoaded", () => {
   const historyContainer = document.getElementById("matchHistoryContainer");
@@ -41,75 +41,149 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   function renderMatchHistory(matches) {
-    historyContainer.innerHTML = ""; // 초기화
+  historyContainer.innerHTML = ""; // 초기화
 
-    matches.forEach((matchGroup) => {
-      const groupDiv = document.createElement("div");
-      groupDiv.className = "match-group";
+  matches.forEach((matchGroup) => {
+    const groupDiv = document.createElement("div");
+    groupDiv.className = "match-group";
 
-      groupDiv.innerHTML = `
-        <div class="match-header">
-          날짜: ${matchGroup.game_date} |
-          차전: ${matchGroup.round_name} |
-          경기: ${matchGroup.match_number}경기
-        </div>
-        <div class="team-container">
-          <div class="team">
-            <h4>승리팀</h4>
-            <table>
-              <thead>
+    groupDiv.innerHTML = `
+      <div class="match-header">
+        날짜: ${matchGroup.game_date} |
+        차전: ${matchGroup.round_name} |
+        경기: ${matchGroup.match_number}경기
+      </div>
+      <div class="team-container">
+        <div class="team win">
+          <h4>승리팀</h4>
+          <table>
+            <thead>
+              <tr>
+                <th>유저</th>
+                <th>챔피언</th>
+                <th>포지션</th>
+                <th>K / D / A</th>
+              </tr>
+            </thead>
+            <tbody>
+              ${matchGroup.winTeam
+                .map(
+                  (player) => `
                 <tr>
-                  <th>유저</th>
-                  <th>챔피언</th>
-                  <th>포지션</th>
-                  <th>K / D / A</th>
-                </tr>
-              </thead>
-              <tbody>
-                ${matchGroup.winTeam
-                  .map(
-                    (player) => `
-                  <tr>
-                    <td>${player.user_name}</td>
-                    <td>${player.champion}</td>
-                    <td>${player.position}</td>
-                    <td>${player.kills} / ${player.deaths} / ${player.assists}</td>
-                  </tr>`
-                  )
-                  .join("")}
-              </tbody>
-            </table>
-          </div>
-          <div class="team">
-            <h4>패배팀</h4>
-            <table>
-              <thead>
-                <tr>
-                  <th>유저</th>
-                  <th>챔피언</th>
-                  <th>포지션</th>
-                  <th>K / D / A</th>
-                </tr>
-              </thead>
-              <tbody>
-                ${matchGroup.loseTeam
-                  .map(
-                    (player) => `
-                  <tr>
-                    <td>${player.user_name}</td>
-                    <td>${player.champion}</td>
-                    <td>${player.position}</td>
-                    <td>${player.kills} / ${player.deaths} / ${player.assists}</td>
-                  </tr>`
-                  )
-                  .join("")}
-              </tbody>
-            </table>
-          </div>
+                  <td>${player.user_name}</td>
+                  <td>${player.champion}</td>
+                  <td>${player.position}</td>
+                  <td>${player.kills} / ${player.deaths} / ${player.assists}</td>
+                </tr>`
+                )
+                .join("")}
+            </tbody>
+          </table>
         </div>
-      `;
+        <div class="team lose">
+          <h4>패배팀</h4>
+          <table>
+            <thead>
+              <tr>
+                <th>유저</th>
+                <th>챔피언</th>
+                <th>포지션</th>
+                <th>K / D / A</th>
+              </tr>
+            </thead>
+            <tbody>
+              ${matchGroup.loseTeam
+                .map(
+                  (player) => `
+                <tr>
+                  <td>${player.user_name}</td>
+                  <td>${player.champion}</td>
+                  <td>${player.position}</td>
+                  <td>${player.kills} / ${player.deaths} / ${player.assists}</td>
+                </tr>`
+                )
+                .join("")}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    `;
 
-      historyContainer.appendChild(groupDiv);
-    });
-  }
+    historyContainer.appendChild(groupDiv);
+  });
+}
+
+
+//   function renderMatchHistory(matches) {
+//     historyContainer.innerHTML = ""; // 초기화
+
+//     matches.forEach((matchGroup) => {
+//       const groupDiv = document.createElement("div");
+//       groupDiv.className = "match-group";
+
+//       groupDiv.innerHTML = `
+//         <div class="match-header">
+//           날짜: ${matchGroup.game_date} |
+//           차전: ${matchGroup.round_name} |
+//           경기: ${matchGroup.match_number}경기
+//         </div>
+//         <div class="team-container">
+//           <div class="team">
+//             <h4>승리팀</h4>
+//             <table>
+//               <thead>
+//                 <tr>
+//                   <th>유저</th>
+//                   <th>챔피언</th>
+//                   <th>포지션</th>
+//                   <th>K / D / A</th>
+//                 </tr>
+//               </thead>
+//               <tbody>
+//                 ${matchGroup.winTeam
+//                   .map(
+//                     (player) => `
+//                   <tr>
+//                     <td>${player.user_name}</td>
+//                     <td>${player.champion}</td>
+//                     <td>${player.position}</td>
+//                     <td>${player.kills} / ${player.deaths} / ${player.assists}</td>
+//                   </tr>`
+//                   )
+//                   .join("")}
+//               </tbody>
+//             </table>
+//           </div>
+//           <div class="team">
+//             <h4>패배팀</h4>
+//             <table>
+//               <thead>
+//                 <tr>
+//                   <th>유저</th>
+//                   <th>챔피언</th>
+//                   <th>포지션</th>
+//                   <th>K / D / A</th>
+//                 </tr>
+//               </thead>
+//               <tbody>
+//                 ${matchGroup.loseTeam
+//                   .map(
+//                     (player) => `
+//                   <tr>
+//                     <td>${player.user_name}</td>
+//                     <td>${player.champion}</td>
+//                     <td>${player.position}</td>
+//                     <td>${player.kills} / ${player.deaths} / ${player.assists}</td>
+//                   </tr>`
+//                   )
+//                   .join("")}
+//               </tbody>
+//             </table>
+//           </div>
+//         </div>
+//       `;
+
+//       historyContainer.appendChild(groupDiv);
+//     });
+//   }
 });

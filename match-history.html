@@ -8,37 +8,41 @@
   <style>
     body {
       font-family: Arial, sans-serif;
-      padding: 20px;
+      padding: 10px;
       background: #f9f9f9;
     }
 
     .history-container {
-      max-width: 800px;
+      max-width: 1400px; /* ✅ 넓은 화면에서도 크게 보이도록 */
+      width: 95%;
       margin: 0 auto;
       display: flex;
       flex-direction: column;
-      height: 80vh;
+      min-height: 90vh;
       border: 1px solid #ddd;
       background: #fff;
-      padding: 10px;
+      padding: 30px;
       box-sizing: border-box;
     }
 
     .search-bar {
       display: flex;
       gap: 10px;
-      margin-bottom: 10px;
+      margin-bottom: 20px;
+      flex-wrap: wrap; /* ✅ 모바일에서 자동 줄바꿈 */
     }
 
     .search-bar input,
     .search-bar select {
-      padding: 6px;
-      font-size: 14px;
+      padding: 8px 10px;
+      font-size: 16px;
+      flex: 1 1 auto;
+      min-width: 120px;
     }
 
     .search-bar button {
-      padding: 6px 12px;
-      font-size: 14px;
+      padding: 8px 16px;
+      font-size: 16px;
       cursor: pointer;
       background: #2196f3;
       color: white;
@@ -54,47 +58,66 @@
 
     .match-group {
       border: 1px solid #ccc;
-      padding: 10px;
-      margin-bottom: 10px;
+      padding: 20px;
+      margin-bottom: 20px;
       background: #fdfdfd;
-      border-radius: 4px;
+      border-radius: 8px;
+      font-size: 18px;
     }
 
     .match-header {
       font-weight: bold;
-      margin-bottom: 5px;
+      font-size: 22px;
+      margin-bottom: 15px;
       color: #333;
+      text-align: center;
     }
 
     .team-container {
       display: flex;
       justify-content: space-between;
-      gap: 10px;
+      gap: 20px;
+      flex-wrap: wrap; /* ✅ 반응형 */
+    }
+
+    /* ✅ 승리팀: 파란색 계열 */
+    .team.win {
+      border: 2px solid #1e90ff;
+      background: #e6f3ff;
+    }
+
+    /* ✅ 패배팀: 은은한 붉은 계열 */
+    .team.lose {
+      border: 2px solid #ff6666;
+      background: #fff0f0;
     }
 
     .team {
-      flex: 1;
-      border: 1px solid #ddd;
-      border-radius: 4px;
+      flex: 1 1 48%;
+      border-radius: 8px;
       background: #fff;
-      padding: 5px;
+      padding: 15px;
+      min-width: 300px;
+      box-sizing: border-box;
     }
 
     .team h4 {
-      margin: 0 0 5px;
-      font-size: 14px;
+      margin: 0 0 10px;
+      font-size: 20px;
       color: #444;
+      text-align: center;
     }
 
     .team table {
       width: 100%;
       border-collapse: collapse;
-      font-size: 12px;
+      font-size: 16px;
     }
 
-    .team th, .team td {
+    .team th,
+    .team td {
       border: 1px solid #ccc;
-      padding: 3px;
+      padding: 8px;
       text-align: center;
     }
 
@@ -130,6 +153,40 @@
       padding: 6px 12px;
       cursor: pointer;
       border-radius: 3px;
+    }
+
+    /* ✅ 반응형 태블릿 (768px 이하) */
+    @media screen and (max-width: 768px) {
+      .match-header {
+        font-size: 18px;
+      }
+      .team {
+        flex: 1 1 100%;
+      }
+      .team table {
+        font-size: 14px;
+      }
+    }
+
+    /* ✅ 모바일 (480px 이하) */
+    @media screen and (max-width: 480px) {
+      .history-container {
+        padding: 15px;
+      }
+      .match-group {
+        font-size: 16px;
+        padding: 15px;
+      }
+      .match-header {
+        font-size: 16px;
+      }
+      .team table {
+        font-size: 12px;
+      }
+      .team th,
+      .team td {
+        padding: 5px;
+      }
     }
   </style>
 </head>
