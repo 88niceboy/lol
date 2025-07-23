@@ -269,7 +269,7 @@ async function fetchChampScoreData(user_name) {
   try {
     console.log("Fetching champ scores for:", user_name);
 
-    const response = await fetch(`${VOTE_URL}/champ-score`, {
+    const response = await fetch(`${CHAMP_SCORE_URL}/champ-score`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ Name: user_name })
