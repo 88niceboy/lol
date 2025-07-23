@@ -321,4 +321,4 @@ async function fetchChampScoreData(user_name) {
 
 
 // 초기 실행
-fetchAndDisplayUsers();
+//fetchAndDisplayUsers();
