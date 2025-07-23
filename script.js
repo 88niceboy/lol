@@ -433,7 +433,7 @@ async function initializeRecordPage() {
   const container = document.getElementById("gameRecordsContainer");
 
   // ✅ 초기 1개 폼 추가
-  addNewRecord(container);
+  //addNewRecord(container);
 
   // ✅ + 버튼 클릭 이벤트 등록
   const addMoreBtn = document.getElementById("addmorebutton");
@@ -443,7 +443,7 @@ async function initializeRecordPage() {
       addNewRecord(container);
       container.scrollTo({ top: container.scrollHeight, behavior: "smooth" });
        addMoreBtn.scrollIntoView({ behavior: "smooth", block: "end" });
-       saveButton.scrollIntoView({ behavior: "smooth", block: "center" });
+       saveRecordsButton.scrollIntoView({ behavior: "smooth", block: "center" });
 
     });
   }
