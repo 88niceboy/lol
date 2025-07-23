@@ -865,7 +865,8 @@ async function saveGameRecords() {
       });
     });
 
-    console.log("전송할 기록:", records);
+    //console.log("전송할 기록:", records);
+    console.log("전송할 기록:", JSON.stringify(records, null, 2));
 
     const response = await fetch(`${VOTE_URL}/save-game-records`, {
       method: "POST",
