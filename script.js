@@ -333,11 +333,11 @@ function createGameRecordForm() {
       <label for="position-${uniqueId}">포지션:</label>
       <select id="position-${uniqueId}">
         <option value="">선택</option>
-        <option value="Top">탑</option>
-        <option value="Jungle">정글</option>
-        <option value="Mid">미드</option>
-        <option value="ADC">원딜</option>
-        <option value="Support">서포터</option>
+        <option value="탑">탑</option>
+        <option value="정글">정글</option>
+        <option value="미드">미드</option>
+        <option value="원딜">원딜</option>
+        <option value="서포터">서포터</option>
       </select>
     </div>
     <div class="record-row">
