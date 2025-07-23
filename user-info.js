@@ -64,22 +64,23 @@ function displayUserCards(users) {
   });
 }
 
-// 모달 초기화 함수
 function resetModalData() {
-  // 모든 승리/패배/총 경기수/승률 초기화
   const positions = ["Total", "Top", "Jungle", "Mid", "ADC", "Support"];
   positions.forEach((position) => {
     document.getElementById(`${position.toLowerCase()}Wins`).textContent = "0";
     document.getElementById(`${position.toLowerCase()}Loses`).textContent = "0";
     document.getElementById(`${position.toLowerCase()}Games`).textContent = "0";
     document.getElementById(`${position.toLowerCase()}Rate`).textContent = "0%";
+
     if (charts[position]) {
-      charts[position].destroy(); // 이전 차트 제거
-      charts[position] = null; // 차트 객체 초기화
+      charts[position].destroy();
+      charts[position] = null;
     }
   });
-  userStatsTableBody.innerHTML = ""; // 테이블 초기화
+
+  userStatsTableBody.innerHTML = "";
 }
+
 
 // 모달 열기 및 그래프 초기화
 // async function showUserModal(user) {
@@ -277,11 +278,10 @@ async function fetchChampScoreData(user_name) {
 
     if (!response.ok) throw new Error("Failed to fetch champ data");
 
-    const { champions, positions } = await response.json(); // ✅ 구조 분해 할당
-
+    const { champions, positions } = await response.json(); // ✅ 백엔드 구조 { champions:[], positions:{} }
     console.log("Champ Score Data:", champions, positions);
 
-    // ✅ 포지션별 승/패 합산 및 그래프 업데이트
+    // ✅ 포지션별 승/패 합산 및 그래프 업데이트 (한글 포지션명 그대로 사용)
     const totalWin = Object.values(positions).reduce((sum, pos) => sum + pos.Win, 0);
     const totalLose = Object.values(positions).reduce((sum, pos) => sum + pos.Lose, 0);
 
@@ -305,8 +305,8 @@ async function fetchChampScoreData(user_name) {
       row.innerHTML = `
         <td>${champ.Champ}</td>
         <td>${champ.Position}</td>
-        <td>${champ.Win}</td>
-        <td>${champ.Lose}</td>
+        <td>${champ.Win}승</td>
+        <td>${champ.Lose}패</td>
         <td>${champ.WinRate}%</td>
       `;
       userStatsTableBody.appendChild(row);
@@ -316,6 +316,7 @@ async function fetchChampScoreData(user_name) {
     userStatsTableBody.innerHTML = `<tr><td colspan="5">Error: ${error.message}</td></tr>`;
   }
 }
+
 
 
 
