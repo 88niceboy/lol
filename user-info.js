@@ -277,7 +277,8 @@ async function fetchChampScoreData(user_name) {
 
     if (!response.ok) throw new Error("Failed to fetch champ data");
 
-    const { champions, positions } = await response.json();
+    const { champions, positions } = await response.json(); // ✅ 구조 분해 할당
+
     console.log("Champ Score Data:", champions, positions);
 
     // ✅ 포지션별 승/패 합산 및 그래프 업데이트
@@ -315,6 +316,7 @@ async function fetchChampScoreData(user_name) {
     userStatsTableBody.innerHTML = `<tr><td colspan="5">Error: ${error.message}</td></tr>`;
   }
 }
+
 
 
 // 초기 실행
