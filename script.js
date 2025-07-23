@@ -363,18 +363,22 @@ function populateNumberSelect(select) {
 
 async function loadChampions() {
   try {
+    const response = await fetch(`${VOTE_URL}/champions`);
+    console.log("Response status:", response.status);
 
-    const response = await fetch(`${VOTE_URL}/champions`); 
-        console.log("Response status:", response.status); // ✅ 상태 코드 확인
+    if (!response.ok) {
+      // ❗ 에러일 때만 body 읽기
+      const errorText = await response.text();
+      console.error("Backend Error:", errorText);
+      throw new Error("Failed to load champions");
+    }
 
-    if (!response.ok) throw new Error("Failed to load champions");
-    console.error(await response.text()); // ✅ 백엔드 에러 내용 출력
-
+    // ✅ 여기서는 한 번만 body를 읽는다
     championList = await response.json();
     console.log("Champion List Loaded:", championList);
   } catch (error) {
     console.error("Error loading champions:", error);
-    championList = ["아리", "가렌", "리신"]; // ✅ 서버 오류 시 기본값
+    championList = ["아리", "가렌", "리신"];
   }
 }
 
