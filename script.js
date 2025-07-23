@@ -1,6 +1,9 @@
 const API_URL = "https://port-0-backend-m43n9mp6f1a95885.sel4.cloudtype.app/users"; // 백엔드 URL
 const LOGIN_URL = "https://port-0-backend-m43n9mp6f1a95885.sel4.cloudtype.app/users/login"; // 로그인 URL
 const VOTE_URL = "https://port-0-backend-m43n9mp6f1a95885.sel4.cloudtype.app/votes"; // 기본 URL로 수정
+// const API_URL = "https://localhost:3000/users"; // 백엔드 URL
+// const LOGIN_URL = "https://localhost:3000/users/login"; // 로그인 URL
+// const VOTE_URL = "https://localhost:3000/votes"; // 기본 URL로 수정
 const SAVE_URL = `${VOTE_URL}/save-game-records`;
 
 
@@ -360,8 +363,12 @@ function populateNumberSelect(select) {
 
 async function loadChampions() {
   try {
+
     const response = await fetch(`${VOTE_URL}/champions`); 
+        console.log("Response status:", response.status); // ✅ 상태 코드 확인
+
     if (!response.ok) throw new Error("Failed to load champions");
+    console.error(await response.text()); // ✅ 백엔드 에러 내용 출력
 
     championList = await response.json();
     console.log("Champion List Loaded:", championList);
@@ -620,8 +627,8 @@ async function addNewRecord(container) {
 // 전적 입력 페이지 초기화 함수
 async function initializeRecordPage() {
   console.log("Initializing Record Page...");
-  loadChampions();
-  loadGameRecords();
+  await loadChampions();
+  await loadGameRecords();
 
   const container = document.getElementById("gameRecordsContainer");
 

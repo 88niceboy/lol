@@ -102,6 +102,8 @@ document.addEventListener("DOMContentLoaded", () => {
   
       try {
         const response = await fetch("https://port-0-backend-m43n9mp6f1a95885.sel4.cloudtype.app/users/login", {
+        //const response = await fetch("https://localhost:3000/users/login", {
+
           method: "POST",
           headers: {
             "Content-Type": "application/json",

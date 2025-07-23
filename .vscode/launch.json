@@ -9,7 +9,7 @@
             "request": "launch",
             "name": "Launch Chrome against localhost",
             "url": "https://88niceboy.github.io/lol/",
-            //"url": "http://localhost:8080",
+            //"url": "http://localhost:3000",
             "webRoot": "${workspaceFolder}"
         }
     ]
