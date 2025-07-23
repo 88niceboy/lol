@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>경기 히스토리</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 20px;
+      background: #f9f9f9;
+    }
+
+    h1 {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    .filter-container {
+      max-width: 600px;
+      margin: 0 auto 20px auto;
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+    }
+
+    .filter-container select, .filter-container input {
+      padding: 6px 10px;
+      font-size: 14px;
+    }
+
+    .history-container {
+      max-width: 900px;
+      margin: 0 auto;
+    }
+
+    .match-block {
+      background: #fff;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      padding: 10px;
+      margin-bottom: 15px;
+    }
+
+    .match-header {
+      font-weight: bold;
+      margin-bottom: 8px;
+      color: #333;
+    }
+
+    .teams-container {
+      display: flex;
+      justify-content: space-between;
+      gap: 20px;
+    }
+
+    .team {
+      flex: 1;
+      background: #fdfdfd;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      padding: 6px;
+    }
+
+    .team h3 {
+      text-align: center;
+      font-size: 15px;
+      margin-bottom: 5px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 13px;
+    }
+
+    th, td {
+      border: 1px solid #ccc;
+      padding: 4px;
+      text-align: center;
+    }
+
+    .no-data {
+      text-align: center;
+      color: #777;
+    }
+
+    button {
+      padding: 6px 12px;
+      background: #2196f3;
+      color: #fff;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background: #1976d2;
+    }
+  </style>
+</head>
+<body>
+  <h1>최근 30일 경기 히스토리</h1>
+
+  <!-- 검색 필터 -->
+  <div class="filter-container">
+    <input type="date" id="filterDate">
+    <select id="filterRound">
+      <option value="">차전 선택</option>
+      <option value="1차전">1차전</option>
+      <option value="2차전">2차전</option>
+      <option value="3차전">3차전</option>
+      <option value="4차전">4차전</option>
+      <option value="5차전">5차전</option>
+    </select>
+    <select id="filterMatch">
+      <option value="">경기 선택</option>
+      <option value="1경기">1경기</option>
+      <option value="2경기">2경기</option>
+      <option value="3경기">3경기</option>
+    </select>
+    <button id="searchButton">검색</button>
+  </div>
+
+  <!-- 경기 히스토리 표시 -->
+  <div class="history-container" id="historyContainer">
+    <p class="no-data">최근 30일 경기 기록을 불러오는 중...</p>
+  </div>
+
+  <script src="match-history.js"></script>
+</body>
+</html>
